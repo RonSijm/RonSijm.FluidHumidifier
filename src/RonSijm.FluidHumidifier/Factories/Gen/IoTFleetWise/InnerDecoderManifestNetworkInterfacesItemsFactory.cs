@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.IoTFleetWise;
+
+public class InnerDecoderManifestNetworkInterfacesItemsFactory(Action<Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems> factoryAction = null) : SubResourceFactory<Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems>
+{
+
+    internal InnerDecoderManifestCanInterfaceFactory CanInterfaceFactory { get; set; }
+
+    internal InnerDecoderManifestObdInterfaceFactory ObdInterfaceFactory { get; set; }
+
+    protected override Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems Create()
+    {
+        var networkInterfacesItemsResult = CreateNetworkInterfacesItems();
+        factoryAction?.Invoke(networkInterfacesItemsResult);
+
+        return networkInterfacesItemsResult;
+    }
+
+    private Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems CreateNetworkInterfacesItems()
+    {
+        var networkInterfacesItemsResult = new Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems();
+
+        return networkInterfacesItemsResult;
+    }
+    public override void CreateChildren(Humidifier.IoTFleetWise.DecoderManifestTypes.NetworkInterfacesItems result)
+    {
+        base.CreateChildren(result);
+
+        result.CanInterface ??= CanInterfaceFactory?.Build();
+        result.ObdInterface ??= ObdInterfaceFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerDecoderManifestNetworkInterfacesItemsFactoryExtensions
+{
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestCanInterfaceFactory> WithCanInterface(this InnerDecoderManifestNetworkInterfacesItemsFactory parentFactory, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null)
+    {
+        parentFactory.CanInterfaceFactory = new InnerDecoderManifestCanInterfaceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.CanInterfaceFactory);
+    }
+
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestObdInterfaceFactory> WithObdInterface(this InnerDecoderManifestNetworkInterfacesItemsFactory parentFactory, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null)
+    {
+        parentFactory.ObdInterfaceFactory = new InnerDecoderManifestObdInterfaceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ObdInterfaceFactory);
+    }
+
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, WithCanInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, WithCanInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, T4, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3, T4>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, T4, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3, T4>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, T4, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, T4, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestCanInterfaceFactory> WithCanInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.CanInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCanInterface(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, WithObdInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, WithObdInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, T4, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3, T4>(this CombinedResult<InnerDecoderManifestNetworkInterfacesItemsFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, T4, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3, T4>(this CombinedResult<T1, InnerDecoderManifestNetworkInterfacesItemsFactory, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, T4, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDecoderManifestNetworkInterfacesItemsFactory, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, T4, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDecoderManifestNetworkInterfacesItemsFactory, T4> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDecoderManifestNetworkInterfacesItemsFactory, InnerDecoderManifestObdInterfaceFactory> WithObdInterface<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDecoderManifestNetworkInterfacesItemsFactory> combinedResult, Action<Humidifier.IoTFleetWise.DecoderManifestTypes.ObdInterface> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithObdInterface(combinedResult.T5, subFactoryAction));
+}

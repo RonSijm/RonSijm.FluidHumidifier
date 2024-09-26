@@ -1,0 +1,103 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.FraudDetector;
+
+public class InnerDetectorEventTypeFactory(Action<Humidifier.FraudDetector.DetectorTypes.EventType> factoryAction = null) : SubResourceFactory<Humidifier.FraudDetector.DetectorTypes.EventType>
+{
+
+    internal List<InnerDetectorEntityTypeFactory> EntityTypesFactories { get; set; } = [];
+
+    internal List<InnerDetectorLabelFactory> LabelsFactories { get; set; } = [];
+
+    internal List<InnerDetectorEventVariableFactory> EventVariablesFactories { get; set; } = [];
+
+    protected override Humidifier.FraudDetector.DetectorTypes.EventType Create()
+    {
+        var eventTypeResult = CreateEventType();
+        factoryAction?.Invoke(eventTypeResult);
+
+        return eventTypeResult;
+    }
+
+    private Humidifier.FraudDetector.DetectorTypes.EventType CreateEventType()
+    {
+        var eventTypeResult = new Humidifier.FraudDetector.DetectorTypes.EventType();
+
+        return eventTypeResult;
+    }
+    public override void CreateChildren(Humidifier.FraudDetector.DetectorTypes.EventType result)
+    {
+        base.CreateChildren(result);
+
+        result.EntityTypes = EntityTypesFactories.Any() ? EntityTypesFactories.Select(x => x.Build()).ToList() : null;
+        result.Labels = LabelsFactories.Any() ? LabelsFactories.Select(x => x.Build()).ToList() : null;
+        result.EventVariables = EventVariablesFactories.Any() ? EventVariablesFactories.Select(x => x.Build()).ToList() : null;
+    }
+
+} // End Of Class
+
+public static class InnerDetectorEventTypeFactoryExtensions
+{
+    public static CombinedResult<InnerDetectorEventTypeFactory, InnerDetectorEntityTypeFactory> WithEntityTypes(this InnerDetectorEventTypeFactory parentFactory, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null)
+    {
+        var factory = new InnerDetectorEntityTypeFactory(subFactoryAction);
+        parentFactory.EntityTypesFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
+    public static CombinedResult<InnerDetectorEventTypeFactory, InnerDetectorLabelFactory> WithLabels(this InnerDetectorEventTypeFactory parentFactory, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null)
+    {
+        var factory = new InnerDetectorLabelFactory(subFactoryAction);
+        parentFactory.LabelsFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
+    public static CombinedResult<InnerDetectorEventTypeFactory, InnerDetectorEventVariableFactory> WithEventVariables(this InnerDetectorEventTypeFactory parentFactory, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null)
+    {
+        var factory = new InnerDetectorEventVariableFactory(subFactoryAction);
+        parentFactory.EventVariablesFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, InnerDetectorEntityTypeFactory> WithEntityTypes<T1>(this CombinedResult<InnerDetectorEventTypeFactory, T1> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, WithEntityTypes(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, InnerDetectorEntityTypeFactory> WithEntityTypes<T1>(this CombinedResult<T1, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, WithEntityTypes(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3, T4>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3, T4>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory, InnerDetectorEntityTypeFactory> WithEntityTypes<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EntityType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEntityTypes(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, InnerDetectorLabelFactory> WithLabels<T1>(this CombinedResult<InnerDetectorEventTypeFactory, T1> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, WithLabels(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, InnerDetectorLabelFactory> WithLabels<T1>(this CombinedResult<T1, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, WithLabels(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, InnerDetectorLabelFactory> WithLabels<T1, T2>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, InnerDetectorLabelFactory> WithLabels<T1, T2>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, InnerDetectorLabelFactory> WithLabels<T1, T2>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, InnerDetectorLabelFactory> WithLabels<T1, T2, T3>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, InnerDetectorLabelFactory> WithLabels<T1, T2, T3>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, InnerDetectorLabelFactory> WithLabels<T1, T2, T3>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, InnerDetectorLabelFactory> WithLabels<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4, InnerDetectorLabelFactory> WithLabels<T1, T2, T3, T4>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4, InnerDetectorLabelFactory> WithLabels<T1, T2, T3, T4>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4, InnerDetectorLabelFactory> WithLabels<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4, InnerDetectorLabelFactory> WithLabels<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory, InnerDetectorLabelFactory> WithLabels<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.Label> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLabels(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, InnerDetectorEventVariableFactory> WithEventVariables<T1>(this CombinedResult<InnerDetectorEventTypeFactory, T1> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, WithEventVariables(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, InnerDetectorEventVariableFactory> WithEventVariables<T1>(this CombinedResult<T1, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, WithEventVariables(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3, T4>(this CombinedResult<InnerDetectorEventTypeFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3, T4>(this CombinedResult<T1, InnerDetectorEventTypeFactory, T2, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDetectorEventTypeFactory, T3, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDetectorEventTypeFactory, T4> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory, InnerDetectorEventVariableFactory> WithEventVariables<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDetectorEventTypeFactory> combinedResult, Action<Humidifier.FraudDetector.DetectorTypes.EventVariable> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEventVariables(combinedResult.T5, subFactoryAction));
+}

@@ -1,0 +1,5 @@
+CloudTrail -> https://confluence.visma.com/display/SECURITY/Configure+Cloud+Log+Management+for+AWS+CloudTrail
+GuardDuty -> https://confluence.visma.com/display/SECURITY/Configure+Cloud+Log+Management+for+AWS+GuardDuty
+ELB -> https://confluence.visma.com/display/SECURITY/Configure+Cloud+Log+Management+for+AWS+ELB
+VPCFlow -> https://confluence.visma.com/display/SECURITY/Configure+Cloud+Log+Management+for+AWS+VPC+Flow
+WAF -> https://confluence.visma.com/display/SECURITY/Configure+Cloud+Log+Management+for+AWS+WAF

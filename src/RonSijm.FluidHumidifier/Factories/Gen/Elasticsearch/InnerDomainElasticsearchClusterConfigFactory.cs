@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.Elasticsearch;
+
+public class InnerDomainElasticsearchClusterConfigFactory(Action<Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig> factoryAction = null) : SubResourceFactory<Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig>
+{
+
+    internal InnerDomainColdStorageOptionsFactory ColdStorageOptionsFactory { get; set; }
+
+    internal InnerDomainZoneAwarenessConfigFactory ZoneAwarenessConfigFactory { get; set; }
+
+    protected override Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig Create()
+    {
+        var elasticsearchClusterConfigResult = CreateElasticsearchClusterConfig();
+        factoryAction?.Invoke(elasticsearchClusterConfigResult);
+
+        return elasticsearchClusterConfigResult;
+    }
+
+    private Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig CreateElasticsearchClusterConfig()
+    {
+        var elasticsearchClusterConfigResult = new Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig();
+
+        return elasticsearchClusterConfigResult;
+    }
+    public override void CreateChildren(Humidifier.Elasticsearch.DomainTypes.ElasticsearchClusterConfig result)
+    {
+        base.CreateChildren(result);
+
+        result.ColdStorageOptions ??= ColdStorageOptionsFactory?.Build();
+        result.ZoneAwarenessConfig ??= ZoneAwarenessConfigFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerDomainElasticsearchClusterConfigFactoryExtensions
+{
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions(this InnerDomainElasticsearchClusterConfigFactory parentFactory, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null)
+    {
+        parentFactory.ColdStorageOptionsFactory = new InnerDomainColdStorageOptionsFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ColdStorageOptionsFactory);
+    }
+
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig(this InnerDomainElasticsearchClusterConfigFactory parentFactory, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null)
+    {
+        parentFactory.ZoneAwarenessConfigFactory = new InnerDomainZoneAwarenessConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ZoneAwarenessConfigFactory);
+    }
+
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, T4, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3, T4>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, T4, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3, T4>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, T4, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, T4, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDomainElasticsearchClusterConfigFactory, InnerDomainColdStorageOptionsFactory> WithColdStorageOptions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ColdStorageOptions> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithColdStorageOptions(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, T4, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3, T4>(this CombinedResult<InnerDomainElasticsearchClusterConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, T4, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3, T4>(this CombinedResult<T1, InnerDomainElasticsearchClusterConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, T4, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDomainElasticsearchClusterConfigFactory, T3, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, T4, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDomainElasticsearchClusterConfigFactory, T4> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDomainElasticsearchClusterConfigFactory, InnerDomainZoneAwarenessConfigFactory> WithZoneAwarenessConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDomainElasticsearchClusterConfigFactory> combinedResult, Action<Humidifier.Elasticsearch.DomainTypes.ZoneAwarenessConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithZoneAwarenessConfig(combinedResult.T5, subFactoryAction));
+}

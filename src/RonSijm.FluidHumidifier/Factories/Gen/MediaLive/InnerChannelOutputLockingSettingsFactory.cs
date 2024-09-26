@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.MediaLive;
+
+public class InnerChannelOutputLockingSettingsFactory(Action<Humidifier.MediaLive.ChannelTypes.OutputLockingSettings> factoryAction = null) : SubResourceFactory<Humidifier.MediaLive.ChannelTypes.OutputLockingSettings>
+{
+
+    internal InnerChannelPipelineLockingSettingsFactory PipelineLockingSettingsFactory { get; set; }
+
+    internal InnerChannelEpochLockingSettingsFactory EpochLockingSettingsFactory { get; set; }
+
+    protected override Humidifier.MediaLive.ChannelTypes.OutputLockingSettings Create()
+    {
+        var outputLockingSettingsResult = CreateOutputLockingSettings();
+        factoryAction?.Invoke(outputLockingSettingsResult);
+
+        return outputLockingSettingsResult;
+    }
+
+    private Humidifier.MediaLive.ChannelTypes.OutputLockingSettings CreateOutputLockingSettings()
+    {
+        var outputLockingSettingsResult = new Humidifier.MediaLive.ChannelTypes.OutputLockingSettings();
+
+        return outputLockingSettingsResult;
+    }
+    public override void CreateChildren(Humidifier.MediaLive.ChannelTypes.OutputLockingSettings result)
+    {
+        base.CreateChildren(result);
+
+        result.PipelineLockingSettings ??= PipelineLockingSettingsFactory?.Build();
+        result.EpochLockingSettings ??= EpochLockingSettingsFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerChannelOutputLockingSettingsFactoryExtensions
+{
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings(this InnerChannelOutputLockingSettingsFactory parentFactory, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null)
+    {
+        parentFactory.PipelineLockingSettingsFactory = new InnerChannelPipelineLockingSettingsFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.PipelineLockingSettingsFactory);
+    }
+
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings(this InnerChannelOutputLockingSettingsFactory parentFactory, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null)
+    {
+        parentFactory.EpochLockingSettingsFactory = new InnerChannelEpochLockingSettingsFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.EpochLockingSettingsFactory);
+    }
+
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, T4, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3, T4>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, T4, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, T4, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, T4, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerChannelOutputLockingSettingsFactory, InnerChannelPipelineLockingSettingsFactory> WithPipelineLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.PipelineLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithPipelineLockingSettings(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, T4, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3, T4>(this CombinedResult<InnerChannelOutputLockingSettingsFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, T4, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, InnerChannelOutputLockingSettingsFactory, T2, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, T4, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerChannelOutputLockingSettingsFactory, T3, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, T4, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerChannelOutputLockingSettingsFactory, T4> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerChannelOutputLockingSettingsFactory, InnerChannelEpochLockingSettingsFactory> WithEpochLockingSettings<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerChannelOutputLockingSettingsFactory> combinedResult, Action<Humidifier.MediaLive.ChannelTypes.EpochLockingSettings> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEpochLockingSettings(combinedResult.T5, subFactoryAction));
+}
