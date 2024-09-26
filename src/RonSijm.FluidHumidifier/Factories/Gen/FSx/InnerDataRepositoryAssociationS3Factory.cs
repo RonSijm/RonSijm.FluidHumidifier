@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.FSx;
+
+public class InnerDataRepositoryAssociationS3Factory(Action<Humidifier.FSx.DataRepositoryAssociationTypes.S3> factoryAction = null) : SubResourceFactory<Humidifier.FSx.DataRepositoryAssociationTypes.S3>
+{
+
+    internal InnerDataRepositoryAssociationAutoImportPolicyFactory AutoImportPolicyFactory { get; set; }
+
+    internal InnerDataRepositoryAssociationAutoExportPolicyFactory AutoExportPolicyFactory { get; set; }
+
+    protected override Humidifier.FSx.DataRepositoryAssociationTypes.S3 Create()
+    {
+        var s3Result = CreateS3();
+        factoryAction?.Invoke(s3Result);
+
+        return s3Result;
+    }
+
+    private Humidifier.FSx.DataRepositoryAssociationTypes.S3 CreateS3()
+    {
+        var s3Result = new Humidifier.FSx.DataRepositoryAssociationTypes.S3();
+
+        return s3Result;
+    }
+    public override void CreateChildren(Humidifier.FSx.DataRepositoryAssociationTypes.S3 result)
+    {
+        base.CreateChildren(result);
+
+        result.AutoImportPolicy ??= AutoImportPolicyFactory?.Build();
+        result.AutoExportPolicy ??= AutoExportPolicyFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerDataRepositoryAssociationS3FactoryExtensions
+{
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy(this InnerDataRepositoryAssociationS3Factory parentFactory, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null)
+    {
+        parentFactory.AutoImportPolicyFactory = new InnerDataRepositoryAssociationAutoImportPolicyFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.AutoImportPolicyFactory);
+    }
+
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy(this InnerDataRepositoryAssociationS3Factory parentFactory, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null)
+    {
+        parentFactory.AutoExportPolicyFactory = new InnerDataRepositoryAssociationAutoExportPolicyFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.AutoExportPolicyFactory);
+    }
+
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, T4, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3, T4>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, T4, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, T4, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, T4, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoImportPolicyFactory> WithAutoImportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoImportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoImportPolicy(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, T4, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3, T4>(this CombinedResult<InnerDataRepositoryAssociationS3Factory, T1, T2, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, T4, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, InnerDataRepositoryAssociationS3Factory, T2, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, T4, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerDataRepositoryAssociationS3Factory, T3, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, T4, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerDataRepositoryAssociationS3Factory, T4> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerDataRepositoryAssociationS3Factory, InnerDataRepositoryAssociationAutoExportPolicyFactory> WithAutoExportPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerDataRepositoryAssociationS3Factory> combinedResult, Action<Humidifier.FSx.DataRepositoryAssociationTypes.AutoExportPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithAutoExportPolicy(combinedResult.T5, subFactoryAction));
+}

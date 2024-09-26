@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.ManagedBlockchain;
+
+public class InnerMemberNetworkConfigurationFactory(Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration> factoryAction = null) : SubResourceFactory<Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration>
+{
+
+    internal InnerMemberVotingPolicyFactory VotingPolicyFactory { get; set; }
+
+    internal InnerMemberNetworkFrameworkConfigurationFactory NetworkFrameworkConfigurationFactory { get; set; }
+
+    protected override Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration Create()
+    {
+        var networkConfigurationResult = CreateNetworkConfiguration();
+        factoryAction?.Invoke(networkConfigurationResult);
+
+        return networkConfigurationResult;
+    }
+
+    private Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration CreateNetworkConfiguration()
+    {
+        var networkConfigurationResult = new Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration();
+
+        return networkConfigurationResult;
+    }
+    public override void CreateChildren(Humidifier.ManagedBlockchain.MemberTypes.NetworkConfiguration result)
+    {
+        base.CreateChildren(result);
+
+        result.VotingPolicy ??= VotingPolicyFactory?.Build();
+        result.NetworkFrameworkConfiguration ??= NetworkFrameworkConfigurationFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerMemberNetworkConfigurationFactoryExtensions
+{
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, InnerMemberVotingPolicyFactory> WithVotingPolicy(this InnerMemberNetworkConfigurationFactory parentFactory, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null)
+    {
+        parentFactory.VotingPolicyFactory = new InnerMemberVotingPolicyFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.VotingPolicyFactory);
+    }
+
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration(this InnerMemberNetworkConfigurationFactory parentFactory, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null)
+    {
+        parentFactory.NetworkFrameworkConfigurationFactory = new InnerMemberNetworkFrameworkConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.NetworkFrameworkConfigurationFactory);
+    }
+
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithVotingPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithVotingPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, T4, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3, T4>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, T4, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3, T4>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, T4, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, T4, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerMemberNetworkConfigurationFactory, InnerMemberVotingPolicyFactory> WithVotingPolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.VotingPolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVotingPolicy(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, T4, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3, T4>(this CombinedResult<InnerMemberNetworkConfigurationFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, T4, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, InnerMemberNetworkConfigurationFactory, T2, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, T4, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerMemberNetworkConfigurationFactory, T3, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, T4, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerMemberNetworkConfigurationFactory, T4> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerMemberNetworkConfigurationFactory, InnerMemberNetworkFrameworkConfigurationFactory> WithNetworkFrameworkConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerMemberNetworkConfigurationFactory> combinedResult, Action<Humidifier.ManagedBlockchain.MemberTypes.NetworkFrameworkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithNetworkFrameworkConfiguration(combinedResult.T5, subFactoryAction));
+}
