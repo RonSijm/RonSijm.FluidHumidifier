@@ -1,8 +1,8 @@
 ﻿using Humidifier.ElasticLoadBalancingV2;
 using Humidifier.ElasticLoadBalancingV2.LoadBalancerTypes;
-using Humidifier.S3;
 using RonSijm.FluidHumidifier.Features.Decorating.Interfaces;
 using RonSijm.FluidHumidifier.Features.Resources;
+using RonSijm.FluidHumidifier.VCDM.Config;
 using RonSijm.FluidHumidifier.VCDM.Helpers;
 
 namespace RonSijm.FluidHumidifier.VCDM.Decorators
@@ -29,11 +29,6 @@ namespace RonSijm.FluidHumidifier.VCDM.Decorators
                 return true;
             }
 
-            if (target is Bucket bucket)
-            {
-                return bucket.BucketName == _expectedEnvironmentName.Value;
-            }
-
             return false;
         }
 
@@ -42,10 +37,6 @@ namespace RonSijm.FluidHumidifier.VCDM.Decorators
             if (target is LoadBalancer loadBalancer)
             {
                 Decorate(loadBalancer);
-            }
-            else if (target is Bucket bucket)
-            {
-                Decorate(bucket);
             }
         }
 
@@ -57,6 +48,15 @@ namespace RonSijm.FluidHumidifier.VCDM.Decorators
             {
                 target.LoadBalancerAttributes = [];
             }
+
+            // Access logs S3 enabled
+            var accessLogsEnabled = target.LoadBalancerAttributes.FirstOrDefault(x => x.Key == "access_logs.s3.enabled");
+            if (accessLogsEnabled == null)
+            {
+                accessLogsEnabled = new LoadBalancerAttribute { Key = "access_logs.s3.enabled" };
+                target.LoadBalancerAttributes.Add(accessLogsEnabled);
+            }
+            accessLogsEnabled.Value = "true";
 
             // Access logs S3 bucket
             var accessLogBucket = target.LoadBalancerAttributes.FirstOrDefault(x => x.Key == "access_logs.s3.bucket");
@@ -74,7 +74,7 @@ namespace RonSijm.FluidHumidifier.VCDM.Decorators
                 accessLogPrefix = new LoadBalancerAttribute { Key = "access_logs.s3.prefix" };
                 target.LoadBalancerAttributes.Add(accessLogPrefix);
             }
-            accessLogPrefix.Value = $"LoadbalancerLogs/{LoggingBucketNameFactory.ConceptName}/AccessLogs";
+            accessLogPrefix.Value = $"{LoggingPrefixConfig.LoadBalancerPrefix}/{LoggingBucketNameFactory.ConceptName}/AccessLogs";
 
             // Connection logs S3 enabled
             var connectionEnabled = target.LoadBalancerAttributes.FirstOrDefault(x => x.Key == "connection_logs.s3.enabled");
@@ -101,14 +101,9 @@ namespace RonSijm.FluidHumidifier.VCDM.Decorators
                 connectionLogPrefix = new LoadBalancerAttribute { Key = "connection_logs.s3.prefix" };
                 target.LoadBalancerAttributes.Add(connectionLogPrefix);
             }
-            connectionLogPrefix.Value = $"LoadbalancerLogs/{LoggingBucketNameFactory.ConceptName}/ConnectionLogs";
+            connectionLogPrefix.Value = $"{LoggingPrefixConfig.LoadBalancerPrefix}/{LoggingBucketNameFactory.ConceptName}/ConnectionLogs";
 
             _loadBalancers.Add(target);
-        }
-
-        public void Decorate(Bucket target)
-        {
-
         }
 
         public string EnvironmentName { get; set; }

@@ -34,9 +34,9 @@ namespace RonSijm.FluidHumidifier.VCDM.Stacks
 
             var queues = new List<QueueWithPrefixModel>()
             {
-                new(cloudTrailQueue, "CloudTrailLogs"),
-                new(loadBalancerQueue, "LoadBalancerLogs"),
-                new(guardDutyQueue, "GuardDutyLogs")
+                new(cloudTrailQueue, LoggingPrefixConfig.CloudTrailPrefix),
+                new(loadBalancerQueue, LoggingPrefixConfig.LoadBalancerPrefix),
+                new(guardDutyQueue, LoggingPrefixConfig.GuardDutyPrefix)
             };
 
             var s3Bucket = CreateBucket(stack, queues);
@@ -49,6 +49,7 @@ namespace RonSijm.FluidHumidifier.VCDM.Stacks
                 trailOptions.IsMultiRegionTrail = true;
                 trailOptions.IncludeGlobalServiceEvents = true;
                 trailOptions.DependsOn = bucketPolicy.FFNamedList();
+                trailOptions.S3KeyPrefix = LoggingPrefixConfig.CloudTrailPrefix;
             }).WithEventSelectors(eventSelectors =>
             {
                 eventSelectors.ReadWriteType = "All";
@@ -72,6 +73,7 @@ namespace RonSijm.FluidHumidifier.VCDM.Stacks
             var deliveryChannel = stack.WithDeliveryChannel($"{LoggingBucketNameFactory.ConceptName}-AWS-Configuration-DeliveryChannel", channel =>
             {
                 channel.S3BucketName = s3Bucket.FFnREF();
+                channel.S3KeyPrefix = LoggingPrefixConfig.AWSConfig;
             }).WithConfigSnapshotDeliveryProperties(x =>
             {
                 x.DeliveryFrequency = "TwentyFour_Hours";
@@ -251,7 +253,7 @@ namespace RonSijm.FluidHumidifier.VCDM.Stacks
                             new FilterRule()
                             {
                                 Name = "prefix",
-                                Value = $"{queue.Prefix}/*"
+                                Value = $"{queue.Prefix}/"
                             }
                         ]
                     }

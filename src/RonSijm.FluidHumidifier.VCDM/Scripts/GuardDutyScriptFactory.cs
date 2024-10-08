@@ -1,5 +1,6 @@
 ﻿using RonSijm.FluidHumidifier.Features.Consumer;
 using System.Text;
+using RonSijm.FluidHumidifier.VCDM.Config;
 
 namespace RonSijm.FluidHumidifier.VCDM.Scripts
 {
@@ -19,7 +20,7 @@ namespace RonSijm.FluidHumidifier.VCDM.Scripts
             bob.AppendLine($"set \"PROFILE={Environment.EnvironmentName}\"");
             bob.AppendLine($"set \"BUCKET_NAME=aws-{config.ConceptName}-{Environment.EnvironmentName}-logging\"");
             bob.AppendLine($"set \"KMS_KEY_ID=KMS-{Environment.EnvironmentName}-CMK\"");
-            bob.AppendLine($"set \"PREFIX=GuardDutyLogs\"");
+            bob.AppendLine($"set \"PREFIX={LoggingPrefixConfig.GuardDutyPrefix}\"");
             bob.AppendLine($"");
             bob.AppendLine($"REM Compare the retrieved account ID with the expected account ID");
             bob.AppendLine($"if \"%ACCOUNT_ID%\"==\"%EXPECTED_ACCOUNT_ID%\" (");
