@@ -1,0 +1,106 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.ECR;
+
+public class RepositoryFactory(string resourceName = null, Action<Humidifier.ECR.Repository> factoryAction = null) : ResourceFactory<Humidifier.ECR.Repository>(resourceName)
+{
+
+    internal InnerRepositoryImageScanningConfigurationFactory ImageScanningConfigurationFactory { get; set; }
+
+    internal InnerRepositoryEncryptionConfigurationFactory EncryptionConfigurationFactory { get; set; }
+
+    internal InnerRepositoryLifecyclePolicyFactory LifecyclePolicyFactory { get; set; }
+
+    protected override Humidifier.ECR.Repository Create()
+    {
+        var repositoryResult = CreateRepository();
+        factoryAction?.Invoke(repositoryResult);
+
+        return repositoryResult;
+    }
+
+    private Humidifier.ECR.Repository CreateRepository()
+    {
+        var repositoryResult = new Humidifier.ECR.Repository
+        {
+            GivenName = InputResourceName,
+        };
+
+        return repositoryResult;
+    }
+    public override void CreateChildren(Humidifier.ECR.Repository result)
+    {
+        base.CreateChildren(result);
+
+        result.ImageScanningConfiguration ??= ImageScanningConfigurationFactory?.Build();
+        result.EncryptionConfiguration ??= EncryptionConfigurationFactory?.Build();
+        result.LifecyclePolicy ??= LifecyclePolicyFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class RepositoryFactoryExtensions
+{
+    public static CombinedResult<RepositoryFactory, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration(this RepositoryFactory parentFactory, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null)
+    {
+        parentFactory.ImageScanningConfigurationFactory = new InnerRepositoryImageScanningConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ImageScanningConfigurationFactory);
+    }
+
+    public static CombinedResult<RepositoryFactory, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration(this RepositoryFactory parentFactory, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null)
+    {
+        parentFactory.EncryptionConfigurationFactory = new InnerRepositoryEncryptionConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.EncryptionConfigurationFactory);
+    }
+
+    public static CombinedResult<RepositoryFactory, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy(this RepositoryFactory parentFactory, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null)
+    {
+        parentFactory.LifecyclePolicyFactory = new InnerRepositoryLifecyclePolicyFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.LifecyclePolicyFactory);
+    }
+
+    public static CombinedResult<RepositoryFactory, T1, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1>(this CombinedResult<RepositoryFactory, T1> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1>(this CombinedResult<T1, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2>(this CombinedResult<RepositoryFactory, T1, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2>(this CombinedResult<T1, RepositoryFactory, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2>(this CombinedResult<T1, T2, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3>(this CombinedResult<RepositoryFactory, T1, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3>(this CombinedResult<T1, RepositoryFactory, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, RepositoryFactory, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, T4, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3, T4>(this CombinedResult<RepositoryFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, T4, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, RepositoryFactory, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, T4, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, RepositoryFactory, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, T4, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, RepositoryFactory, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, RepositoryFactory, InnerRepositoryImageScanningConfigurationFactory> WithImageScanningConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.ImageScanningConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithImageScanningConfiguration(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1>(this CombinedResult<RepositoryFactory, T1> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1>(this CombinedResult<T1, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2>(this CombinedResult<RepositoryFactory, T1, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2>(this CombinedResult<T1, RepositoryFactory, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2>(this CombinedResult<T1, T2, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3>(this CombinedResult<RepositoryFactory, T1, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3>(this CombinedResult<T1, RepositoryFactory, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, RepositoryFactory, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, T4, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3, T4>(this CombinedResult<RepositoryFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, T4, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, RepositoryFactory, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, T4, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, RepositoryFactory, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, T4, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, RepositoryFactory, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, RepositoryFactory, InnerRepositoryEncryptionConfigurationFactory> WithEncryptionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.EncryptionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithEncryptionConfiguration(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1>(this CombinedResult<RepositoryFactory, T1> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1>(this CombinedResult<T1, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2>(this CombinedResult<RepositoryFactory, T1, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2>(this CombinedResult<T1, RepositoryFactory, T2> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2>(this CombinedResult<T1, T2, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3>(this CombinedResult<RepositoryFactory, T1, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3>(this CombinedResult<T1, RepositoryFactory, T2, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3>(this CombinedResult<T1, T2, RepositoryFactory, T3> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3>(this CombinedResult<T1, T2, T3, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<RepositoryFactory, T1, T2, T3, T4, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3, T4>(this CombinedResult<RepositoryFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, RepositoryFactory, T2, T3, T4, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3, T4>(this CombinedResult<T1, RepositoryFactory, T2, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, RepositoryFactory, T3, T4, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, RepositoryFactory, T3, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, RepositoryFactory, T4, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, RepositoryFactory, T4> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, RepositoryFactory, InnerRepositoryLifecyclePolicyFactory> WithLifecyclePolicy<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, RepositoryFactory> combinedResult, Action<Humidifier.ECR.RepositoryTypes.LifecyclePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLifecyclePolicy(combinedResult.T5, subFactoryAction));
+}

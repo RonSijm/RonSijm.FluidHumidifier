@@ -1,0 +1,57 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.Cognito;
+
+public class InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory(Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType> factoryAction = null) : SubResourceFactory<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType>
+{
+
+    internal InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory ActionsFactory { get; set; }
+
+    protected override Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType Create()
+    {
+        var compromisedCredentialsRiskConfigurationTypeResult = CreateCompromisedCredentialsRiskConfigurationType();
+        factoryAction?.Invoke(compromisedCredentialsRiskConfigurationTypeResult);
+
+        return compromisedCredentialsRiskConfigurationTypeResult;
+    }
+
+    private Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType CreateCompromisedCredentialsRiskConfigurationType()
+    {
+        var compromisedCredentialsRiskConfigurationTypeResult = new Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType();
+
+        return compromisedCredentialsRiskConfigurationTypeResult;
+    }
+    public override void CreateChildren(Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsRiskConfigurationType result)
+    {
+        base.CreateChildren(result);
+
+        result.Actions ??= ActionsFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactoryExtensions
+{
+    public static CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions(this InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory parentFactory, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null)
+    {
+        parentFactory.ActionsFactory = new InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ActionsFactory);
+    }
+
+    public static CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1>(this CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, WithActions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1>(this CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, WithActions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2>(this CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2>(this CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2>(this CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3>(this CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2, T3> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3>(this CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2, T3> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3>(this CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T3> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2, T3, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3, T4>(this CombinedResult<InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2, T3, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3, T4>(this CombinedResult<T1, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T2, T3, T4> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T3, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T3, T4> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, T4> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsActionsTypeFactory> WithActions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerUserPoolRiskConfigurationAttachmentCompromisedCredentialsRiskConfigurationTypeFactory> combinedResult, Action<Humidifier.Cognito.UserPoolRiskConfigurationAttachmentTypes.CompromisedCredentialsActionsType> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActions(combinedResult.T5, subFactoryAction));
+}

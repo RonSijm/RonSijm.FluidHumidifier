@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {
+        "BUILD_PATH": "C:\\dev\\Humidifier"
+      },
+      "distributionName": ""
+    },
+    "FluidHumidifier.CodeGen": {
+      "commandName": "Project",
+      "commandLineArgs": "-ForceRegenerate -directory D:\\RonSijm\\RonSijm.Humidifier\\src",
+      "environmentVariables": {
+        "BUILD_PATH": "C:\\dev\\Humidifier"
+      }
+    }
+  }
+}
