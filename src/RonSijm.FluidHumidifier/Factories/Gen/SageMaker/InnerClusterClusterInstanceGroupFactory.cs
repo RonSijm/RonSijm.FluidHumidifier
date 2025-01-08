@@ -7,6 +7,8 @@ namespace RonSijm.FluidHumidifier.Factories.SageMaker;
 public class InnerClusterClusterInstanceGroupFactory(Action<Humidifier.SageMaker.ClusterTypes.ClusterInstanceGroup> factoryAction = null) : SubResourceFactory<Humidifier.SageMaker.ClusterTypes.ClusterInstanceGroup>
 {
 
+    internal InnerClusterVpcConfigFactory OverrideVpcConfigFactory { get; set; }
+
     internal InnerClusterClusterLifeCycleConfigFactory LifeCycleConfigFactory { get; set; }
 
     protected override Humidifier.SageMaker.ClusterTypes.ClusterInstanceGroup Create()
@@ -27,6 +29,7 @@ public class InnerClusterClusterInstanceGroupFactory(Action<Humidifier.SageMaker
     {
         base.CreateChildren(result);
 
+        result.OverrideVpcConfig ??= OverrideVpcConfigFactory?.Build();
         result.LifeCycleConfig ??= LifeCycleConfigFactory?.Build();
     }
 
@@ -34,12 +37,32 @@ public class InnerClusterClusterInstanceGroupFactory(Action<Humidifier.SageMaker
 
 public static class InnerClusterClusterInstanceGroupFactoryExtensions
 {
+    public static CombinedResult<InnerClusterClusterInstanceGroupFactory, InnerClusterVpcConfigFactory> WithOverrideVpcConfig(this InnerClusterClusterInstanceGroupFactory parentFactory, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null)
+    {
+        parentFactory.OverrideVpcConfigFactory = new InnerClusterVpcConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.OverrideVpcConfigFactory);
+    }
+
     public static CombinedResult<InnerClusterClusterInstanceGroupFactory, InnerClusterClusterLifeCycleConfigFactory> WithLifeCycleConfig(this InnerClusterClusterInstanceGroupFactory parentFactory, Action<Humidifier.SageMaker.ClusterTypes.ClusterLifeCycleConfig> subFactoryAction = null)
     {
         parentFactory.LifeCycleConfigFactory = new InnerClusterClusterLifeCycleConfigFactory(subFactoryAction);
         return CombinedResultFactory.Create(parentFactory, parentFactory.LifeCycleConfigFactory);
     }
 
+    public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1>(this CombinedResult<T1, InnerClusterClusterInstanceGroupFactory> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2>(this CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2>(this CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, T3, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, T3> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2, T3, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3>(this CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2, T3> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory, T3, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3>(this CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory, T3> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerClusterClusterInstanceGroupFactory, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerClusterClusterInstanceGroupFactory> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, T3, T4, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3, T4>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2, T3, T4, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3, T4>(this CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, T2, T3, T4> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory, T3, T4, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerClusterClusterInstanceGroupFactory, T3, T4> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerClusterClusterInstanceGroupFactory, T4, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerClusterClusterInstanceGroupFactory, T4> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerClusterClusterInstanceGroupFactory, InnerClusterVpcConfigFactory> WithOverrideVpcConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerClusterClusterInstanceGroupFactory> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.VpcConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOverrideVpcConfig(combinedResult.T5, subFactoryAction));
     public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, InnerClusterClusterLifeCycleConfigFactory> WithLifeCycleConfig<T1>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.ClusterLifeCycleConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithLifeCycleConfig(combinedResult.T1, subFactoryAction));
     public static CombinedResult<T1, InnerClusterClusterInstanceGroupFactory, InnerClusterClusterLifeCycleConfigFactory> WithLifeCycleConfig<T1>(this CombinedResult<T1, InnerClusterClusterInstanceGroupFactory> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.ClusterLifeCycleConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithLifeCycleConfig(combinedResult.T2, subFactoryAction));
     public static CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2, InnerClusterClusterLifeCycleConfigFactory> WithLifeCycleConfig<T1, T2>(this CombinedResult<InnerClusterClusterInstanceGroupFactory, T1, T2> combinedResult, Action<Humidifier.SageMaker.ClusterTypes.ClusterLifeCycleConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLifeCycleConfig(combinedResult.T1, subFactoryAction));

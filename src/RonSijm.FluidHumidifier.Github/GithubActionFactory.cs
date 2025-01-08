@@ -93,6 +93,12 @@ public class GithubActionFactory
         }
 
         var result = bob.ToString();
+
+        if (!Directory.Exists(config.OutputDir))
+        {
+            Directory.CreateDirectory(config.OutputDir);
+        }
+
         File.WriteAllText(config.OutputDir + $"auto-deploy-cf-{environment.Environment.EnvironmentName}.yml", result);
     }
 }

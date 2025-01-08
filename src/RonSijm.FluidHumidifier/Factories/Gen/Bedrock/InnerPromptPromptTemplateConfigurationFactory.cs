@@ -7,6 +7,8 @@ namespace RonSijm.FluidHumidifier.Factories.Bedrock;
 public class InnerPromptPromptTemplateConfigurationFactory(Action<Humidifier.Bedrock.PromptTypes.PromptTemplateConfiguration> factoryAction = null) : SubResourceFactory<Humidifier.Bedrock.PromptTypes.PromptTemplateConfiguration>
 {
 
+    internal InnerPromptChatPromptTemplateConfigurationFactory ChatFactory { get; set; }
+
     internal InnerPromptTextPromptTemplateConfigurationFactory TextFactory { get; set; }
 
     protected override Humidifier.Bedrock.PromptTypes.PromptTemplateConfiguration Create()
@@ -27,6 +29,7 @@ public class InnerPromptPromptTemplateConfigurationFactory(Action<Humidifier.Bed
     {
         base.CreateChildren(result);
 
+        result.Chat ??= ChatFactory?.Build();
         result.Text ??= TextFactory?.Build();
     }
 
@@ -34,12 +37,32 @@ public class InnerPromptPromptTemplateConfigurationFactory(Action<Humidifier.Bed
 
 public static class InnerPromptPromptTemplateConfigurationFactoryExtensions
 {
+    public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, InnerPromptChatPromptTemplateConfigurationFactory> WithChat(this InnerPromptPromptTemplateConfigurationFactory parentFactory, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null)
+    {
+        parentFactory.ChatFactory = new InnerPromptChatPromptTemplateConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ChatFactory);
+    }
+
     public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, InnerPromptTextPromptTemplateConfigurationFactory> WithText(this InnerPromptPromptTemplateConfigurationFactory parentFactory, Action<Humidifier.Bedrock.PromptTypes.TextPromptTemplateConfiguration> subFactoryAction = null)
     {
         parentFactory.TextFactory = new InnerPromptTextPromptTemplateConfigurationFactory(subFactoryAction);
         return CombinedResultFactory.Create(parentFactory, parentFactory.TextFactory);
     }
 
+    public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithChat(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1>(this CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithChat(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2>(this CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2>(this CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, T3, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, T3> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2, T3, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3>(this CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2, T3> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory, T3, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3>(this CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory, T3> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerPromptPromptTemplateConfigurationFactory, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerPromptPromptTemplateConfigurationFactory> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, T3, T4, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3, T4>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2, T3, T4, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3, T4>(this CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, T2, T3, T4> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory, T3, T4, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerPromptPromptTemplateConfigurationFactory, T3, T4> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerPromptPromptTemplateConfigurationFactory, T4, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerPromptPromptTemplateConfigurationFactory, T4> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerPromptPromptTemplateConfigurationFactory, InnerPromptChatPromptTemplateConfigurationFactory> WithChat<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerPromptPromptTemplateConfigurationFactory> combinedResult, Action<Humidifier.Bedrock.PromptTypes.ChatPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChat(combinedResult.T5, subFactoryAction));
     public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, InnerPromptTextPromptTemplateConfigurationFactory> WithText<T1>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1> combinedResult, Action<Humidifier.Bedrock.PromptTypes.TextPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithText(combinedResult.T1, subFactoryAction));
     public static CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory, InnerPromptTextPromptTemplateConfigurationFactory> WithText<T1>(this CombinedResult<T1, InnerPromptPromptTemplateConfigurationFactory> combinedResult, Action<Humidifier.Bedrock.PromptTypes.TextPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithText(combinedResult.T2, subFactoryAction));
     public static CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2, InnerPromptTextPromptTemplateConfigurationFactory> WithText<T1, T2>(this CombinedResult<InnerPromptPromptTemplateConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.Bedrock.PromptTypes.TextPromptTemplateConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithText(combinedResult.T1, subFactoryAction));

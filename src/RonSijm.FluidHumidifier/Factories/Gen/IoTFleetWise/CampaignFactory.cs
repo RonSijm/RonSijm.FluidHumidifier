@@ -7,6 +7,8 @@ namespace RonSijm.FluidHumidifier.Factories.IoTFleetWise;
 public class CampaignFactory(string resourceName = null, Action<Humidifier.IoTFleetWise.Campaign> factoryAction = null) : ResourceFactory<Humidifier.IoTFleetWise.Campaign>(resourceName)
 {
 
+    internal List<InnerCampaignDataPartitionFactory> DataPartitionsFactories { get; set; } = [];
+
     internal List<InnerCampaignSignalInformationFactory> SignalsToCollectFactories { get; set; } = [];
 
     internal List<InnerCampaignSignalFetchInformationFactory> SignalsToFetchFactories { get; set; } = [];
@@ -36,6 +38,7 @@ public class CampaignFactory(string resourceName = null, Action<Humidifier.IoTFl
     {
         base.CreateChildren(result);
 
+        result.DataPartitions = DataPartitionsFactories.Any() ? DataPartitionsFactories.Select(x => x.Build()).ToList() : null;
         result.SignalsToCollect = SignalsToCollectFactories.Any() ? SignalsToCollectFactories.Select(x => x.Build()).ToList() : null;
         result.SignalsToFetch = SignalsToFetchFactories.Any() ? SignalsToFetchFactories.Select(x => x.Build()).ToList() : null;
         result.DataDestinationConfigs = DataDestinationConfigsFactories.Any() ? DataDestinationConfigsFactories.Select(x => x.Build()).ToList() : null;
@@ -46,6 +49,12 @@ public class CampaignFactory(string resourceName = null, Action<Humidifier.IoTFl
 
 public static class CampaignFactoryExtensions
 {
+    public static CombinedResult<CampaignFactory, InnerCampaignDataPartitionFactory> WithDataPartitions(this CampaignFactory parentFactory, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null)
+    {
+        var factory = new InnerCampaignDataPartitionFactory(subFactoryAction);
+        parentFactory.DataPartitionsFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
     public static CombinedResult<CampaignFactory, InnerCampaignSignalInformationFactory> WithSignalsToCollect(this CampaignFactory parentFactory, Action<Humidifier.IoTFleetWise.CampaignTypes.SignalInformation> subFactoryAction = null)
     {
         var factory = new InnerCampaignSignalInformationFactory(subFactoryAction);
@@ -70,6 +79,20 @@ public static class CampaignFactoryExtensions
         return CombinedResultFactory.Create(parentFactory, parentFactory.CollectionSchemeFactory);
     }
 
+    public static CombinedResult<CampaignFactory, T1, InnerCampaignDataPartitionFactory> WithDataPartitions<T1>(this CombinedResult<CampaignFactory, T1> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, WithDataPartitions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, CampaignFactory, InnerCampaignDataPartitionFactory> WithDataPartitions<T1>(this CombinedResult<T1, CampaignFactory> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, WithDataPartitions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<CampaignFactory, T1, T2, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2>(this CombinedResult<CampaignFactory, T1, T2> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, CampaignFactory, T2, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2>(this CombinedResult<T1, CampaignFactory, T2> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, CampaignFactory, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2>(this CombinedResult<T1, T2, CampaignFactory> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<CampaignFactory, T1, T2, T3, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3>(this CombinedResult<CampaignFactory, T1, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, CampaignFactory, T2, T3, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3>(this CombinedResult<T1, CampaignFactory, T2, T3> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, CampaignFactory, T3, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3>(this CombinedResult<T1, T2, CampaignFactory, T3> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, CampaignFactory, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3>(this CombinedResult<T1, T2, T3, CampaignFactory> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<CampaignFactory, T1, T2, T3, T4, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3, T4>(this CombinedResult<CampaignFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, CampaignFactory, T2, T3, T4, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3, T4>(this CombinedResult<T1, CampaignFactory, T2, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, CampaignFactory, T3, T4, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3, T4>(this CombinedResult<T1, T2, CampaignFactory, T3, T4> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, CampaignFactory, T4, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, CampaignFactory, T4> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, CampaignFactory, InnerCampaignDataPartitionFactory> WithDataPartitions<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, CampaignFactory> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.DataPartition> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDataPartitions(combinedResult.T5, subFactoryAction));
     public static CombinedResult<CampaignFactory, T1, InnerCampaignSignalInformationFactory> WithSignalsToCollect<T1>(this CombinedResult<CampaignFactory, T1> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.SignalInformation> subFactoryAction = null) => new (combinedResult, combinedResult, WithSignalsToCollect(combinedResult.T1, subFactoryAction));
     public static CombinedResult<T1, CampaignFactory, InnerCampaignSignalInformationFactory> WithSignalsToCollect<T1>(this CombinedResult<T1, CampaignFactory> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.SignalInformation> subFactoryAction = null) => new (combinedResult, combinedResult, WithSignalsToCollect(combinedResult.T2, subFactoryAction));
     public static CombinedResult<CampaignFactory, T1, T2, InnerCampaignSignalInformationFactory> WithSignalsToCollect<T1, T2>(this CombinedResult<CampaignFactory, T1, T2> combinedResult, Action<Humidifier.IoTFleetWise.CampaignTypes.SignalInformation> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSignalsToCollect(combinedResult.T1, subFactoryAction));

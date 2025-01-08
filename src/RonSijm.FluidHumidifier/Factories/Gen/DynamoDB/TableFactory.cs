@@ -31,6 +31,8 @@ public class TableFactory(string resourceName = null, Action<Humidifier.DynamoDB
 
     internal InnerTableProvisionedThroughputFactory ProvisionedThroughputFactory { get; set; }
 
+    internal InnerTableWarmThroughputFactory WarmThroughputFactory { get; set; }
+
     internal InnerTableResourcePolicyFactory ResourcePolicyFactory { get; set; }
 
     internal InnerTableTimeToLiveSpecificationFactory TimeToLiveSpecificationFactory { get; set; }
@@ -68,6 +70,7 @@ public class TableFactory(string resourceName = null, Action<Humidifier.DynamoDB
         result.ImportSourceSpecification ??= ImportSourceSpecificationFactory?.Build();
         result.PointInTimeRecoverySpecification ??= PointInTimeRecoverySpecificationFactory?.Build();
         result.ProvisionedThroughput ??= ProvisionedThroughputFactory?.Build();
+        result.WarmThroughput ??= WarmThroughputFactory?.Build();
         result.ResourcePolicy ??= ResourcePolicyFactory?.Build();
         result.TimeToLiveSpecification ??= TimeToLiveSpecificationFactory?.Build();
     }
@@ -146,6 +149,12 @@ public static class TableFactoryExtensions
     {
         parentFactory.ProvisionedThroughputFactory = new InnerTableProvisionedThroughputFactory(subFactoryAction);
         return CombinedResultFactory.Create(parentFactory, parentFactory.ProvisionedThroughputFactory);
+    }
+
+    public static CombinedResult<TableFactory, InnerTableWarmThroughputFactory> WithWarmThroughput(this TableFactory parentFactory, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null)
+    {
+        parentFactory.WarmThroughputFactory = new InnerTableWarmThroughputFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.WarmThroughputFactory);
     }
 
     public static CombinedResult<TableFactory, InnerTableResourcePolicyFactory> WithResourcePolicy(this TableFactory parentFactory, Action<Humidifier.DynamoDB.TableTypes.ResourcePolicy> subFactoryAction = null)
@@ -328,6 +337,20 @@ public static class TableFactoryExtensions
     public static CombinedResult<T1, T2, TableFactory, T3, T4, InnerTableProvisionedThroughputFactory> WithProvisionedThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, TableFactory, T3, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ProvisionedThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithProvisionedThroughput(combinedResult.T3, subFactoryAction));
     public static CombinedResult<T1, T2, T3, TableFactory, T4, InnerTableProvisionedThroughputFactory> WithProvisionedThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, TableFactory, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ProvisionedThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithProvisionedThroughput(combinedResult.T4, subFactoryAction));
     public static CombinedResult<T1, T2, T3, T4, TableFactory, InnerTableProvisionedThroughputFactory> WithProvisionedThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ProvisionedThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithProvisionedThroughput(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<TableFactory, T1, InnerTableWarmThroughputFactory> WithWarmThroughput<T1>(this CombinedResult<TableFactory, T1> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, WithWarmThroughput(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, TableFactory, InnerTableWarmThroughputFactory> WithWarmThroughput<T1>(this CombinedResult<T1, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, WithWarmThroughput(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<TableFactory, T1, T2, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2>(this CombinedResult<TableFactory, T1, T2> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, TableFactory, T2, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2>(this CombinedResult<T1, TableFactory, T2> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, TableFactory, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2>(this CombinedResult<T1, T2, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<TableFactory, T1, T2, T3, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3>(this CombinedResult<TableFactory, T1, T2, T3> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, TableFactory, T2, T3, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3>(this CombinedResult<T1, TableFactory, T2, T3> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, TableFactory, T3, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3>(this CombinedResult<T1, T2, TableFactory, T3> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, TableFactory, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3>(this CombinedResult<T1, T2, T3, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<TableFactory, T1, T2, T3, T4, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3, T4>(this CombinedResult<TableFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, TableFactory, T2, T3, T4, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3, T4>(this CombinedResult<T1, TableFactory, T2, T3, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, TableFactory, T3, T4, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, TableFactory, T3, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, TableFactory, T4, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, TableFactory, T4> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, TableFactory, InnerTableWarmThroughputFactory> WithWarmThroughput<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.WarmThroughput> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmThroughput(combinedResult.T5, subFactoryAction));
     public static CombinedResult<TableFactory, T1, InnerTableResourcePolicyFactory> WithResourcePolicy<T1>(this CombinedResult<TableFactory, T1> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ResourcePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithResourcePolicy(combinedResult.T1, subFactoryAction));
     public static CombinedResult<T1, TableFactory, InnerTableResourcePolicyFactory> WithResourcePolicy<T1>(this CombinedResult<T1, TableFactory> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ResourcePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, WithResourcePolicy(combinedResult.T2, subFactoryAction));
     public static CombinedResult<TableFactory, T1, T2, InnerTableResourcePolicyFactory> WithResourcePolicy<T1, T2>(this CombinedResult<TableFactory, T1, T2> combinedResult, Action<Humidifier.DynamoDB.TableTypes.ResourcePolicy> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithResourcePolicy(combinedResult.T1, subFactoryAction));

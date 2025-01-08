@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.ConnectCampaignsV2;
+
+public class InnerCampaignSmsChannelSubtypeConfigFactory(Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig> factoryAction = null) : SubResourceFactory<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig>
+{
+
+    internal InnerCampaignSmsOutboundModeFactory OutboundModeFactory { get; set; }
+
+    internal InnerCampaignSmsOutboundConfigFactory DefaultOutboundConfigFactory { get; set; }
+
+    protected override Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig Create()
+    {
+        var smsChannelSubtypeConfigResult = CreateSmsChannelSubtypeConfig();
+        factoryAction?.Invoke(smsChannelSubtypeConfigResult);
+
+        return smsChannelSubtypeConfigResult;
+    }
+
+    private Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig CreateSmsChannelSubtypeConfig()
+    {
+        var smsChannelSubtypeConfigResult = new Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig();
+
+        return smsChannelSubtypeConfigResult;
+    }
+    public override void CreateChildren(Humidifier.ConnectCampaignsV2.CampaignTypes.SmsChannelSubtypeConfig result)
+    {
+        base.CreateChildren(result);
+
+        result.OutboundMode ??= OutboundModeFactory?.Build();
+        result.DefaultOutboundConfig ??= DefaultOutboundConfigFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerCampaignSmsChannelSubtypeConfigFactoryExtensions
+{
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundModeFactory> WithOutboundMode(this InnerCampaignSmsChannelSubtypeConfigFactory parentFactory, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null)
+    {
+        parentFactory.OutboundModeFactory = new InnerCampaignSmsOutboundModeFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.OutboundModeFactory);
+    }
+
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig(this InnerCampaignSmsChannelSubtypeConfigFactory parentFactory, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null)
+    {
+        parentFactory.DefaultOutboundConfigFactory = new InnerCampaignSmsOutboundConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.DefaultOutboundConfigFactory);
+    }
+
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, WithOutboundMode(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, WithOutboundMode(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, T4, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3, T4>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, T4, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3, T4>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, T4, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, T4, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundModeFactory> WithOutboundMode<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundMode> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOutboundMode(combinedResult.T5, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, T4, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3, T4>(this CombinedResult<InnerCampaignSmsChannelSubtypeConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T1, subFactoryAction));
+    public static CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, T4, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3, T4>(this CombinedResult<T1, InnerCampaignSmsChannelSubtypeConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T2, subFactoryAction));
+    public static CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, T4, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerCampaignSmsChannelSubtypeConfigFactory, T3, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T3, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, T4, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerCampaignSmsChannelSubtypeConfigFactory, T4> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T4, subFactoryAction));
+    public static CombinedResult<T1, T2, T3, T4, InnerCampaignSmsChannelSubtypeConfigFactory, InnerCampaignSmsOutboundConfigFactory> WithDefaultOutboundConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerCampaignSmsChannelSubtypeConfigFactory> combinedResult, Action<Humidifier.ConnectCampaignsV2.CampaignTypes.SmsOutboundConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithDefaultOutboundConfig(combinedResult.T5, subFactoryAction));
+}

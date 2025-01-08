@@ -33,6 +33,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Lambda.PermissionFactory> LambdaPermissionFactories { get; set; } = [];
 
+    private List<QBusiness.PermissionFactory> QBusinessPermissionFactories { get; set; } = [];
+
     private List<RAM.PermissionFactory> RAMPermissionFactories { get; set; } = [];
 
     private List<APS.RuleGroupsNamespaceFactory> RuleGroupsNamespaceFactories { get; set; } = [];
@@ -119,6 +121,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<ApiGateway.BasePathMappingFactory> BasePathMappingFactories { get; set; } = [];
 
+    private List<ApiGateway.BasePathMappingV2Factory> BasePathMappingV2Factories { get; set; } = [];
+
     private List<ApiGateway.ClientCertificateFactory> ClientCertificateFactories { get; set; } = [];
 
     private List<ApiGateway.DeploymentFactory> ApiGatewayDeploymentFactories { get; set; } = [];
@@ -131,6 +135,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<LaunchWizard.DeploymentFactory> LaunchWizardDeploymentFactories { get; set; } = [];
 
+    private List<M2.DeploymentFactory> M2DeploymentFactories { get; set; } = [];
+
     private List<ApiGateway.DocumentationPartFactory> DocumentationPartFactories { get; set; } = [];
 
     private List<ApiGateway.DocumentationVersionFactory> DocumentationVersionFactories { get; set; } = [];
@@ -140,6 +146,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<ApiGatewayV2.DomainNameFactory> ApiGatewayV2DomainNameFactories { get; set; } = [];
 
     private List<AppSync.DomainNameFactory> AppSyncDomainNameFactories { get; set; } = [];
+
+    private List<ApiGateway.DomainNameAccessAssociationFactory> DomainNameAccessAssociationFactories { get; set; } = [];
+
+    private List<ApiGateway.DomainNameV2Factory> DomainNameV2Factories { get; set; } = [];
 
     private List<ApiGateway.GatewayResponseFactory> GatewayResponseFactories { get; set; } = [];
 
@@ -173,7 +183,9 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<ApiGatewayV2.VpcLinkFactory> ApiGatewayV2VpcLinkFactories { get; set; } = [];
 
-    private List<ApiGatewayV2.ApiFactory> ApiFactories { get; set; } = [];
+    private List<ApiGatewayV2.ApiFactory> ApiGatewayV2ApiFactories { get; set; } = [];
+
+    private List<AppSync.ApiFactory> AppSyncApiFactories { get; set; } = [];
 
     private List<ApiGatewayV2.ApiGatewayManagedOverridesFactory> ApiGatewayManagedOverridesFactories { get; set; } = [];
 
@@ -183,7 +195,11 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<CustomerProfiles.IntegrationFactory> CustomerProfilesIntegrationFactories { get; set; } = [];
 
+    private List<Logs.IntegrationFactory> LogsIntegrationFactories { get; set; } = [];
+
     private List<RDS.IntegrationFactory> RDSIntegrationFactories { get; set; } = [];
+
+    private List<Redshift.IntegrationFactory> RedshiftIntegrationFactories { get; set; } = [];
 
     private List<ApiGatewayV2.IntegrationResponseFactory> IntegrationResponseFactories { get; set; } = [];
 
@@ -218,6 +234,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<KinesisAnalyticsV2.ApplicationFactory> KinesisAnalyticsV2ApplicationFactories { get; set; } = [];
 
     private List<M2.ApplicationFactory> M2ApplicationFactories { get; set; } = [];
+
+    private List<OpenSearchService.ApplicationFactory> OpenSearchServiceApplicationFactories { get; set; } = [];
 
     private List<QBusiness.ApplicationFactory> QBusinessApplicationFactories { get; set; } = [];
 
@@ -357,6 +375,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<AppSync.ApiCacheFactory> ApiCacheFactories { get; set; } = [];
 
+    private List<AppSync.ChannelNamespaceFactory> ChannelNamespaceFactories { get; set; } = [];
+
     private List<AppSync.DataSourceFactory> AppSyncDataSourceFactories { get; set; } = [];
 
     private List<Bedrock.DataSourceFactory> BedrockDataSourceFactories { get; set; } = [];
@@ -431,7 +451,9 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Transfer.ProfileFactory> TransferProfileFactories { get; set; } = [];
 
-    private List<B2BI.TransformerFactory> TransformerFactories { get; set; } = [];
+    private List<B2BI.TransformerFactory> B2BITransformerFactories { get; set; } = [];
+
+    private List<Logs.TransformerFactory> LogsTransformerFactories { get; set; } = [];
 
     private List<BCMDataExports.ExportFactory> ExportFactories { get; set; } = [];
 
@@ -442,6 +464,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<Backup.BackupVaultFactory> BackupVaultFactories { get; set; } = [];
 
     private List<Backup.FrameworkFactory> FrameworkFactories { get; set; } = [];
+
+    private List<Backup.LogicallyAirGappedBackupVaultFactory> LogicallyAirGappedBackupVaultFactories { get; set; } = [];
 
     private List<Backup.ReportPlanFactory> ReportPlanFactories { get; set; } = [];
 
@@ -464,6 +488,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<DataSync.AgentFactory> DataSyncAgentFactories { get; set; } = [];
 
     private List<Bedrock.AgentAliasFactory> AgentAliasFactories { get; set; } = [];
+
+    private List<Bedrock.ApplicationInferenceProfileFactory> ApplicationInferenceProfileFactories { get; set; } = [];
 
     private List<Bedrock.FlowAliasFactory> FlowAliasFactories { get; set; } = [];
 
@@ -515,6 +541,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Timestream.TableFactory> TimestreamTableFactories { get; set; } = [];
 
+    private List<Cassandra.TypeFactory> TypeFactories { get; set; } = [];
+
+    private List<Chatbot.CustomActionFactory> CustomActionFactories { get; set; } = [];
+
     private List<Chatbot.MicrosoftTeamsChannelConfigurationFactory> MicrosoftTeamsChannelConfigurationFactories { get; set; } = [];
 
     private List<Chatbot.SlackChannelConfigurationFactory> ChatbotSlackChannelConfigurationFactories { get; set; } = [];
@@ -543,11 +573,15 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<CloudFormation.CustomResourceFactory> CustomResourceFactories { get; set; } = [];
 
+    private List<CloudFormation.GuardHookFactory> GuardHookFactories { get; set; } = [];
+
     private List<CloudFormation.HookDefaultVersionFactory> HookDefaultVersionFactories { get; set; } = [];
 
     private List<CloudFormation.HookTypeConfigFactory> HookTypeConfigFactories { get; set; } = [];
 
     private List<CloudFormation.HookVersionFactory> HookVersionFactories { get; set; } = [];
+
+    private List<CloudFormation.LambdaHookFactory> LambdaHookFactories { get; set; } = [];
 
     private List<CloudFormation.MacroFactory> MacroFactories { get; set; } = [];
 
@@ -570,6 +604,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<CloudFormation.WaitConditionFactory> WaitConditionFactories { get; set; } = [];
 
     private List<CloudFormation.WaitConditionHandleFactory> WaitConditionHandleFactories { get; set; } = [];
+
+    private List<CloudFront.AnycastIpListFactory> AnycastIpListFactories { get; set; } = [];
 
     private List<CloudFront.CachePolicyFactory> CachePolicyFactories { get; set; } = [];
 
@@ -619,9 +655,19 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<MediaTailor.ChannelFactory> MediaTailorChannelFactories { get; set; } = [];
 
+    private List<CloudTrail.DashboardFactory> CloudTrailDashboardFactories { get; set; } = [];
+
+    private List<CloudWatch.DashboardFactory> CloudWatchDashboardFactories { get; set; } = [];
+
+    private List<IoTSiteWise.DashboardFactory> IoTSiteWiseDashboardFactories { get; set; } = [];
+
+    private List<QuickSight.DashboardFactory> QuickSightDashboardFactories { get; set; } = [];
+
     private List<CloudTrail.EventDataStoreFactory> EventDataStoreFactories { get; set; } = [];
 
     private List<CloudTrail.ResourcePolicyFactory> CloudTrailResourcePolicyFactories { get; set; } = [];
+
+    private List<Kinesis.ResourcePolicyFactory> KinesisResourcePolicyFactories { get; set; } = [];
 
     private List<Lex.ResourcePolicyFactory> LexResourcePolicyFactories { get; set; } = [];
 
@@ -649,12 +695,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<CloudWatch.CompositeAlarmFactory> CompositeAlarmFactories { get; set; } = [];
 
-    private List<CloudWatch.DashboardFactory> CloudWatchDashboardFactories { get; set; } = [];
-
-    private List<IoTSiteWise.DashboardFactory> IoTSiteWiseDashboardFactories { get; set; } = [];
-
-    private List<QuickSight.DashboardFactory> QuickSightDashboardFactories { get; set; } = [];
-
     private List<CloudWatch.InsightRuleFactory> InsightRuleFactories { get; set; } = [];
 
     private List<CloudWatch.MetricStreamFactory> MetricStreamFactories { get; set; } = [];
@@ -674,8 +714,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<DataZone.ProjectFactory> DataZoneProjectFactories { get; set; } = [];
 
     private List<Evidently.ProjectFactory> EvidentlyProjectFactories { get; set; } = [];
-
-    private List<IoT1Click.ProjectFactory> IoT1ClickProjectFactories { get; set; } = [];
 
     private List<IoTSiteWise.ProjectFactory> IoTSiteWiseProjectFactories { get; set; } = [];
 
@@ -735,6 +773,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Cognito.LogDeliveryConfigurationFactory> LogDeliveryConfigurationFactories { get; set; } = [];
 
+    private List<Cognito.ManagedLoginBrandingFactory> ManagedLoginBrandingFactories { get; set; } = [];
+
     private List<Cognito.UserPoolFactory> UserPoolFactories { get; set; } = [];
 
     private List<Cognito.UserPoolClientFactory> UserPoolClientFactories { get; set; } = [];
@@ -787,6 +827,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Connect.ContactFlowModuleFactory> ContactFlowModuleFactories { get; set; } = [];
 
+    private List<Connect.EmailAddressFactory> EmailAddressFactories { get; set; } = [];
+
     private List<Connect.EvaluationFormFactory> EvaluationFormFactories { get; set; } = [];
 
     private List<Connect.HoursOfOperationFactory> HoursOfOperationFactories { get; set; } = [];
@@ -817,6 +859,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<MediaConvert.QueueFactory> MediaConvertQueueFactories { get; set; } = [];
 
+    private List<PCS.QueueFactory> PCSQueueFactories { get; set; } = [];
+
     private List<SQS.QueueFactory> SQSQueueFactories { get; set; } = [];
 
     private List<Connect.QuickConnectFactory> QuickConnectFactories { get; set; } = [];
@@ -826,6 +870,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<Connect.RuleFactory> ConnectRuleFactories { get; set; } = [];
 
     private List<Events.RuleFactory> EventsRuleFactories { get; set; } = [];
+
+    private List<Rbin.RuleFactory> RbinRuleFactories { get; set; } = [];
 
     private List<VpcLattice.RuleFactory> VpcLatticeRuleFactories { get; set; } = [];
 
@@ -855,6 +901,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<ConnectCampaigns.CampaignFactory> ConnectCampaignsCampaignFactories { get; set; } = [];
 
+    private List<ConnectCampaignsV2.CampaignFactory> ConnectCampaignsV2CampaignFactories { get; set; } = [];
+
     private List<IoTFleetWise.CampaignFactory> IoTFleetWiseCampaignFactories { get; set; } = [];
 
     private List<Pinpoint.CampaignFactory> PinpointCampaignFactories { get; set; } = [];
@@ -873,6 +921,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<CustomerProfiles.ObjectTypeFactory> ObjectTypeFactories { get; set; } = [];
 
+    private List<CustomerProfiles.SegmentDefinitionFactory> SegmentDefinitionFactories { get; set; } = [];
+
     private List<DAX.ClusterFactory> DAXClusterFactories { get; set; } = [];
 
     private List<DocDBElastic.ClusterFactory> DocDBElasticClusterFactories { get; set; } = [];
@@ -888,6 +938,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<MediaLive.ClusterFactory> MediaLiveClusterFactories { get; set; } = [];
 
     private List<MemoryDB.ClusterFactory> MemoryDBClusterFactories { get; set; } = [];
+
+    private List<PCS.ClusterFactory> PCSClusterFactories { get; set; } = [];
 
     private List<Redshift.ClusterFactory> RedshiftClusterFactories { get; set; } = [];
 
@@ -912,6 +964,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<ImageBuilder.LifecyclePolicyFactory> ImageBuilderLifecyclePolicyFactories { get; set; } = [];
 
     private List<OpenSearchServerless.LifecyclePolicyFactory> OpenSearchServerlessLifecyclePolicyFactories { get; set; } = [];
+
+    private List<DMS.DataMigrationFactory> DataMigrationFactories { get; set; } = [];
 
     private List<DMS.DataProviderFactory> DataProviderFactories { get; set; } = [];
 
@@ -1173,6 +1227,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<ElastiCache.SecurityGroupIngressFactory> ElastiCacheSecurityGroupIngressFactories { get; set; } = [];
 
+    private List<EC2.SecurityGroupVpcAssociationFactory> SecurityGroupVpcAssociationFactories { get; set; } = [];
+
     private List<EC2.SnapshotBlockPublicAccessFactory> SnapshotBlockPublicAccessFactories { get; set; } = [];
 
     private List<EC2.SpotFleetFactory> SpotFleetFactories { get; set; } = [];
@@ -1220,6 +1276,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<EC2.TransitGatewayVpcAttachmentFactory> TransitGatewayVpcAttachmentFactories { get; set; } = [];
 
     private List<EC2.VPCFactory> VPCFactories { get; set; } = [];
+
+    private List<EC2.VPCBlockPublicAccessExclusionFactory> VPCBlockPublicAccessExclusionFactories { get; set; } = [];
+
+    private List<EC2.VPCBlockPublicAccessOptionsFactory> VPCBlockPublicAccessOptionsFactories { get; set; } = [];
 
     private List<EC2.VPCCidrBlockFactory> VPCCidrBlockFactories { get; set; } = [];
 
@@ -1321,9 +1381,7 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<EMR.StepFactory> StepFactories { get; set; } = [];
 
-    private List<EMR.StudioFactory> EMRStudioFactories { get; set; } = [];
-
-    private List<NimbleStudio.StudioFactory> NimbleStudioStudioFactories { get; set; } = [];
+    private List<EMR.StudioFactory> StudioFactories { get; set; } = [];
 
     private List<EMR.StudioSessionMappingFactory> StudioSessionMappingFactories { get; set; } = [];
 
@@ -1465,6 +1523,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<GameLift.BuildFactory> BuildFactories { get; set; } = [];
 
+    private List<GameLift.ContainerFleetFactory> ContainerFleetFactories { get; set; } = [];
+
     private List<GameLift.ContainerGroupDefinitionFactory> ContainerGroupDefinitionFactories { get; set; } = [];
 
     private List<GameLift.GameServerGroupFactory> GameServerGroupFactories { get; set; } = [];
@@ -1514,6 +1574,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<Glue.TableOptimizerFactory> TableOptimizerFactories { get; set; } = [];
 
     private List<Glue.TriggerFactory> TriggerFactories { get; set; } = [];
+
+    private List<Glue.UsageProfileFactory> UsageProfileFactories { get; set; } = [];
 
     private List<Glue.WorkflowFactory> GlueWorkflowFactories { get; set; } = [];
 
@@ -1627,6 +1689,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<IVS.EncoderConfigurationFactory> EncoderConfigurationFactories { get; set; } = [];
 
+    private List<IVS.IngestConfigurationFactory> IngestConfigurationFactories { get; set; } = [];
+
     private List<IVS.PlaybackKeyPairFactory> PlaybackKeyPairFactories { get; set; } = [];
 
     private List<IVS.PlaybackRestrictionPolicyFactory> PlaybackRestrictionPolicyFactories { get; set; } = [];
@@ -1669,19 +1733,15 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<InspectorV2.CisScanConfigurationFactory> CisScanConfigurationFactories { get; set; } = [];
 
-    private List<IoT1Click.DeviceFactory> IoT1ClickDeviceFactories { get; set; } = [];
-
-    private List<NetworkManager.DeviceFactory> NetworkManagerDeviceFactories { get; set; } = [];
-
-    private List<SageMaker.DeviceFactory> SageMakerDeviceFactories { get; set; } = [];
-
-    private List<IoT1Click.PlacementFactory> PlacementFactories { get; set; } = [];
+    private List<Invoicing.InvoiceUnitFactory> InvoiceUnitFactories { get; set; } = [];
 
     private List<IoT.AccountAuditConfigurationFactory> AccountAuditConfigurationFactories { get; set; } = [];
 
     private List<IoT.CACertificateFactory> CACertificateFactories { get; set; } = [];
 
     private List<IoT.CertificateProviderFactory> CertificateProviderFactories { get; set; } = [];
+
+    private List<IoT.CommandFactory> CommandFactories { get; set; } = [];
 
     private List<IoT.CustomMetricFactory> CustomMetricFactories { get; set; } = [];
 
@@ -1740,6 +1800,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<IoTFleetWise.ModelManifestFactory> ModelManifestFactories { get; set; } = [];
 
     private List<IoTFleetWise.SignalCatalogFactory> SignalCatalogFactories { get; set; } = [];
+
+    private List<IoTFleetWise.StateTemplateFactory> StateTemplateFactories { get; set; } = [];
 
     private List<IoTFleetWise.VehicleFactory> VehicleFactories { get; set; } = [];
 
@@ -2011,6 +2073,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<MemoryDB.ACLFactory> ACLFactories { get; set; } = [];
 
+    private List<MemoryDB.MultiRegionClusterFactory> MultiRegionClusterFactories { get; set; } = [];
+
     private List<Neptune.DBParameterGroupFactory> NeptuneDBParameterGroupFactories { get; set; } = [];
 
     private List<RDS.DBParameterGroupFactory> RDSDBParameterGroupFactories { get; set; } = [];
@@ -2035,6 +2099,12 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<NetworkManager.CustomerGatewayAssociationFactory> CustomerGatewayAssociationFactories { get; set; } = [];
 
+    private List<NetworkManager.DeviceFactory> NetworkManagerDeviceFactories { get; set; } = [];
+
+    private List<SageMaker.DeviceFactory> SageMakerDeviceFactories { get; set; } = [];
+
+    private List<NetworkManager.DirectConnectGatewayAttachmentFactory> DirectConnectGatewayAttachmentFactories { get; set; } = [];
+
     private List<NetworkManager.GlobalNetworkFactory> GlobalNetworkFactories { get; set; } = [];
 
     private List<NetworkManager.LinkFactory> NetworkManagerLinkFactories { get; set; } = [];
@@ -2054,10 +2124,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<NetworkManager.TransitGatewayRouteTableAttachmentFactory> TransitGatewayRouteTableAttachmentFactories { get; set; } = [];
 
     private List<NetworkManager.VpcAttachmentFactory> VpcAttachmentFactories { get; set; } = [];
-
-    private List<NimbleStudio.LaunchProfileFactory> LaunchProfileFactories { get; set; } = [];
-
-    private List<NimbleStudio.StreamingImageFactory> StreamingImageFactories { get; set; } = [];
 
     private List<NimbleStudio.StudioComponentFactory> StudioComponentFactories { get; set; } = [];
 
@@ -2108,6 +2174,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<PCAConnectorAD.TemplateGroupAccessControlEntryFactory> TemplateGroupAccessControlEntryFactories { get; set; } = [];
 
     private List<PCAConnectorSCEP.ChallengeFactory> ChallengeFactories { get; set; } = [];
+
+    private List<PCS.ComputeNodeGroupFactory> ComputeNodeGroupFactories { get; set; } = [];
 
     private List<Panorama.ApplicationInstanceFactory> ApplicationInstanceFactories { get; set; } = [];
 
@@ -2169,6 +2237,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<Proton.ServiceTemplateFactory> ServiceTemplateFactories { get; set; } = [];
 
+    private List<QBusiness.DataAccessorFactory> DataAccessorFactories { get; set; } = [];
+
     private List<QBusiness.PluginFactory> PluginFactories { get; set; } = [];
 
     private List<QBusiness.RetrieverFactory> RetrieverFactories { get; set; } = [];
@@ -2179,7 +2249,11 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<QuickSight.AnalysisFactory> AnalysisFactories { get; set; } = [];
 
+    private List<QuickSight.CustomPermissionsFactory> CustomPermissionsFactories { get; set; } = [];
+
     private List<QuickSight.DataSetFactory> DataSetFactories { get; set; } = [];
+
+    private List<QuickSight.FolderFactory> FolderFactories { get; set; } = [];
 
     private List<QuickSight.RefreshScheduleFactory> RefreshScheduleFactories { get; set; } = [];
 
@@ -2202,6 +2276,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<RDS.DBSecurityGroupFactory> DBSecurityGroupFactories { get; set; } = [];
 
     private List<RDS.DBSecurityGroupIngressFactory> DBSecurityGroupIngressFactories { get; set; } = [];
+
+    private List<RDS.DBShardGroupFactory> DBShardGroupFactories { get; set; } = [];
 
     private List<RDS.GlobalClusterFactory> GlobalClusterFactories { get; set; } = [];
 
@@ -2230,6 +2306,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<ResilienceHub.ResiliencyPolicyFactory> ResiliencyPolicyFactories { get; set; } = [];
 
     private List<ResourceExplorer2.DefaultViewAssociationFactory> DefaultViewAssociationFactories { get; set; } = [];
+
+    private List<ResourceGroups.TagSyncTaskFactory> TagSyncTaskFactories { get; set; } = [];
 
     private List<RoboMaker.RobotFactory> RobotFactories { get; set; } = [];
 
@@ -2320,6 +2398,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<S3Express.DirectoryBucketFactory> DirectoryBucketFactories { get; set; } = [];
 
     private List<S3ObjectLambda.AccessPointPolicyFactory> AccessPointPolicyFactories { get; set; } = [];
+
+    private List<S3Tables.TableBucketFactory> TableBucketFactories { get; set; } = [];
+
+    private List<S3Tables.TableBucketPolicyFactory> TableBucketPolicyFactories { get; set; } = [];
 
     private List<SES.ContactListFactory> ContactListFactories { get; set; } = [];
 
@@ -2432,6 +2514,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<SageMaker.NotebookInstanceFactory> NotebookInstanceFactories { get; set; } = [];
 
     private List<SageMaker.NotebookInstanceLifecycleConfigFactory> NotebookInstanceLifecycleConfigFactories { get; set; } = [];
+
+    private List<SageMaker.PartnerAppFactory> PartnerAppFactories { get; set; } = [];
 
     private List<SageMaker.SpaceFactory> SpaceFactories { get; set; } = [];
 
@@ -2565,7 +2649,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<VpcLattice.AuthPolicyFactory> AuthPolicyFactories { get; set; } = [];
 
+    private List<VpcLattice.ResourceConfigurationFactory> ResourceConfigurationFactories { get; set; } = [];
+
+    private List<VpcLattice.ResourceGatewayFactory> ResourceGatewayFactories { get; set; } = [];
+
     private List<VpcLattice.ServiceNetworkFactory> ServiceNetworkFactories { get; set; } = [];
+
+    private List<VpcLattice.ServiceNetworkResourceAssociationFactory> ServiceNetworkResourceAssociationFactories { get; set; } = [];
 
     private List<VpcLattice.ServiceNetworkServiceAssociationFactory> ServiceNetworkServiceAssociationFactories { get; set; } = [];
 
@@ -2605,15 +2695,33 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<WAFv2.WebACLAssociationFactory> WAFv2WebACLAssociationFactories { get; set; } = [];
 
+    private List<Wisdom.AIAgentFactory> AIAgentFactories { get; set; } = [];
+
+    private List<Wisdom.AIAgentVersionFactory> AIAgentVersionFactories { get; set; } = [];
+
+    private List<Wisdom.AIGuardrailFactory> AIGuardrailFactories { get; set; } = [];
+
+    private List<Wisdom.AIGuardrailVersionFactory> AIGuardrailVersionFactories { get; set; } = [];
+
+    private List<Wisdom.AIPromptFactory> AIPromptFactories { get; set; } = [];
+
+    private List<Wisdom.AIPromptVersionFactory> AIPromptVersionFactories { get; set; } = [];
+
     private List<Wisdom.AssistantFactory> AssistantFactories { get; set; } = [];
 
     private List<Wisdom.AssistantAssociationFactory> AssistantAssociationFactories { get; set; } = [];
+
+    private List<Wisdom.MessageTemplateFactory> MessageTemplateFactories { get; set; } = [];
+
+    private List<Wisdom.MessageTemplateVersionFactory> MessageTemplateVersionFactories { get; set; } = [];
 
     private List<WorkSpaces.ConnectionAliasFactory> ConnectionAliasFactories { get; set; } = [];
 
     private List<WorkSpaces.WorkspacesPoolFactory> WorkspacesPoolFactories { get; set; } = [];
 
     private List<WorkSpacesWeb.BrowserSettingsFactory> BrowserSettingsFactories { get; set; } = [];
+
+    private List<WorkSpacesWeb.DataProtectionSettingsFactory> DataProtectionSettingsFactories { get; set; } = [];
 
     private List<WorkSpacesWeb.IdentityProviderFactory> IdentityProviderFactories { get; set; } = [];
 
@@ -2702,6 +2810,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Lambda.PermissionFactory(resourceName, resourceFactoryAction));
         LambdaPermissionFactories.Add(factory);
+        return factory;
+    }
+
+    public QBusiness.PermissionFactory WithQBusinessPermission(string resourceName = null, Action<Humidifier.QBusiness.Permission> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new QBusiness.PermissionFactory(resourceName, resourceFactoryAction));
+        QBusinessPermissionFactories.Add(factory);
         return factory;
     }
 
@@ -3006,6 +3121,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ApiGateway.BasePathMappingV2Factory WithBasePathMappingV2(string resourceName = null, Action<Humidifier.ApiGateway.BasePathMappingV2> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.BasePathMappingV2Factory(resourceName, resourceFactoryAction));
+        BasePathMappingV2Factories.Add(factory);
+        return factory;
+    }
+
     public ApiGateway.ClientCertificateFactory WithClientCertificate(string resourceName = null, Action<Humidifier.ApiGateway.ClientCertificate> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGateway.ClientCertificateFactory(resourceName, resourceFactoryAction));
@@ -3048,6 +3170,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public M2.DeploymentFactory WithM2Deployment(string resourceName = null, Action<Humidifier.M2.Deployment> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new M2.DeploymentFactory(resourceName, resourceFactoryAction));
+        M2DeploymentFactories.Add(factory);
+        return factory;
+    }
+
     public ApiGateway.DocumentationPartFactory WithDocumentationPart(string resourceName = null, Action<Humidifier.ApiGateway.DocumentationPart> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGateway.DocumentationPartFactory(resourceName, resourceFactoryAction));
@@ -3080,6 +3209,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new AppSync.DomainNameFactory(resourceName, resourceFactoryAction));
         AppSyncDomainNameFactories.Add(factory);
+        return factory;
+    }
+
+    public ApiGateway.DomainNameAccessAssociationFactory WithDomainNameAccessAssociation(string resourceName = null, Action<Humidifier.ApiGateway.DomainNameAccessAssociation> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.DomainNameAccessAssociationFactory(resourceName, resourceFactoryAction));
+        DomainNameAccessAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public ApiGateway.DomainNameV2Factory WithDomainNameV2(string resourceName = null, Action<Humidifier.ApiGateway.DomainNameV2> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.DomainNameV2Factory(resourceName, resourceFactoryAction));
+        DomainNameV2Factories.Add(factory);
         return factory;
     }
 
@@ -3195,10 +3338,17 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public ApiGatewayV2.ApiFactory WithApi(string resourceName = null, Action<Humidifier.ApiGatewayV2.Api> resourceFactoryAction = null)
+    public ApiGatewayV2.ApiFactory WithApiGatewayV2Api(string resourceName = null, Action<Humidifier.ApiGatewayV2.Api> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGatewayV2.ApiFactory(resourceName, resourceFactoryAction));
-        ApiFactories.Add(factory);
+        ApiGatewayV2ApiFactories.Add(factory);
+        return factory;
+    }
+
+    public AppSync.ApiFactory WithAppSyncApi(string resourceName = null, Action<Humidifier.AppSync.Api> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new AppSync.ApiFactory(resourceName, resourceFactoryAction));
+        AppSyncApiFactories.Add(factory);
         return factory;
     }
 
@@ -3230,10 +3380,24 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Logs.IntegrationFactory WithLogsIntegration(string resourceName = null, Action<Humidifier.Logs.Integration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Logs.IntegrationFactory(resourceName, resourceFactoryAction));
+        LogsIntegrationFactories.Add(factory);
+        return factory;
+    }
+
     public RDS.IntegrationFactory WithRDSIntegration(string resourceName = null, Action<Humidifier.RDS.Integration> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new RDS.IntegrationFactory(resourceName, resourceFactoryAction));
         RDSIntegrationFactories.Add(factory);
+        return factory;
+    }
+
+    public Redshift.IntegrationFactory WithRedshiftIntegration(string resourceName = null, Action<Humidifier.Redshift.Integration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Redshift.IntegrationFactory(resourceName, resourceFactoryAction));
+        RedshiftIntegrationFactories.Add(factory);
         return factory;
     }
 
@@ -3353,6 +3517,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new M2.ApplicationFactory(resourceName, resourceFactoryAction));
         M2ApplicationFactories.Add(factory);
+        return factory;
+    }
+
+    public OpenSearchService.ApplicationFactory WithOpenSearchServiceApplication(string resourceName = null, Action<Humidifier.OpenSearchService.Application> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new OpenSearchService.ApplicationFactory(resourceName, resourceFactoryAction));
+        OpenSearchServiceApplicationFactories.Add(factory);
         return factory;
     }
 
@@ -3839,6 +4010,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public AppSync.ChannelNamespaceFactory WithChannelNamespace(string resourceName = null, Action<Humidifier.AppSync.ChannelNamespace> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new AppSync.ChannelNamespaceFactory(resourceName, resourceFactoryAction));
+        ChannelNamespaceFactories.Add(factory);
+        return factory;
+    }
+
     public AppSync.DataSourceFactory WithAppSyncDataSource(string resourceName = null, Action<Humidifier.AppSync.DataSource> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new AppSync.DataSourceFactory(resourceName, resourceFactoryAction));
@@ -4098,10 +4276,17 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public B2BI.TransformerFactory WithTransformer(string resourceName = null, Action<Humidifier.B2BI.Transformer> resourceFactoryAction = null)
+    public B2BI.TransformerFactory WithB2BITransformer(string resourceName = null, Action<Humidifier.B2BI.Transformer> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new B2BI.TransformerFactory(resourceName, resourceFactoryAction));
-        TransformerFactories.Add(factory);
+        B2BITransformerFactories.Add(factory);
+        return factory;
+    }
+
+    public Logs.TransformerFactory WithLogsTransformer(string resourceName = null, Action<Humidifier.Logs.Transformer> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Logs.TransformerFactory(resourceName, resourceFactoryAction));
+        LogsTransformerFactories.Add(factory);
         return factory;
     }
 
@@ -4137,6 +4322,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Backup.FrameworkFactory(resourceName, resourceFactoryAction));
         FrameworkFactories.Add(factory);
+        return factory;
+    }
+
+    public Backup.LogicallyAirGappedBackupVaultFactory WithLogicallyAirGappedBackupVault(string resourceName = null, Action<Humidifier.Backup.LogicallyAirGappedBackupVault> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Backup.LogicallyAirGappedBackupVaultFactory(resourceName, resourceFactoryAction));
+        LogicallyAirGappedBackupVaultFactories.Add(factory);
         return factory;
     }
 
@@ -4214,6 +4406,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Bedrock.AgentAliasFactory(resourceName, resourceFactoryAction));
         AgentAliasFactories.Add(factory);
+        return factory;
+    }
+
+    public Bedrock.ApplicationInferenceProfileFactory WithApplicationInferenceProfile(string resourceName = null, Action<Humidifier.Bedrock.ApplicationInferenceProfile> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Bedrock.ApplicationInferenceProfileFactory(resourceName, resourceFactoryAction));
+        ApplicationInferenceProfileFactories.Add(factory);
         return factory;
     }
 
@@ -4392,6 +4591,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Cassandra.TypeFactory WithType(string resourceName = null, Action<Humidifier.Cassandra.Type> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Cassandra.TypeFactory(resourceName, resourceFactoryAction));
+        TypeFactories.Add(factory);
+        return factory;
+    }
+
+    public Chatbot.CustomActionFactory WithCustomAction(string resourceName = null, Action<Humidifier.Chatbot.CustomAction> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Chatbot.CustomActionFactory(resourceName, resourceFactoryAction));
+        CustomActionFactories.Add(factory);
+        return factory;
+    }
+
     public Chatbot.MicrosoftTeamsChannelConfigurationFactory WithMicrosoftTeamsChannelConfiguration(string resourceName = null, Action<Humidifier.Chatbot.MicrosoftTeamsChannelConfiguration> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new Chatbot.MicrosoftTeamsChannelConfigurationFactory(resourceName, resourceFactoryAction));
@@ -4490,6 +4703,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CloudFormation.GuardHookFactory WithGuardHook(string resourceName = null, Action<Humidifier.CloudFormation.GuardHook> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFormation.GuardHookFactory(resourceName, resourceFactoryAction));
+        GuardHookFactories.Add(factory);
+        return factory;
+    }
+
     public CloudFormation.HookDefaultVersionFactory WithHookDefaultVersion(string resourceName = null, Action<Humidifier.CloudFormation.HookDefaultVersion> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.HookDefaultVersionFactory(resourceName, resourceFactoryAction));
@@ -4508,6 +4728,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.HookVersionFactory(resourceName, resourceFactoryAction));
         HookVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudFormation.LambdaHookFactory WithLambdaHook(string resourceName = null, Action<Humidifier.CloudFormation.LambdaHook> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFormation.LambdaHookFactory(resourceName, resourceFactoryAction));
+        LambdaHookFactories.Add(factory);
         return factory;
     }
 
@@ -4585,6 +4812,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.WaitConditionHandleFactory(resourceName, resourceFactoryAction));
         WaitConditionHandleFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudFront.AnycastIpListFactory WithAnycastIpList(string resourceName = null, Action<Humidifier.CloudFront.AnycastIpList> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFront.AnycastIpListFactory(resourceName, resourceFactoryAction));
+        AnycastIpListFactories.Add(factory);
         return factory;
     }
 
@@ -4756,6 +4990,34 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CloudTrail.DashboardFactory WithCloudTrailDashboard(string resourceName = null, Action<Humidifier.CloudTrail.Dashboard> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudTrail.DashboardFactory(resourceName, resourceFactoryAction));
+        CloudTrailDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudWatch.DashboardFactory WithCloudWatchDashboard(string resourceName = null, Action<Humidifier.CloudWatch.Dashboard> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudWatch.DashboardFactory(resourceName, resourceFactoryAction));
+        CloudWatchDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public IoTSiteWise.DashboardFactory WithIoTSiteWiseDashboard(string resourceName = null, Action<Humidifier.IoTSiteWise.Dashboard> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoTSiteWise.DashboardFactory(resourceName, resourceFactoryAction));
+        IoTSiteWiseDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public QuickSight.DashboardFactory WithQuickSightDashboard(string resourceName = null, Action<Humidifier.QuickSight.Dashboard> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.DashboardFactory(resourceName, resourceFactoryAction));
+        QuickSightDashboardFactories.Add(factory);
+        return factory;
+    }
+
     public CloudTrail.EventDataStoreFactory WithEventDataStore(string resourceName = null, Action<Humidifier.CloudTrail.EventDataStore> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new CloudTrail.EventDataStoreFactory(resourceName, resourceFactoryAction));
@@ -4767,6 +5029,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudTrail.ResourcePolicyFactory(resourceName, resourceFactoryAction));
         CloudTrailResourcePolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public Kinesis.ResourcePolicyFactory WithKinesisResourcePolicy(string resourceName = null, Action<Humidifier.Kinesis.ResourcePolicy> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Kinesis.ResourcePolicyFactory(resourceName, resourceFactoryAction));
+        KinesisResourcePolicyFactories.Add(factory);
         return factory;
     }
 
@@ -4861,27 +5130,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public CloudWatch.DashboardFactory WithCloudWatchDashboard(string resourceName = null, Action<Humidifier.CloudWatch.Dashboard> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new CloudWatch.DashboardFactory(resourceName, resourceFactoryAction));
-        CloudWatchDashboardFactories.Add(factory);
-        return factory;
-    }
-
-    public IoTSiteWise.DashboardFactory WithIoTSiteWiseDashboard(string resourceName = null, Action<Humidifier.IoTSiteWise.Dashboard> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTSiteWise.DashboardFactory(resourceName, resourceFactoryAction));
-        IoTSiteWiseDashboardFactories.Add(factory);
-        return factory;
-    }
-
-    public QuickSight.DashboardFactory WithQuickSightDashboard(string resourceName = null, Action<Humidifier.QuickSight.Dashboard> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new QuickSight.DashboardFactory(resourceName, resourceFactoryAction));
-        QuickSightDashboardFactories.Add(factory);
-        return factory;
-    }
-
     public CloudWatch.InsightRuleFactory WithInsightRule(string resourceName = null, Action<Humidifier.CloudWatch.InsightRule> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new CloudWatch.InsightRuleFactory(resourceName, resourceFactoryAction));
@@ -4949,13 +5197,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Evidently.ProjectFactory(resourceName, resourceFactoryAction));
         EvidentlyProjectFactories.Add(factory);
-        return factory;
-    }
-
-    public IoT1Click.ProjectFactory WithIoT1ClickProject(string resourceName = null, Action<Humidifier.IoT1Click.Project> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoT1Click.ProjectFactory(resourceName, resourceFactoryAction));
-        IoT1ClickProjectFactories.Add(factory);
         return factory;
     }
 
@@ -5162,6 +5403,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Cognito.ManagedLoginBrandingFactory WithManagedLoginBranding(string resourceName = null, Action<Humidifier.Cognito.ManagedLoginBranding> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Cognito.ManagedLoginBrandingFactory(resourceName, resourceFactoryAction));
+        ManagedLoginBrandingFactories.Add(factory);
+        return factory;
+    }
+
     public Cognito.UserPoolFactory WithUserPool(string resourceName = null, Action<Humidifier.Cognito.UserPool> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new Cognito.UserPoolFactory(resourceName, resourceFactoryAction));
@@ -5344,6 +5592,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Connect.EmailAddressFactory WithEmailAddress(string resourceName = null, Action<Humidifier.Connect.EmailAddress> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Connect.EmailAddressFactory(resourceName, resourceFactoryAction));
+        EmailAddressFactories.Add(factory);
+        return factory;
+    }
+
     public Connect.EvaluationFormFactory WithEvaluationForm(string resourceName = null, Action<Humidifier.Connect.EvaluationForm> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new Connect.EvaluationFormFactory(resourceName, resourceFactoryAction));
@@ -5449,6 +5704,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public PCS.QueueFactory WithPCSQueue(string resourceName = null, Action<Humidifier.PCS.Queue> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.QueueFactory(resourceName, resourceFactoryAction));
+        PCSQueueFactories.Add(factory);
+        return factory;
+    }
+
     public SQS.QueueFactory WithSQSQueue(string resourceName = null, Action<Humidifier.SQS.Queue> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new SQS.QueueFactory(resourceName, resourceFactoryAction));
@@ -5481,6 +5743,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Events.RuleFactory(resourceName, resourceFactoryAction));
         EventsRuleFactories.Add(factory);
+        return factory;
+    }
+
+    public Rbin.RuleFactory WithRbinRule(string resourceName = null, Action<Humidifier.Rbin.Rule> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Rbin.RuleFactory(resourceName, resourceFactoryAction));
+        RbinRuleFactories.Add(factory);
         return factory;
     }
 
@@ -5582,6 +5851,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ConnectCampaignsV2.CampaignFactory WithConnectCampaignsV2Campaign(string resourceName = null, Action<Humidifier.ConnectCampaignsV2.Campaign> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ConnectCampaignsV2.CampaignFactory(resourceName, resourceFactoryAction));
+        ConnectCampaignsV2CampaignFactories.Add(factory);
+        return factory;
+    }
+
     public IoTFleetWise.CampaignFactory WithIoTFleetWiseCampaign(string resourceName = null, Action<Humidifier.IoTFleetWise.Campaign> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.CampaignFactory(resourceName, resourceFactoryAction));
@@ -5645,6 +5921,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CustomerProfiles.SegmentDefinitionFactory WithSegmentDefinition(string resourceName = null, Action<Humidifier.CustomerProfiles.SegmentDefinition> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new CustomerProfiles.SegmentDefinitionFactory(resourceName, resourceFactoryAction));
+        SegmentDefinitionFactories.Add(factory);
+        return factory;
+    }
+
     public DAX.ClusterFactory WithDAXCluster(string resourceName = null, Action<Humidifier.DAX.Cluster> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new DAX.ClusterFactory(resourceName, resourceFactoryAction));
@@ -5698,6 +5981,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new MemoryDB.ClusterFactory(resourceName, resourceFactoryAction));
         MemoryDBClusterFactories.Add(factory);
+        return factory;
+    }
+
+    public PCS.ClusterFactory WithPCSCluster(string resourceName = null, Action<Humidifier.PCS.Cluster> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.ClusterFactory(resourceName, resourceFactoryAction));
+        PCSClusterFactories.Add(factory);
         return factory;
     }
 
@@ -5782,6 +6072,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new OpenSearchServerless.LifecyclePolicyFactory(resourceName, resourceFactoryAction));
         OpenSearchServerlessLifecyclePolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public DMS.DataMigrationFactory WithDataMigration(string resourceName = null, Action<Humidifier.DMS.DataMigration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new DMS.DataMigrationFactory(resourceName, resourceFactoryAction));
+        DataMigrationFactories.Add(factory);
         return factory;
     }
 
@@ -6695,6 +6992,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.SecurityGroupVpcAssociationFactory WithSecurityGroupVpcAssociation(string resourceName = null, Action<Humidifier.EC2.SecurityGroupVpcAssociation> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.SecurityGroupVpcAssociationFactory(resourceName, resourceFactoryAction));
+        SecurityGroupVpcAssociationFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.SnapshotBlockPublicAccessFactory WithSnapshotBlockPublicAccess(string resourceName = null, Action<Humidifier.EC2.SnapshotBlockPublicAccess> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.SnapshotBlockPublicAccessFactory(resourceName, resourceFactoryAction));
@@ -6860,6 +7164,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new EC2.VPCFactory(resourceName, resourceFactoryAction));
         VPCFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.VPCBlockPublicAccessExclusionFactory WithVPCBlockPublicAccessExclusion(string resourceName = null, Action<Humidifier.EC2.VPCBlockPublicAccessExclusion> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.VPCBlockPublicAccessExclusionFactory(resourceName, resourceFactoryAction));
+        VPCBlockPublicAccessExclusionFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.VPCBlockPublicAccessOptionsFactory WithVPCBlockPublicAccessOptions(string resourceName = null, Action<Humidifier.EC2.VPCBlockPublicAccessOptions> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.VPCBlockPublicAccessOptionsFactory(resourceName, resourceFactoryAction));
+        VPCBlockPublicAccessOptionsFactories.Add(factory);
         return factory;
     }
 
@@ -7213,17 +7531,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public EMR.StudioFactory WithEMRStudio(string resourceName = null, Action<Humidifier.EMR.Studio> resourceFactoryAction = null)
+    public EMR.StudioFactory WithStudio(string resourceName = null, Action<Humidifier.EMR.Studio> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new EMR.StudioFactory(resourceName, resourceFactoryAction));
-        EMRStudioFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.StudioFactory WithNimbleStudioStudio(string resourceName = null, Action<Humidifier.NimbleStudio.Studio> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.StudioFactory(resourceName, resourceFactoryAction));
-        NimbleStudioStudioFactories.Add(factory);
+        StudioFactories.Add(factory);
         return factory;
     }
 
@@ -7717,6 +8028,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public GameLift.ContainerFleetFactory WithContainerFleet(string resourceName = null, Action<Humidifier.GameLift.ContainerFleet> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new GameLift.ContainerFleetFactory(resourceName, resourceFactoryAction));
+        ContainerFleetFactories.Add(factory);
+        return factory;
+    }
+
     public GameLift.ContainerGroupDefinitionFactory WithContainerGroupDefinition(string resourceName = null, Action<Humidifier.GameLift.ContainerGroupDefinition> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new GameLift.ContainerGroupDefinitionFactory(resourceName, resourceFactoryAction));
@@ -7889,6 +8207,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Glue.TriggerFactory(resourceName, resourceFactoryAction));
         TriggerFactories.Add(factory);
+        return factory;
+    }
+
+    public Glue.UsageProfileFactory WithUsageProfile(string resourceName = null, Action<Humidifier.Glue.UsageProfile> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Glue.UsageProfileFactory(resourceName, resourceFactoryAction));
+        UsageProfileFactories.Add(factory);
         return factory;
     }
 
@@ -8284,6 +8609,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public IVS.IngestConfigurationFactory WithIngestConfiguration(string resourceName = null, Action<Humidifier.IVS.IngestConfiguration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new IVS.IngestConfigurationFactory(resourceName, resourceFactoryAction));
+        IngestConfigurationFactories.Add(factory);
+        return factory;
+    }
+
     public IVS.PlaybackKeyPairFactory WithPlaybackKeyPair(string resourceName = null, Action<Humidifier.IVS.PlaybackKeyPair> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new IVS.PlaybackKeyPairFactory(resourceName, resourceFactoryAction));
@@ -8431,31 +8763,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public IoT1Click.DeviceFactory WithIoT1ClickDevice(string resourceName = null, Action<Humidifier.IoT1Click.Device> resourceFactoryAction = null)
+    public Invoicing.InvoiceUnitFactory WithInvoiceUnit(string resourceName = null, Action<Humidifier.Invoicing.InvoiceUnit> resourceFactoryAction = null)
     {
-        var factory = this.CreateSubFactory(() => new IoT1Click.DeviceFactory(resourceName, resourceFactoryAction));
-        IoT1ClickDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public NetworkManager.DeviceFactory WithNetworkManagerDevice(string resourceName = null, Action<Humidifier.NetworkManager.Device> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new NetworkManager.DeviceFactory(resourceName, resourceFactoryAction));
-        NetworkManagerDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public SageMaker.DeviceFactory WithSageMakerDevice(string resourceName = null, Action<Humidifier.SageMaker.Device> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new SageMaker.DeviceFactory(resourceName, resourceFactoryAction));
-        SageMakerDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public IoT1Click.PlacementFactory WithPlacement(string resourceName = null, Action<Humidifier.IoT1Click.Placement> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoT1Click.PlacementFactory(resourceName, resourceFactoryAction));
-        PlacementFactories.Add(factory);
+        var factory = this.CreateSubFactory(() => new Invoicing.InvoiceUnitFactory(resourceName, resourceFactoryAction));
+        InvoiceUnitFactories.Add(factory);
         return factory;
     }
 
@@ -8477,6 +8788,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new IoT.CertificateProviderFactory(resourceName, resourceFactoryAction));
         CertificateProviderFactories.Add(factory);
+        return factory;
+    }
+
+    public IoT.CommandFactory WithCommand(string resourceName = null, Action<Humidifier.IoT.Command> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoT.CommandFactory(resourceName, resourceFactoryAction));
+        CommandFactories.Add(factory);
         return factory;
     }
 
@@ -8680,6 +8998,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.SignalCatalogFactory(resourceName, resourceFactoryAction));
         SignalCatalogFactories.Add(factory);
+        return factory;
+    }
+
+    public IoTFleetWise.StateTemplateFactory WithStateTemplate(string resourceName = null, Action<Humidifier.IoTFleetWise.StateTemplate> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoTFleetWise.StateTemplateFactory(resourceName, resourceFactoryAction));
+        StateTemplateFactories.Add(factory);
         return factory;
     }
 
@@ -9628,6 +9953,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public MemoryDB.MultiRegionClusterFactory WithMultiRegionCluster(string resourceName = null, Action<Humidifier.MemoryDB.MultiRegionCluster> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new MemoryDB.MultiRegionClusterFactory(resourceName, resourceFactoryAction));
+        MultiRegionClusterFactories.Add(factory);
+        return factory;
+    }
+
     public Neptune.DBParameterGroupFactory WithNeptuneDBParameterGroup(string resourceName = null, Action<Humidifier.Neptune.DBParameterGroup> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new Neptune.DBParameterGroupFactory(resourceName, resourceFactoryAction));
@@ -9712,6 +10044,27 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public NetworkManager.DeviceFactory WithNetworkManagerDevice(string resourceName = null, Action<Humidifier.NetworkManager.Device> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new NetworkManager.DeviceFactory(resourceName, resourceFactoryAction));
+        NetworkManagerDeviceFactories.Add(factory);
+        return factory;
+    }
+
+    public SageMaker.DeviceFactory WithSageMakerDevice(string resourceName = null, Action<Humidifier.SageMaker.Device> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.DeviceFactory(resourceName, resourceFactoryAction));
+        SageMakerDeviceFactories.Add(factory);
+        return factory;
+    }
+
+    public NetworkManager.DirectConnectGatewayAttachmentFactory WithDirectConnectGatewayAttachment(string resourceName = null, Action<Humidifier.NetworkManager.DirectConnectGatewayAttachment> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new NetworkManager.DirectConnectGatewayAttachmentFactory(resourceName, resourceFactoryAction));
+        DirectConnectGatewayAttachmentFactories.Add(factory);
+        return factory;
+    }
+
     public NetworkManager.GlobalNetworkFactory WithGlobalNetwork(string resourceName = null, Action<Humidifier.NetworkManager.GlobalNetwork> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new NetworkManager.GlobalNetworkFactory(resourceName, resourceFactoryAction));
@@ -9779,20 +10132,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new NetworkManager.VpcAttachmentFactory(resourceName, resourceFactoryAction));
         VpcAttachmentFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.LaunchProfileFactory WithLaunchProfile(string resourceName = null, Action<Humidifier.NimbleStudio.LaunchProfile> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.LaunchProfileFactory(resourceName, resourceFactoryAction));
-        LaunchProfileFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.StreamingImageFactory WithStreamingImage(string resourceName = null, Action<Humidifier.NimbleStudio.StreamingImage> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.StreamingImageFactory(resourceName, resourceFactoryAction));
-        StreamingImageFactories.Add(factory);
         return factory;
     }
 
@@ -9968,6 +10307,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new PCAConnectorSCEP.ChallengeFactory(resourceName, resourceFactoryAction));
         ChallengeFactories.Add(factory);
+        return factory;
+    }
+
+    public PCS.ComputeNodeGroupFactory WithComputeNodeGroup(string resourceName = null, Action<Humidifier.PCS.ComputeNodeGroup> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.ComputeNodeGroupFactory(resourceName, resourceFactoryAction));
+        ComputeNodeGroupFactories.Add(factory);
         return factory;
     }
 
@@ -10181,6 +10527,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public QBusiness.DataAccessorFactory WithDataAccessor(string resourceName = null, Action<Humidifier.QBusiness.DataAccessor> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new QBusiness.DataAccessorFactory(resourceName, resourceFactoryAction));
+        DataAccessorFactories.Add(factory);
+        return factory;
+    }
+
     public QBusiness.PluginFactory WithPlugin(string resourceName = null, Action<Humidifier.QBusiness.Plugin> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new QBusiness.PluginFactory(resourceName, resourceFactoryAction));
@@ -10216,10 +10569,24 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public QuickSight.CustomPermissionsFactory WithCustomPermissions(string resourceName = null, Action<Humidifier.QuickSight.CustomPermissions> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.CustomPermissionsFactory(resourceName, resourceFactoryAction));
+        CustomPermissionsFactories.Add(factory);
+        return factory;
+    }
+
     public QuickSight.DataSetFactory WithDataSet(string resourceName = null, Action<Humidifier.QuickSight.DataSet> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new QuickSight.DataSetFactory(resourceName, resourceFactoryAction));
         DataSetFactories.Add(factory);
+        return factory;
+    }
+
+    public QuickSight.FolderFactory WithFolder(string resourceName = null, Action<Humidifier.QuickSight.Folder> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.FolderFactory(resourceName, resourceFactoryAction));
+        FolderFactories.Add(factory);
         return factory;
     }
 
@@ -10297,6 +10664,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new RDS.DBSecurityGroupIngressFactory(resourceName, resourceFactoryAction));
         DBSecurityGroupIngressFactories.Add(factory);
+        return factory;
+    }
+
+    public RDS.DBShardGroupFactory WithDBShardGroup(string resourceName = null, Action<Humidifier.RDS.DBShardGroup> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new RDS.DBShardGroupFactory(resourceName, resourceFactoryAction));
+        DBShardGroupFactories.Add(factory);
         return factory;
     }
 
@@ -10395,6 +10769,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new ResourceExplorer2.DefaultViewAssociationFactory(resourceName, resourceFactoryAction));
         DefaultViewAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public ResourceGroups.TagSyncTaskFactory WithTagSyncTask(string resourceName = null, Action<Humidifier.ResourceGroups.TagSyncTask> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ResourceGroups.TagSyncTaskFactory(resourceName, resourceFactoryAction));
+        TagSyncTaskFactories.Add(factory);
         return factory;
     }
 
@@ -10710,6 +11091,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new S3ObjectLambda.AccessPointPolicyFactory(resourceName, resourceFactoryAction));
         AccessPointPolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public S3Tables.TableBucketFactory WithTableBucket(string resourceName = null, Action<Humidifier.S3Tables.TableBucket> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new S3Tables.TableBucketFactory(resourceName, resourceFactoryAction));
+        TableBucketFactories.Add(factory);
+        return factory;
+    }
+
+    public S3Tables.TableBucketPolicyFactory WithTableBucketPolicy(string resourceName = null, Action<Humidifier.S3Tables.TableBucketPolicy> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new S3Tables.TableBucketPolicyFactory(resourceName, resourceFactoryAction));
+        TableBucketPolicyFactories.Add(factory);
         return factory;
     }
 
@@ -11102,6 +11497,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new SageMaker.NotebookInstanceLifecycleConfigFactory(resourceName, resourceFactoryAction));
         NotebookInstanceLifecycleConfigFactories.Add(factory);
+        return factory;
+    }
+
+    public SageMaker.PartnerAppFactory WithPartnerApp(string resourceName = null, Action<Humidifier.SageMaker.PartnerApp> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.PartnerAppFactory(resourceName, resourceFactoryAction));
+        PartnerAppFactories.Add(factory);
         return factory;
     }
 
@@ -11567,10 +11969,31 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public VpcLattice.ResourceConfigurationFactory WithResourceConfiguration(string resourceName = null, Action<Humidifier.VpcLattice.ResourceConfiguration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ResourceConfigurationFactory(resourceName, resourceFactoryAction));
+        ResourceConfigurationFactories.Add(factory);
+        return factory;
+    }
+
+    public VpcLattice.ResourceGatewayFactory WithResourceGateway(string resourceName = null, Action<Humidifier.VpcLattice.ResourceGateway> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ResourceGatewayFactory(resourceName, resourceFactoryAction));
+        ResourceGatewayFactories.Add(factory);
+        return factory;
+    }
+
     public VpcLattice.ServiceNetworkFactory WithServiceNetwork(string resourceName = null, Action<Humidifier.VpcLattice.ServiceNetwork> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new VpcLattice.ServiceNetworkFactory(resourceName, resourceFactoryAction));
         ServiceNetworkFactories.Add(factory);
+        return factory;
+    }
+
+    public VpcLattice.ServiceNetworkResourceAssociationFactory WithServiceNetworkResourceAssociation(string resourceName = null, Action<Humidifier.VpcLattice.ServiceNetworkResourceAssociation> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ServiceNetworkResourceAssociationFactory(resourceName, resourceFactoryAction));
+        ServiceNetworkResourceAssociationFactories.Add(factory);
         return factory;
     }
 
@@ -11707,6 +12130,48 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Wisdom.AIAgentFactory WithAIAgent(string resourceName = null, Action<Humidifier.Wisdom.AIAgent> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIAgentFactory(resourceName, resourceFactoryAction));
+        AIAgentFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIAgentVersionFactory WithAIAgentVersion(string resourceName = null, Action<Humidifier.Wisdom.AIAgentVersion> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIAgentVersionFactory(resourceName, resourceFactoryAction));
+        AIAgentVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIGuardrailFactory WithAIGuardrail(string resourceName = null, Action<Humidifier.Wisdom.AIGuardrail> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIGuardrailFactory(resourceName, resourceFactoryAction));
+        AIGuardrailFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIGuardrailVersionFactory WithAIGuardrailVersion(string resourceName = null, Action<Humidifier.Wisdom.AIGuardrailVersion> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIGuardrailVersionFactory(resourceName, resourceFactoryAction));
+        AIGuardrailVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIPromptFactory WithAIPrompt(string resourceName = null, Action<Humidifier.Wisdom.AIPrompt> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIPromptFactory(resourceName, resourceFactoryAction));
+        AIPromptFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIPromptVersionFactory WithAIPromptVersion(string resourceName = null, Action<Humidifier.Wisdom.AIPromptVersion> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIPromptVersionFactory(resourceName, resourceFactoryAction));
+        AIPromptVersionFactories.Add(factory);
+        return factory;
+    }
+
     public Wisdom.AssistantFactory WithAssistant(string resourceName = null, Action<Humidifier.Wisdom.Assistant> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new Wisdom.AssistantFactory(resourceName, resourceFactoryAction));
@@ -11718,6 +12183,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Wisdom.AssistantAssociationFactory(resourceName, resourceFactoryAction));
         AssistantAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.MessageTemplateFactory WithMessageTemplate(string resourceName = null, Action<Humidifier.Wisdom.MessageTemplate> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.MessageTemplateFactory(resourceName, resourceFactoryAction));
+        MessageTemplateFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.MessageTemplateVersionFactory WithMessageTemplateVersion(string resourceName = null, Action<Humidifier.Wisdom.MessageTemplateVersion> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.MessageTemplateVersionFactory(resourceName, resourceFactoryAction));
+        MessageTemplateVersionFactories.Add(factory);
         return factory;
     }
 
@@ -11739,6 +12218,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new WorkSpacesWeb.BrowserSettingsFactory(resourceName, resourceFactoryAction));
         BrowserSettingsFactories.Add(factory);
+        return factory;
+    }
+
+    public WorkSpacesWeb.DataProtectionSettingsFactory WithDataProtectionSettings(string resourceName = null, Action<Humidifier.WorkSpacesWeb.DataProtectionSettings> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new WorkSpacesWeb.DataProtectionSettingsFactory(resourceName, resourceFactoryAction));
+        DataProtectionSettingsFactories.Add(factory);
         return factory;
     }
 
@@ -11858,6 +12344,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Lambda.PermissionFactory(resourceName, resourceFactoryAction));
         LambdaPermissionFactories.Add(factory);
+        return factory;
+    }
+
+    public QBusiness.PermissionFactory WithQBusinessPermission(Action<Humidifier.QBusiness.Permission> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new QBusiness.PermissionFactory(resourceName, resourceFactoryAction));
+        QBusinessPermissionFactories.Add(factory);
         return factory;
     }
 
@@ -12162,6 +12655,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ApiGateway.BasePathMappingV2Factory WithBasePathMappingV2(Action<Humidifier.ApiGateway.BasePathMappingV2> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.BasePathMappingV2Factory(resourceName, resourceFactoryAction));
+        BasePathMappingV2Factories.Add(factory);
+        return factory;
+    }
+
     public ApiGateway.ClientCertificateFactory WithClientCertificate(Action<Humidifier.ApiGateway.ClientCertificate> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGateway.ClientCertificateFactory(resourceName, resourceFactoryAction));
@@ -12204,6 +12704,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public M2.DeploymentFactory WithM2Deployment(Action<Humidifier.M2.Deployment> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new M2.DeploymentFactory(resourceName, resourceFactoryAction));
+        M2DeploymentFactories.Add(factory);
+        return factory;
+    }
+
     public ApiGateway.DocumentationPartFactory WithDocumentationPart(Action<Humidifier.ApiGateway.DocumentationPart> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGateway.DocumentationPartFactory(resourceName, resourceFactoryAction));
@@ -12236,6 +12743,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new AppSync.DomainNameFactory(resourceName, resourceFactoryAction));
         AppSyncDomainNameFactories.Add(factory);
+        return factory;
+    }
+
+    public ApiGateway.DomainNameAccessAssociationFactory WithDomainNameAccessAssociation(Action<Humidifier.ApiGateway.DomainNameAccessAssociation> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.DomainNameAccessAssociationFactory(resourceName, resourceFactoryAction));
+        DomainNameAccessAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public ApiGateway.DomainNameV2Factory WithDomainNameV2(Action<Humidifier.ApiGateway.DomainNameV2> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ApiGateway.DomainNameV2Factory(resourceName, resourceFactoryAction));
+        DomainNameV2Factories.Add(factory);
         return factory;
     }
 
@@ -12351,10 +12872,17 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public ApiGatewayV2.ApiFactory WithApi(Action<Humidifier.ApiGatewayV2.Api> resourceFactoryAction = null, string resourceName = null)
+    public ApiGatewayV2.ApiFactory WithApiGatewayV2Api(Action<Humidifier.ApiGatewayV2.Api> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new ApiGatewayV2.ApiFactory(resourceName, resourceFactoryAction));
-        ApiFactories.Add(factory);
+        ApiGatewayV2ApiFactories.Add(factory);
+        return factory;
+    }
+
+    public AppSync.ApiFactory WithAppSyncApi(Action<Humidifier.AppSync.Api> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new AppSync.ApiFactory(resourceName, resourceFactoryAction));
+        AppSyncApiFactories.Add(factory);
         return factory;
     }
 
@@ -12386,10 +12914,24 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Logs.IntegrationFactory WithLogsIntegration(Action<Humidifier.Logs.Integration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Logs.IntegrationFactory(resourceName, resourceFactoryAction));
+        LogsIntegrationFactories.Add(factory);
+        return factory;
+    }
+
     public RDS.IntegrationFactory WithRDSIntegration(Action<Humidifier.RDS.Integration> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new RDS.IntegrationFactory(resourceName, resourceFactoryAction));
         RDSIntegrationFactories.Add(factory);
+        return factory;
+    }
+
+    public Redshift.IntegrationFactory WithRedshiftIntegration(Action<Humidifier.Redshift.Integration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Redshift.IntegrationFactory(resourceName, resourceFactoryAction));
+        RedshiftIntegrationFactories.Add(factory);
         return factory;
     }
 
@@ -12509,6 +13051,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new M2.ApplicationFactory(resourceName, resourceFactoryAction));
         M2ApplicationFactories.Add(factory);
+        return factory;
+    }
+
+    public OpenSearchService.ApplicationFactory WithOpenSearchServiceApplication(Action<Humidifier.OpenSearchService.Application> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new OpenSearchService.ApplicationFactory(resourceName, resourceFactoryAction));
+        OpenSearchServiceApplicationFactories.Add(factory);
         return factory;
     }
 
@@ -12995,6 +13544,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public AppSync.ChannelNamespaceFactory WithChannelNamespace(Action<Humidifier.AppSync.ChannelNamespace> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new AppSync.ChannelNamespaceFactory(resourceName, resourceFactoryAction));
+        ChannelNamespaceFactories.Add(factory);
+        return factory;
+    }
+
     public AppSync.DataSourceFactory WithAppSyncDataSource(Action<Humidifier.AppSync.DataSource> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new AppSync.DataSourceFactory(resourceName, resourceFactoryAction));
@@ -13254,10 +13810,17 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public B2BI.TransformerFactory WithTransformer(Action<Humidifier.B2BI.Transformer> resourceFactoryAction = null, string resourceName = null)
+    public B2BI.TransformerFactory WithB2BITransformer(Action<Humidifier.B2BI.Transformer> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new B2BI.TransformerFactory(resourceName, resourceFactoryAction));
-        TransformerFactories.Add(factory);
+        B2BITransformerFactories.Add(factory);
+        return factory;
+    }
+
+    public Logs.TransformerFactory WithLogsTransformer(Action<Humidifier.Logs.Transformer> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Logs.TransformerFactory(resourceName, resourceFactoryAction));
+        LogsTransformerFactories.Add(factory);
         return factory;
     }
 
@@ -13293,6 +13856,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Backup.FrameworkFactory(resourceName, resourceFactoryAction));
         FrameworkFactories.Add(factory);
+        return factory;
+    }
+
+    public Backup.LogicallyAirGappedBackupVaultFactory WithLogicallyAirGappedBackupVault(Action<Humidifier.Backup.LogicallyAirGappedBackupVault> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Backup.LogicallyAirGappedBackupVaultFactory(resourceName, resourceFactoryAction));
+        LogicallyAirGappedBackupVaultFactories.Add(factory);
         return factory;
     }
 
@@ -13370,6 +13940,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Bedrock.AgentAliasFactory(resourceName, resourceFactoryAction));
         AgentAliasFactories.Add(factory);
+        return factory;
+    }
+
+    public Bedrock.ApplicationInferenceProfileFactory WithApplicationInferenceProfile(Action<Humidifier.Bedrock.ApplicationInferenceProfile> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Bedrock.ApplicationInferenceProfileFactory(resourceName, resourceFactoryAction));
+        ApplicationInferenceProfileFactories.Add(factory);
         return factory;
     }
 
@@ -13548,6 +14125,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Cassandra.TypeFactory WithType(Action<Humidifier.Cassandra.Type> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Cassandra.TypeFactory(resourceName, resourceFactoryAction));
+        TypeFactories.Add(factory);
+        return factory;
+    }
+
+    public Chatbot.CustomActionFactory WithCustomAction(Action<Humidifier.Chatbot.CustomAction> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Chatbot.CustomActionFactory(resourceName, resourceFactoryAction));
+        CustomActionFactories.Add(factory);
+        return factory;
+    }
+
     public Chatbot.MicrosoftTeamsChannelConfigurationFactory WithMicrosoftTeamsChannelConfiguration(Action<Humidifier.Chatbot.MicrosoftTeamsChannelConfiguration> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new Chatbot.MicrosoftTeamsChannelConfigurationFactory(resourceName, resourceFactoryAction));
@@ -13646,6 +14237,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CloudFormation.GuardHookFactory WithGuardHook(Action<Humidifier.CloudFormation.GuardHook> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFormation.GuardHookFactory(resourceName, resourceFactoryAction));
+        GuardHookFactories.Add(factory);
+        return factory;
+    }
+
     public CloudFormation.HookDefaultVersionFactory WithHookDefaultVersion(Action<Humidifier.CloudFormation.HookDefaultVersion> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.HookDefaultVersionFactory(resourceName, resourceFactoryAction));
@@ -13664,6 +14262,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.HookVersionFactory(resourceName, resourceFactoryAction));
         HookVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudFormation.LambdaHookFactory WithLambdaHook(Action<Humidifier.CloudFormation.LambdaHook> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFormation.LambdaHookFactory(resourceName, resourceFactoryAction));
+        LambdaHookFactories.Add(factory);
         return factory;
     }
 
@@ -13741,6 +14346,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudFormation.WaitConditionHandleFactory(resourceName, resourceFactoryAction));
         WaitConditionHandleFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudFront.AnycastIpListFactory WithAnycastIpList(Action<Humidifier.CloudFront.AnycastIpList> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudFront.AnycastIpListFactory(resourceName, resourceFactoryAction));
+        AnycastIpListFactories.Add(factory);
         return factory;
     }
 
@@ -13912,6 +14524,34 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CloudTrail.DashboardFactory WithCloudTrailDashboard(Action<Humidifier.CloudTrail.Dashboard> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudTrail.DashboardFactory(resourceName, resourceFactoryAction));
+        CloudTrailDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public CloudWatch.DashboardFactory WithCloudWatchDashboard(Action<Humidifier.CloudWatch.Dashboard> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CloudWatch.DashboardFactory(resourceName, resourceFactoryAction));
+        CloudWatchDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public IoTSiteWise.DashboardFactory WithIoTSiteWiseDashboard(Action<Humidifier.IoTSiteWise.Dashboard> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoTSiteWise.DashboardFactory(resourceName, resourceFactoryAction));
+        IoTSiteWiseDashboardFactories.Add(factory);
+        return factory;
+    }
+
+    public QuickSight.DashboardFactory WithQuickSightDashboard(Action<Humidifier.QuickSight.Dashboard> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.DashboardFactory(resourceName, resourceFactoryAction));
+        QuickSightDashboardFactories.Add(factory);
+        return factory;
+    }
+
     public CloudTrail.EventDataStoreFactory WithEventDataStore(Action<Humidifier.CloudTrail.EventDataStore> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new CloudTrail.EventDataStoreFactory(resourceName, resourceFactoryAction));
@@ -13923,6 +14563,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new CloudTrail.ResourcePolicyFactory(resourceName, resourceFactoryAction));
         CloudTrailResourcePolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public Kinesis.ResourcePolicyFactory WithKinesisResourcePolicy(Action<Humidifier.Kinesis.ResourcePolicy> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Kinesis.ResourcePolicyFactory(resourceName, resourceFactoryAction));
+        KinesisResourcePolicyFactories.Add(factory);
         return factory;
     }
 
@@ -14017,27 +14664,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public CloudWatch.DashboardFactory WithCloudWatchDashboard(Action<Humidifier.CloudWatch.Dashboard> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new CloudWatch.DashboardFactory(resourceName, resourceFactoryAction));
-        CloudWatchDashboardFactories.Add(factory);
-        return factory;
-    }
-
-    public IoTSiteWise.DashboardFactory WithIoTSiteWiseDashboard(Action<Humidifier.IoTSiteWise.Dashboard> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTSiteWise.DashboardFactory(resourceName, resourceFactoryAction));
-        IoTSiteWiseDashboardFactories.Add(factory);
-        return factory;
-    }
-
-    public QuickSight.DashboardFactory WithQuickSightDashboard(Action<Humidifier.QuickSight.Dashboard> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new QuickSight.DashboardFactory(resourceName, resourceFactoryAction));
-        QuickSightDashboardFactories.Add(factory);
-        return factory;
-    }
-
     public CloudWatch.InsightRuleFactory WithInsightRule(Action<Humidifier.CloudWatch.InsightRule> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new CloudWatch.InsightRuleFactory(resourceName, resourceFactoryAction));
@@ -14105,13 +14731,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Evidently.ProjectFactory(resourceName, resourceFactoryAction));
         EvidentlyProjectFactories.Add(factory);
-        return factory;
-    }
-
-    public IoT1Click.ProjectFactory WithIoT1ClickProject(Action<Humidifier.IoT1Click.Project> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoT1Click.ProjectFactory(resourceName, resourceFactoryAction));
-        IoT1ClickProjectFactories.Add(factory);
         return factory;
     }
 
@@ -14318,6 +14937,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Cognito.ManagedLoginBrandingFactory WithManagedLoginBranding(Action<Humidifier.Cognito.ManagedLoginBranding> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Cognito.ManagedLoginBrandingFactory(resourceName, resourceFactoryAction));
+        ManagedLoginBrandingFactories.Add(factory);
+        return factory;
+    }
+
     public Cognito.UserPoolFactory WithUserPool(Action<Humidifier.Cognito.UserPool> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new Cognito.UserPoolFactory(resourceName, resourceFactoryAction));
@@ -14500,6 +15126,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Connect.EmailAddressFactory WithEmailAddress(Action<Humidifier.Connect.EmailAddress> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Connect.EmailAddressFactory(resourceName, resourceFactoryAction));
+        EmailAddressFactories.Add(factory);
+        return factory;
+    }
+
     public Connect.EvaluationFormFactory WithEvaluationForm(Action<Humidifier.Connect.EvaluationForm> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new Connect.EvaluationFormFactory(resourceName, resourceFactoryAction));
@@ -14605,6 +15238,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public PCS.QueueFactory WithPCSQueue(Action<Humidifier.PCS.Queue> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.QueueFactory(resourceName, resourceFactoryAction));
+        PCSQueueFactories.Add(factory);
+        return factory;
+    }
+
     public SQS.QueueFactory WithSQSQueue(Action<Humidifier.SQS.Queue> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new SQS.QueueFactory(resourceName, resourceFactoryAction));
@@ -14637,6 +15277,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Events.RuleFactory(resourceName, resourceFactoryAction));
         EventsRuleFactories.Add(factory);
+        return factory;
+    }
+
+    public Rbin.RuleFactory WithRbinRule(Action<Humidifier.Rbin.Rule> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Rbin.RuleFactory(resourceName, resourceFactoryAction));
+        RbinRuleFactories.Add(factory);
         return factory;
     }
 
@@ -14738,6 +15385,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ConnectCampaignsV2.CampaignFactory WithConnectCampaignsV2Campaign(Action<Humidifier.ConnectCampaignsV2.Campaign> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ConnectCampaignsV2.CampaignFactory(resourceName, resourceFactoryAction));
+        ConnectCampaignsV2CampaignFactories.Add(factory);
+        return factory;
+    }
+
     public IoTFleetWise.CampaignFactory WithIoTFleetWiseCampaign(Action<Humidifier.IoTFleetWise.Campaign> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.CampaignFactory(resourceName, resourceFactoryAction));
@@ -14801,6 +15455,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public CustomerProfiles.SegmentDefinitionFactory WithSegmentDefinition(Action<Humidifier.CustomerProfiles.SegmentDefinition> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new CustomerProfiles.SegmentDefinitionFactory(resourceName, resourceFactoryAction));
+        SegmentDefinitionFactories.Add(factory);
+        return factory;
+    }
+
     public DAX.ClusterFactory WithDAXCluster(Action<Humidifier.DAX.Cluster> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new DAX.ClusterFactory(resourceName, resourceFactoryAction));
@@ -14854,6 +15515,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new MemoryDB.ClusterFactory(resourceName, resourceFactoryAction));
         MemoryDBClusterFactories.Add(factory);
+        return factory;
+    }
+
+    public PCS.ClusterFactory WithPCSCluster(Action<Humidifier.PCS.Cluster> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.ClusterFactory(resourceName, resourceFactoryAction));
+        PCSClusterFactories.Add(factory);
         return factory;
     }
 
@@ -14938,6 +15606,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new OpenSearchServerless.LifecyclePolicyFactory(resourceName, resourceFactoryAction));
         OpenSearchServerlessLifecyclePolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public DMS.DataMigrationFactory WithDataMigration(Action<Humidifier.DMS.DataMigration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new DMS.DataMigrationFactory(resourceName, resourceFactoryAction));
+        DataMigrationFactories.Add(factory);
         return factory;
     }
 
@@ -15851,6 +16526,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.SecurityGroupVpcAssociationFactory WithSecurityGroupVpcAssociation(Action<Humidifier.EC2.SecurityGroupVpcAssociation> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.SecurityGroupVpcAssociationFactory(resourceName, resourceFactoryAction));
+        SecurityGroupVpcAssociationFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.SnapshotBlockPublicAccessFactory WithSnapshotBlockPublicAccess(Action<Humidifier.EC2.SnapshotBlockPublicAccess> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.SnapshotBlockPublicAccessFactory(resourceName, resourceFactoryAction));
@@ -16016,6 +16698,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new EC2.VPCFactory(resourceName, resourceFactoryAction));
         VPCFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.VPCBlockPublicAccessExclusionFactory WithVPCBlockPublicAccessExclusion(Action<Humidifier.EC2.VPCBlockPublicAccessExclusion> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.VPCBlockPublicAccessExclusionFactory(resourceName, resourceFactoryAction));
+        VPCBlockPublicAccessExclusionFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.VPCBlockPublicAccessOptionsFactory WithVPCBlockPublicAccessOptions(Action<Humidifier.EC2.VPCBlockPublicAccessOptions> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.VPCBlockPublicAccessOptionsFactory(resourceName, resourceFactoryAction));
+        VPCBlockPublicAccessOptionsFactories.Add(factory);
         return factory;
     }
 
@@ -16369,17 +17065,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public EMR.StudioFactory WithEMRStudio(Action<Humidifier.EMR.Studio> resourceFactoryAction = null, string resourceName = null)
+    public EMR.StudioFactory WithStudio(Action<Humidifier.EMR.Studio> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new EMR.StudioFactory(resourceName, resourceFactoryAction));
-        EMRStudioFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.StudioFactory WithNimbleStudioStudio(Action<Humidifier.NimbleStudio.Studio> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.StudioFactory(resourceName, resourceFactoryAction));
-        NimbleStudioStudioFactories.Add(factory);
+        StudioFactories.Add(factory);
         return factory;
     }
 
@@ -16873,6 +17562,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public GameLift.ContainerFleetFactory WithContainerFleet(Action<Humidifier.GameLift.ContainerFleet> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new GameLift.ContainerFleetFactory(resourceName, resourceFactoryAction));
+        ContainerFleetFactories.Add(factory);
+        return factory;
+    }
+
     public GameLift.ContainerGroupDefinitionFactory WithContainerGroupDefinition(Action<Humidifier.GameLift.ContainerGroupDefinition> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new GameLift.ContainerGroupDefinitionFactory(resourceName, resourceFactoryAction));
@@ -17045,6 +17741,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Glue.TriggerFactory(resourceName, resourceFactoryAction));
         TriggerFactories.Add(factory);
+        return factory;
+    }
+
+    public Glue.UsageProfileFactory WithUsageProfile(Action<Humidifier.Glue.UsageProfile> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Glue.UsageProfileFactory(resourceName, resourceFactoryAction));
+        UsageProfileFactories.Add(factory);
         return factory;
     }
 
@@ -17440,6 +18143,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public IVS.IngestConfigurationFactory WithIngestConfiguration(Action<Humidifier.IVS.IngestConfiguration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new IVS.IngestConfigurationFactory(resourceName, resourceFactoryAction));
+        IngestConfigurationFactories.Add(factory);
+        return factory;
+    }
+
     public IVS.PlaybackKeyPairFactory WithPlaybackKeyPair(Action<Humidifier.IVS.PlaybackKeyPair> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new IVS.PlaybackKeyPairFactory(resourceName, resourceFactoryAction));
@@ -17587,31 +18297,10 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public IoT1Click.DeviceFactory WithIoT1ClickDevice(Action<Humidifier.IoT1Click.Device> resourceFactoryAction = null, string resourceName = null)
+    public Invoicing.InvoiceUnitFactory WithInvoiceUnit(Action<Humidifier.Invoicing.InvoiceUnit> resourceFactoryAction = null, string resourceName = null)
     {
-        var factory = this.CreateSubFactory(() => new IoT1Click.DeviceFactory(resourceName, resourceFactoryAction));
-        IoT1ClickDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public NetworkManager.DeviceFactory WithNetworkManagerDevice(Action<Humidifier.NetworkManager.Device> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new NetworkManager.DeviceFactory(resourceName, resourceFactoryAction));
-        NetworkManagerDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public SageMaker.DeviceFactory WithSageMakerDevice(Action<Humidifier.SageMaker.Device> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new SageMaker.DeviceFactory(resourceName, resourceFactoryAction));
-        SageMakerDeviceFactories.Add(factory);
-        return factory;
-    }
-
-    public IoT1Click.PlacementFactory WithPlacement(Action<Humidifier.IoT1Click.Placement> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoT1Click.PlacementFactory(resourceName, resourceFactoryAction));
-        PlacementFactories.Add(factory);
+        var factory = this.CreateSubFactory(() => new Invoicing.InvoiceUnitFactory(resourceName, resourceFactoryAction));
+        InvoiceUnitFactories.Add(factory);
         return factory;
     }
 
@@ -17633,6 +18322,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new IoT.CertificateProviderFactory(resourceName, resourceFactoryAction));
         CertificateProviderFactories.Add(factory);
+        return factory;
+    }
+
+    public IoT.CommandFactory WithCommand(Action<Humidifier.IoT.Command> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoT.CommandFactory(resourceName, resourceFactoryAction));
+        CommandFactories.Add(factory);
         return factory;
     }
 
@@ -17836,6 +18532,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.SignalCatalogFactory(resourceName, resourceFactoryAction));
         SignalCatalogFactories.Add(factory);
+        return factory;
+    }
+
+    public IoTFleetWise.StateTemplateFactory WithStateTemplate(Action<Humidifier.IoTFleetWise.StateTemplate> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new IoTFleetWise.StateTemplateFactory(resourceName, resourceFactoryAction));
+        StateTemplateFactories.Add(factory);
         return factory;
     }
 
@@ -18784,6 +19487,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public MemoryDB.MultiRegionClusterFactory WithMultiRegionCluster(Action<Humidifier.MemoryDB.MultiRegionCluster> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new MemoryDB.MultiRegionClusterFactory(resourceName, resourceFactoryAction));
+        MultiRegionClusterFactories.Add(factory);
+        return factory;
+    }
+
     public Neptune.DBParameterGroupFactory WithNeptuneDBParameterGroup(Action<Humidifier.Neptune.DBParameterGroup> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new Neptune.DBParameterGroupFactory(resourceName, resourceFactoryAction));
@@ -18868,6 +19578,27 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public NetworkManager.DeviceFactory WithNetworkManagerDevice(Action<Humidifier.NetworkManager.Device> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new NetworkManager.DeviceFactory(resourceName, resourceFactoryAction));
+        NetworkManagerDeviceFactories.Add(factory);
+        return factory;
+    }
+
+    public SageMaker.DeviceFactory WithSageMakerDevice(Action<Humidifier.SageMaker.Device> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.DeviceFactory(resourceName, resourceFactoryAction));
+        SageMakerDeviceFactories.Add(factory);
+        return factory;
+    }
+
+    public NetworkManager.DirectConnectGatewayAttachmentFactory WithDirectConnectGatewayAttachment(Action<Humidifier.NetworkManager.DirectConnectGatewayAttachment> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new NetworkManager.DirectConnectGatewayAttachmentFactory(resourceName, resourceFactoryAction));
+        DirectConnectGatewayAttachmentFactories.Add(factory);
+        return factory;
+    }
+
     public NetworkManager.GlobalNetworkFactory WithGlobalNetwork(Action<Humidifier.NetworkManager.GlobalNetwork> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new NetworkManager.GlobalNetworkFactory(resourceName, resourceFactoryAction));
@@ -18935,20 +19666,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new NetworkManager.VpcAttachmentFactory(resourceName, resourceFactoryAction));
         VpcAttachmentFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.LaunchProfileFactory WithLaunchProfile(Action<Humidifier.NimbleStudio.LaunchProfile> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.LaunchProfileFactory(resourceName, resourceFactoryAction));
-        LaunchProfileFactories.Add(factory);
-        return factory;
-    }
-
-    public NimbleStudio.StreamingImageFactory WithStreamingImage(Action<Humidifier.NimbleStudio.StreamingImage> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new NimbleStudio.StreamingImageFactory(resourceName, resourceFactoryAction));
-        StreamingImageFactories.Add(factory);
         return factory;
     }
 
@@ -19124,6 +19841,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new PCAConnectorSCEP.ChallengeFactory(resourceName, resourceFactoryAction));
         ChallengeFactories.Add(factory);
+        return factory;
+    }
+
+    public PCS.ComputeNodeGroupFactory WithComputeNodeGroup(Action<Humidifier.PCS.ComputeNodeGroup> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new PCS.ComputeNodeGroupFactory(resourceName, resourceFactoryAction));
+        ComputeNodeGroupFactories.Add(factory);
         return factory;
     }
 
@@ -19337,6 +20061,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public QBusiness.DataAccessorFactory WithDataAccessor(Action<Humidifier.QBusiness.DataAccessor> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new QBusiness.DataAccessorFactory(resourceName, resourceFactoryAction));
+        DataAccessorFactories.Add(factory);
+        return factory;
+    }
+
     public QBusiness.PluginFactory WithPlugin(Action<Humidifier.QBusiness.Plugin> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new QBusiness.PluginFactory(resourceName, resourceFactoryAction));
@@ -19372,10 +20103,24 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public QuickSight.CustomPermissionsFactory WithCustomPermissions(Action<Humidifier.QuickSight.CustomPermissions> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.CustomPermissionsFactory(resourceName, resourceFactoryAction));
+        CustomPermissionsFactories.Add(factory);
+        return factory;
+    }
+
     public QuickSight.DataSetFactory WithDataSet(Action<Humidifier.QuickSight.DataSet> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new QuickSight.DataSetFactory(resourceName, resourceFactoryAction));
         DataSetFactories.Add(factory);
+        return factory;
+    }
+
+    public QuickSight.FolderFactory WithFolder(Action<Humidifier.QuickSight.Folder> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new QuickSight.FolderFactory(resourceName, resourceFactoryAction));
+        FolderFactories.Add(factory);
         return factory;
     }
 
@@ -19453,6 +20198,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new RDS.DBSecurityGroupIngressFactory(resourceName, resourceFactoryAction));
         DBSecurityGroupIngressFactories.Add(factory);
+        return factory;
+    }
+
+    public RDS.DBShardGroupFactory WithDBShardGroup(Action<Humidifier.RDS.DBShardGroup> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new RDS.DBShardGroupFactory(resourceName, resourceFactoryAction));
+        DBShardGroupFactories.Add(factory);
         return factory;
     }
 
@@ -19551,6 +20303,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new ResourceExplorer2.DefaultViewAssociationFactory(resourceName, resourceFactoryAction));
         DefaultViewAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public ResourceGroups.TagSyncTaskFactory WithTagSyncTask(Action<Humidifier.ResourceGroups.TagSyncTask> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ResourceGroups.TagSyncTaskFactory(resourceName, resourceFactoryAction));
+        TagSyncTaskFactories.Add(factory);
         return factory;
     }
 
@@ -19866,6 +20625,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new S3ObjectLambda.AccessPointPolicyFactory(resourceName, resourceFactoryAction));
         AccessPointPolicyFactories.Add(factory);
+        return factory;
+    }
+
+    public S3Tables.TableBucketFactory WithTableBucket(Action<Humidifier.S3Tables.TableBucket> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new S3Tables.TableBucketFactory(resourceName, resourceFactoryAction));
+        TableBucketFactories.Add(factory);
+        return factory;
+    }
+
+    public S3Tables.TableBucketPolicyFactory WithTableBucketPolicy(Action<Humidifier.S3Tables.TableBucketPolicy> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new S3Tables.TableBucketPolicyFactory(resourceName, resourceFactoryAction));
+        TableBucketPolicyFactories.Add(factory);
         return factory;
     }
 
@@ -20258,6 +21031,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new SageMaker.NotebookInstanceLifecycleConfigFactory(resourceName, resourceFactoryAction));
         NotebookInstanceLifecycleConfigFactories.Add(factory);
+        return factory;
+    }
+
+    public SageMaker.PartnerAppFactory WithPartnerApp(Action<Humidifier.SageMaker.PartnerApp> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.PartnerAppFactory(resourceName, resourceFactoryAction));
+        PartnerAppFactories.Add(factory);
         return factory;
     }
 
@@ -20723,10 +21503,31 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public VpcLattice.ResourceConfigurationFactory WithResourceConfiguration(Action<Humidifier.VpcLattice.ResourceConfiguration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ResourceConfigurationFactory(resourceName, resourceFactoryAction));
+        ResourceConfigurationFactories.Add(factory);
+        return factory;
+    }
+
+    public VpcLattice.ResourceGatewayFactory WithResourceGateway(Action<Humidifier.VpcLattice.ResourceGateway> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ResourceGatewayFactory(resourceName, resourceFactoryAction));
+        ResourceGatewayFactories.Add(factory);
+        return factory;
+    }
+
     public VpcLattice.ServiceNetworkFactory WithServiceNetwork(Action<Humidifier.VpcLattice.ServiceNetwork> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new VpcLattice.ServiceNetworkFactory(resourceName, resourceFactoryAction));
         ServiceNetworkFactories.Add(factory);
+        return factory;
+    }
+
+    public VpcLattice.ServiceNetworkResourceAssociationFactory WithServiceNetworkResourceAssociation(Action<Humidifier.VpcLattice.ServiceNetworkResourceAssociation> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new VpcLattice.ServiceNetworkResourceAssociationFactory(resourceName, resourceFactoryAction));
+        ServiceNetworkResourceAssociationFactories.Add(factory);
         return factory;
     }
 
@@ -20863,6 +21664,48 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public Wisdom.AIAgentFactory WithAIAgent(Action<Humidifier.Wisdom.AIAgent> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIAgentFactory(resourceName, resourceFactoryAction));
+        AIAgentFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIAgentVersionFactory WithAIAgentVersion(Action<Humidifier.Wisdom.AIAgentVersion> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIAgentVersionFactory(resourceName, resourceFactoryAction));
+        AIAgentVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIGuardrailFactory WithAIGuardrail(Action<Humidifier.Wisdom.AIGuardrail> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIGuardrailFactory(resourceName, resourceFactoryAction));
+        AIGuardrailFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIGuardrailVersionFactory WithAIGuardrailVersion(Action<Humidifier.Wisdom.AIGuardrailVersion> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIGuardrailVersionFactory(resourceName, resourceFactoryAction));
+        AIGuardrailVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIPromptFactory WithAIPrompt(Action<Humidifier.Wisdom.AIPrompt> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIPromptFactory(resourceName, resourceFactoryAction));
+        AIPromptFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.AIPromptVersionFactory WithAIPromptVersion(Action<Humidifier.Wisdom.AIPromptVersion> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.AIPromptVersionFactory(resourceName, resourceFactoryAction));
+        AIPromptVersionFactories.Add(factory);
+        return factory;
+    }
+
     public Wisdom.AssistantFactory WithAssistant(Action<Humidifier.Wisdom.Assistant> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new Wisdom.AssistantFactory(resourceName, resourceFactoryAction));
@@ -20874,6 +21717,20 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Wisdom.AssistantAssociationFactory(resourceName, resourceFactoryAction));
         AssistantAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.MessageTemplateFactory WithMessageTemplate(Action<Humidifier.Wisdom.MessageTemplate> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.MessageTemplateFactory(resourceName, resourceFactoryAction));
+        MessageTemplateFactories.Add(factory);
+        return factory;
+    }
+
+    public Wisdom.MessageTemplateVersionFactory WithMessageTemplateVersion(Action<Humidifier.Wisdom.MessageTemplateVersion> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Wisdom.MessageTemplateVersionFactory(resourceName, resourceFactoryAction));
+        MessageTemplateVersionFactories.Add(factory);
         return factory;
     }
 
@@ -20895,6 +21752,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new WorkSpacesWeb.BrowserSettingsFactory(resourceName, resourceFactoryAction));
         BrowserSettingsFactories.Add(factory);
+        return factory;
+    }
+
+    public WorkSpacesWeb.DataProtectionSettingsFactory WithDataProtectionSettings(Action<Humidifier.WorkSpacesWeb.DataProtectionSettings> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new WorkSpacesWeb.DataProtectionSettingsFactory(resourceName, resourceFactoryAction));
+        DataProtectionSettingsFactories.Add(factory);
         return factory;
     }
 
