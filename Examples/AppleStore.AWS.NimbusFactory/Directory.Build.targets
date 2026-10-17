@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <UseSourceProjects Condition="'$(SolutionName)' == 'AppleStore.AWS.NimbusFactory.LocalDev'">true</UseSourceProjects>
+  </PropertyGroup>
+
+  <Target Name="PrintUseSourceProjects" BeforeTargets="BeforeBuild">
+    <Message Importance="High" Text="UseSourceProjects = $(UseSourceProjects)" />
+    <Message Importance="High" Text="Solution = $(SolutionName)" />
+  </Target>
+</Project>

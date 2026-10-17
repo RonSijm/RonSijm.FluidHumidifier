@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.BedrockAgentCore;
+
+public class InnerHarnessPrivateEndpointFactory(Action<Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint> factoryAction = null) : SubResourceFactory<Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint>
+{
+
+    internal InnerHarnessSelfManagedLatticeResourceFactory SelfManagedLatticeResourceFactory { get; set; }
+
+    internal InnerHarnessManagedVpcResourceFactory ManagedVpcResourceFactory { get; set; }
+
+    protected override Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint Create()
+    {
+        var privateEndpointResult = CreatePrivateEndpoint();
+        factoryAction?.Invoke(privateEndpointResult);
+
+        return privateEndpointResult;
+    }
+
+    private Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint CreatePrivateEndpoint()
+    {
+        var privateEndpointResult = new Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint();
+
+        return privateEndpointResult;
+    }
+    public override void CreateChildren(Humidifier.BedrockAgentCore.HarnessTypes.PrivateEndpoint result)
+    {
+        base.CreateChildren(result);
+
+        result.SelfManagedLatticeResource ??= SelfManagedLatticeResourceFactory?.Build();
+        result.ManagedVpcResource ??= ManagedVpcResourceFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerHarnessPrivateEndpointFactoryExtensions
+{
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource(this InnerHarnessPrivateEndpointFactory parentFactory, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null)
+    {
+        parentFactory.SelfManagedLatticeResourceFactory = new InnerHarnessSelfManagedLatticeResourceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.SelfManagedLatticeResourceFactory);
+    }
+
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource(this InnerHarnessPrivateEndpointFactory parentFactory, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null)
+    {
+        parentFactory.ManagedVpcResourceFactory = new InnerHarnessManagedVpcResourceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ManagedVpcResourceFactory);
+    }
+
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, T4, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, T4, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, T4, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, T4, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerHarnessPrivateEndpointFactory, InnerHarnessSelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, T4, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<InnerHarnessPrivateEndpointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, T4, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, InnerHarnessPrivateEndpointFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, T4, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerHarnessPrivateEndpointFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, T4, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerHarnessPrivateEndpointFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerHarnessPrivateEndpointFactory, InnerHarnessManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerHarnessPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.HarnessTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T5, subFactoryAction).T2);
+}

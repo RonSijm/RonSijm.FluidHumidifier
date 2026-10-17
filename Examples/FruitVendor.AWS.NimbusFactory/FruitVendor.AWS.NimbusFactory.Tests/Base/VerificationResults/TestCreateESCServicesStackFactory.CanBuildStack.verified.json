@@ -1,0 +1,455 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "FruitVendordevCluster": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "CapacityProviders": [
+          "FARGATE",
+          "FARGATE_SPOT"
+        ],
+        "ClusterName": "FruitVendor-dev-Cluster"
+      }
+    },
+    "Puma": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/Puma",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "Puma-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "PortMappings": [
+              {
+                "AppProtocol": "http",
+                "HostPort": "3000",
+                "ContainerPort": "3000",
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Family": "Puma"
+      }
+    },
+    "devsidekiq": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-export-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-content-export.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-duplication-high-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-duplication-high-priority.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-duplication-low-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-duplication-low-priority.yml"
+            ]
+          }
+        ],
+        "Family": "dev-sidekiq"
+      }
+    },
+    "devrpush": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-rpush",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-rpush-rpush-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "rpush",
+              "start",
+              "-f"
+            ]
+          }
+        ],
+        "Family": "dev-rpush"
+      }
+    },
+    "devjobs": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-jobs",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-jobs-jobs1-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "cron",
+              "-f"
+            ],
+            "Environment": [
+              {
+                "Value": "jobs_1",
+                "Name": "SERVER_ROLE"
+              }
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": ".dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-jobs",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-dev-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "dev-jobs-jobs2-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "cron",
+              "-f"
+            ],
+            "Environment": [
+              {
+                "Value": "jobs_2",
+                "Name": "SERVER_ROLE"
+              }
+            ]
+          }
+        ],
+        "Family": "dev-jobs"
+      }
+    },
+    "ecsPuma": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/Puma"
+      }
+    },
+    "ecsdevsidekiq": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-sidekiq"
+      }
+    },
+    "ecsdevrpush": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-rpush"
+      }
+    },
+    "ecsdevjobs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-jobs"
+      }
+    }
+  }
+}

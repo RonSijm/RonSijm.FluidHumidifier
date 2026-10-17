@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.BedrockAgentCore;
+
+public class InnerGatewayPrivateEndpointFactory(Action<Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint> factoryAction = null) : SubResourceFactory<Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint>
+{
+
+    internal InnerGatewayManagedVpcResourceFactory ManagedVpcResourceFactory { get; set; }
+
+    internal InnerGatewaySelfManagedLatticeResourceFactory SelfManagedLatticeResourceFactory { get; set; }
+
+    protected override Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint Create()
+    {
+        var privateEndpointResult = CreatePrivateEndpoint();
+        factoryAction?.Invoke(privateEndpointResult);
+
+        return privateEndpointResult;
+    }
+
+    private Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint CreatePrivateEndpoint()
+    {
+        var privateEndpointResult = new Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint();
+
+        return privateEndpointResult;
+    }
+    public override void CreateChildren(Humidifier.BedrockAgentCore.GatewayTypes.PrivateEndpoint result)
+    {
+        base.CreateChildren(result);
+
+        result.ManagedVpcResource ??= ManagedVpcResourceFactory?.Build();
+        result.SelfManagedLatticeResource ??= SelfManagedLatticeResourceFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerGatewayPrivateEndpointFactoryExtensions
+{
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource(this InnerGatewayPrivateEndpointFactory parentFactory, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null)
+    {
+        parentFactory.ManagedVpcResourceFactory = new InnerGatewayManagedVpcResourceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ManagedVpcResourceFactory);
+    }
+
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource(this InnerGatewayPrivateEndpointFactory parentFactory, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null)
+    {
+        parentFactory.SelfManagedLatticeResourceFactory = new InnerGatewaySelfManagedLatticeResourceFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.SelfManagedLatticeResourceFactory);
+    }
+
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, T4, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, T4, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, T4, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, T4, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerGatewayPrivateEndpointFactory, InnerGatewayManagedVpcResourceFactory> WithManagedVpcResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.ManagedVpcResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithManagedVpcResource(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, T4, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<InnerGatewayPrivateEndpointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, T4, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, InnerGatewayPrivateEndpointFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, T4, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerGatewayPrivateEndpointFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, T4, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerGatewayPrivateEndpointFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerGatewayPrivateEndpointFactory, InnerGatewaySelfManagedLatticeResourceFactory> WithSelfManagedLatticeResource<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerGatewayPrivateEndpointFactory> combinedResult, Action<Humidifier.BedrockAgentCore.GatewayTypes.SelfManagedLatticeResource> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSelfManagedLatticeResource(combinedResult.T5, subFactoryAction).T2);
+}

@@ -41,6 +41,7 @@ public class EnvironmentOutputResult
         Stacks.Add(new StackOutputResult
         {
             Result = stack,
+            Region = result.Region,
             RelativePath = path,
             Name = $"CF-{counter}-{Environment.EnvironmentName}-{stack.Name}-Stack"
         });

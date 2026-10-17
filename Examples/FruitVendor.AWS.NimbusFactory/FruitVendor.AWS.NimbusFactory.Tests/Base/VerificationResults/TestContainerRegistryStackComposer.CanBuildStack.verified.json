@@ -1,0 +1,73 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "fruitvendorwebapp": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryPolicyText": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": [
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "aws:PrincipalArn": [
+                    "arn:aws:iam::1234:role/ECR-test1234-to-assets-AccessRole",
+                    "arn:aws:iam::5678:role/ECR-test5678-to-assets-AccessRole"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "RepositoryName": "fruitvendor-webapp"
+      }
+    },
+    "ECRdevtoassetsAccessRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ECR-dev-to-assets-AccessRole",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ecr:GetDownloadUrlForLayer",
+                    "ecr:BatchGetImage",
+                    "ecr:BatchCheckLayerAvailability"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/fruitvendorwebapp"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  "arn:aws:iam::1234:root",
+                  "arn:aws:iam::5678:root"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

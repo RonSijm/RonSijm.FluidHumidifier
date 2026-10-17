@@ -1,0 +1,340 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Cloudformation Resources For staging Environment",
+  "Resources": {
+    "fruitvendorstagingwebappprecompiledassetsCF": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Origins": [
+            {
+              "DomainName": "fruitvendor-staging-webapp-precompiledassets.s3.eu-central-1.amazonaws.com",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": ""
+              },
+              "Id": "fruitvendor-staging-webapp-precompiledassets"
+            }
+          ],
+          "ViewerCertificate": {
+            "SslSupportMethod": "sni-only",
+            "MinimumProtocolVersion": "TLSv1.2_2021",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:444444444444:certificate/00000000-0000-0000-0000-000000000009"
+          },
+          "PriceClass": "PriceClass_All",
+          "DefaultCacheBehavior": {
+            "Compress": true,
+            "TargetOriginId": "fruitvendor-staging-webapp-precompiledassets",
+            "ViewerProtocolPolicy": "https-only",
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "SmoothStreaming": false,
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6"
+          },
+          "Enabled": true,
+          "Aliases": [
+            "assets.staging-fruitvendor.example"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-staging-webapp-precompiledassets-CF"
+          }
+        ]
+      }
+    },
+    "stagingSlackLoggerPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "staging-SlackLogger-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateLogGroup",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "stagingSlackLogger": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "stagingSlackLoggerPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "staging-SlackLogger",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-SlackLogger"
+          }
+        ]
+      }
+    },
+    "awsstagingcloudformationfruitvendor": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "aws-staging-cloudformation-fruitvendor",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-staging-cloudformation-fruitvendor"
+          }
+        ]
+      }
+    },
+    "fruitvendorstagingwebappenvironmentvariables": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-staging-webapp-environmentvariables",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-staging-webapp-environmentvariables"
+          }
+        ]
+      }
+    },
+    "fruitvendorstagingwebplayer": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-staging-webplayer",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-staging-webplayer"
+          }
+        ]
+      }
+    },
+    "fruitvendorstagingmanagertoolkit": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-staging-managertoolkit",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-staging-managertoolkit"
+          }
+        ]
+      }
+    },
+    "fruitvendorstagingwebappprecompiledassets": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "PublicAccessBlockConfiguration": {
+          "RestrictPublicBuckets": false,
+          "BlockPublicPolicy": false,
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false
+        },
+        "BucketName": "fruitvendor-staging-webapp-precompiledassets",
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-staging-webapp-precompiledassets"
+          }
+        ]
+      }
+    },
+    "fruitvendorsysopsstagingTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "TopicName": "fruitvendor-sysops-staging-Topic",
+        "DisplayName": "fruitvendor-sysops-staging",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-sysops-staging-Topic"
+          }
+        ]
+      }
+    },
+    "assetsstagingfruitvendorcom": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "staging-fruitvendor.example.",
+        "Name": "assets.staging-fruitvendor.example",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "fruitvendorstagingwebappprecompiledassetsCF",
+              "DomainName"
+            ]
+          }
+        ],
+        "TTL": 300,
+        "Type": "CNAME"
+      }
+    },
+    "fruitvendorstagingwebappprecompiledassetsPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "fruitvendorstagingwebappprecompiledassets"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::fruitvendor-staging-webapp-precompiledassets/*"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "AWS:SourceArn": "arn:aws:cloudfront::444444444444:distribution/*"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "fruitvendorsysopsstagingTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "fruitvendorsysopsstagingTopic"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSNS",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsstagingTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "AllowCloudtrail",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "SNS:Publish"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsstagingTopic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "stagingSlackLogger": {
+      "Value": {
+        "Ref": "stagingSlackLogger"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "stagingSlackLogger"
+        }
+      }
+    },
+    "awsstagingcloudformationfruitvendor": {
+      "Value": {
+        "Ref": "awsstagingcloudformationfruitvendor"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "awsstagingcloudformationfruitvendor"
+        }
+      }
+    },
+    "fruitvendorsysopsstagingTopic": {
+      "Value": {
+        "Ref": "fruitvendorsysopsstagingTopic"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorsysopsstagingTopic"
+        }
+      }
+    }
+  }
+}

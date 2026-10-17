@@ -1,0 +1,205 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Cloudformation Resources For staging Environment",
+  "Resources": {
+    "stagingSlackLoggerPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "staging-SlackLogger-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateLogGroup",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "stagingSlackLogger": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "stagingSlackLoggerPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "staging-SlackLogger",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-SlackLogger"
+          }
+        ]
+      }
+    },
+    "awsstagingcloudformationapplestore": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "aws-staging-cloudformation-applestore",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-staging-cloudformation-applestore"
+          }
+        ]
+      }
+    },
+    "applestorestagingwebappenvironmentvariables": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "applestore-staging-webapp-environmentvariables",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AppleStore-staging-webapp-environmentvariables"
+          }
+        ]
+      }
+    },
+    "applestoresysopsstagingTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "applestore-sysops-staging",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-sysops-staging-Topic"
+          }
+        ],
+        "TopicName": "applestore-sysops-staging-Topic"
+      }
+    },
+    "applestoresysopsstagingTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "applestoresysopsstagingTopic"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSNS",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "applestoresysopsstagingTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "AllowCloudtrail",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "SNS:Publish"
+              ],
+              "Resource": {
+                "Ref": "applestoresysopsstagingTopic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "stagingSlackLogger": {
+      "Value": {
+        "Ref": "stagingSlackLogger"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "stagingSlackLogger"
+        }
+      }
+    },
+    "awsstagingcloudformationapplestore": {
+      "Value": {
+        "Ref": "awsstagingcloudformationapplestore"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "awsstagingcloudformationapplestore"
+        }
+      }
+    },
+    "applestorestagingwebappenvironmentvariables": {
+      "Value": {
+        "Ref": "applestorestagingwebappenvironmentvariables"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "applestorestagingwebappenvironmentvariables"
+        }
+      }
+    },
+    "applestoresysopsstagingTopic": {
+      "Value": {
+        "Ref": "applestoresysopsstagingTopic"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "applestoresysopsstagingTopic"
+        }
+      }
+    }
+  }
+}

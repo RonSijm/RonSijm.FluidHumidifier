@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.DevOpsAgent;
+
+public class InnerAgentSpaceOperatorAppFactory(Action<Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp> factoryAction = null) : SubResourceFactory<Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp>
+{
+
+    internal InnerAgentSpaceIamAuthConfigurationFactory IamFactory { get; set; }
+
+    internal InnerAgentSpaceIdcAuthConfigurationFactory IdcFactory { get; set; }
+
+    protected override Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp Create()
+    {
+        var operatorAppResult = CreateOperatorApp();
+        factoryAction?.Invoke(operatorAppResult);
+
+        return operatorAppResult;
+    }
+
+    private Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp CreateOperatorApp()
+    {
+        var operatorAppResult = new Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp();
+
+        return operatorAppResult;
+    }
+    public override void CreateChildren(Humidifier.DevOpsAgent.AgentSpaceTypes.OperatorApp result)
+    {
+        base.CreateChildren(result);
+
+        result.Iam ??= IamFactory?.Build();
+        result.Idc ??= IdcFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerAgentSpaceOperatorAppFactoryExtensions
+{
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIamAuthConfigurationFactory> WithIam(this InnerAgentSpaceOperatorAppFactory parentFactory, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null)
+    {
+        parentFactory.IamFactory = new InnerAgentSpaceIamAuthConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.IamFactory);
+    }
+
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc(this InnerAgentSpaceOperatorAppFactory parentFactory, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null)
+    {
+        parentFactory.IdcFactory = new InnerAgentSpaceIdcAuthConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.IdcFactory);
+    }
+
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithIam(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithIam(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, T4, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3, T4>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, T4, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3, T4>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, T4, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, T4, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIamAuthConfigurationFactory> WithIam<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IamAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIam(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithIdc(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithIdc(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, T4, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3, T4>(this CombinedResult<InnerAgentSpaceOperatorAppFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, T4, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3, T4>(this CombinedResult<T1, InnerAgentSpaceOperatorAppFactory, T2, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, T4, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerAgentSpaceOperatorAppFactory, T3, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, T4, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerAgentSpaceOperatorAppFactory, T4> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerAgentSpaceOperatorAppFactory, InnerAgentSpaceIdcAuthConfigurationFactory> WithIdc<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerAgentSpaceOperatorAppFactory> combinedResult, Action<Humidifier.DevOpsAgent.AgentSpaceTypes.IdcAuthConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithIdc(combinedResult.T5, subFactoryAction).T2);
+}

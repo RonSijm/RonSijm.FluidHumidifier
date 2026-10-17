@@ -50,7 +50,7 @@ public class BatchActionFactory
             bob.AppendLine($"    --profile dev ^");
             bob.AppendLine($"    --stack-name {stack.Name} ^");
             bob.AppendLine($"    --template-file \"./{stack.FileName}\" ^");
-            bob.AppendLine($"    --region {environment.Environment.Region} ^");
+            bob.AppendLine($"    --region {stackOutputResult.Region ?? environment.Environment.Region} ^");
             bob.AppendLine($"    --capabilities CAPABILITY_NAMED_IAM");
         }
 

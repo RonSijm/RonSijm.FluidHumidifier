@@ -1,0 +1,93 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For CircleCI User For staging Environment",
+  "Resources": {
+    "CircleCIDeployPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "CircleCI-Deploy-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ecr:GetAuthorizationToken",
+                "sts:AssumeRoleWithWebIdentity"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ecs:UpdateService",
+                "ecs:DescribeServices"
+              ],
+              "Resource": [
+                "*"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "CircleCIOidcProvider": {
+      "Type": "AWS::IAM::OIDCProvider",
+      "Properties": {
+        "ClientIdList": [
+          "sts.amazonaws.com",
+          "00000000-0000-0000-0000-000000000001"
+        ],
+        "ThumbprintList": [
+          "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
+        ],
+        "Url": "https://oidc.circleci.com/org/00000000-0000-0000-0000-000000000001",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "CircleCIOidcProvider"
+          }
+        ]
+      }
+    },
+    "CircleCIDeployRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Fn::ImportValue": "OidcSafetyPolicy"
+          },
+          {
+            "Ref": "CircleCIDeployPolicy"
+          }
+        ],
+        "RoleName": "CircleCI-Deploy-Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:aws:iam::444444444444:oidc-provider/oidc.circleci.com/org/00000000-0000-0000-0000-000000000001"
+              },
+              "Action": [
+                "sts:AssumeRoleWithWebIdentity"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "oidc.circleci.com/org/00000000-0000-0000-0000-000000000001:aud": "00000000-0000-0000-0000-000000000001"
+                }
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "CircleCI-Deploy-Role"
+          }
+        ]
+      }
+    }
+  }
+}

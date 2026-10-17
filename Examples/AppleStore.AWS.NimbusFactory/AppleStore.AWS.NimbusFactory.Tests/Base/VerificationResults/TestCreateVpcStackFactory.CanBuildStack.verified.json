@@ -1,0 +1,937 @@
+﻿{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "internetroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorepubrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "devAppleStoreinternetgw"
+        }
+      }
+    },
+    "dockerroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStoredockerrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "devAppleStoreinternetgw"
+        }
+      }
+    },
+    "localnatroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "AppleStoreNAT"
+        }
+      }
+    },
+    "AppleStoreNATEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {}
+    },
+    "AppleStoreNWEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {}
+    },
+    "AppleStoreEIPAss": {
+      "Type": "AWS::EC2::EIPAssociation",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "AppleStoreNWEIP",
+            "AllocationId"
+          ]
+        },
+        "NetworkInterfaceId": {
+          "Ref": "AppleStoreNI"
+        }
+      }
+    },
+    "devAppleStoreinternetgw": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {}
+    },
+    "AppleStoreNAT": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "AppleStoreNATEIP",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "devAppleStorenetworkacl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "devAppleStorenetworkaclinet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": true,
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "devAppleStorenetworkaclet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "AppleStoreNI": {
+      "Type": "AWS::EC2::NetworkInterface",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "devAppleStorepubrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "devAppleStorelocalrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "devAppleStoredockerrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "PumaLBToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Puma - Lets PumaLB Talk to Docker",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "Docker"
+        },
+        "GroupId": {
+          "Ref": "PumaLB"
+        }
+      }
+    },
+    "DockerToPumaLBSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Puma - Lets PumaLB Talk to Docker",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "PumaLB"
+        },
+        "GroupId": {
+          "Ref": "Docker"
+        }
+      }
+    },
+    "DockerToRDSSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets Docker Talk to RDS",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "RDS"
+        },
+        "GroupId": {
+          "Ref": "Docker"
+        }
+      }
+    },
+    "RDSToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets Docker Talk to RDS",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "Docker"
+        },
+        "GroupId": {
+          "Ref": "RDS"
+        }
+      }
+    },
+    "DockerToRedisSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Redis - Lets Docker Talk to Redis",
+        "FromPort": 6379,
+        "ToPort": 6379,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "Redis"
+        },
+        "GroupId": {
+          "Ref": "Docker"
+        }
+      }
+    },
+    "RedisToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Redis - Lets Docker Talk to Redis",
+        "FromPort": 6379,
+        "ToPort": 6379,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "Docker"
+        },
+        "GroupId": {
+          "Ref": "Redis"
+        }
+      }
+    },
+    "RDSSubnetGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupName": "RDS Subnet Group",
+        "SubnetIds": [
+          {
+            "Ref": "RDSSubnetAZA"
+          },
+          {
+            "Ref": "RDSSubnetAZB"
+          },
+          {
+            "Ref": "RDSSubnetAZC"
+          }
+        ]
+      }
+    },
+    "RedisSubnetGroup": {
+      "Type": "AWS::ElastiCache::SubnetGroup",
+      "Properties": {
+        "Description": "Default Subnet Group for ElastiCache",
+        "SubnetIds": [
+          {
+            "Ref": "RedisSubnetAZA"
+          },
+          {
+            "Ref": "RedisSubnetAZB"
+          },
+          {
+            "Ref": "RedisSubnetAZC"
+          }
+        ]
+      }
+    },
+    "Redis": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "PumaLB": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        },
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Http Inbound - Lets PumaLB Communicate over tcp 80-80",
+            "FromPort": 80,
+            "ToPort": 80,
+            "IpProtocol": "tcp"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Https Inbound - Lets PumaLB Communicate over tcp 443-443",
+            "FromPort": 443,
+            "ToPort": 443,
+            "IpProtocol": "tcp"
+          }
+        ]
+      }
+    },
+    "Docker": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RDS": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "PumaLBSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "PumaLBSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.2.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "PumaLBSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.3.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.4.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.5.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.6.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RedisSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.7.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RedisSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.8.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "RedisSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.9.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "DockerSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.10.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "DockerSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.11.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "DockerSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.12.0/24",
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "AppleStoreInfrastructure": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": true
+      }
+    },
+    "PumaLBAZAdevAppleStorepubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorepubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBAZAdevAppleStorepubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBAZBdevAppleStorepubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorepubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBAZBdevAppleStorepubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBAZCdevAppleStorepubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorepubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "PumaLBAZCdevAppleStorepubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "RDSAZAdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZAdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZBdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZBdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZCdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "RDSAZCdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "RedisAZAdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZA"
+        }
+      }
+    },
+    "RedisAZAdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZA"
+        }
+      }
+    },
+    "RedisAZBdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZB"
+        }
+      }
+    },
+    "RedisAZBdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZB"
+        }
+      }
+    },
+    "RedisAZCdevAppleStorelocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStorelocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZC"
+        }
+      }
+    },
+    "RedisAZCdevAppleStorelocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZC"
+        }
+      }
+    },
+    "DockerAZAdevAppleStoredockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStoredockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerAZAdevAppleStoredockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerAZBdevAppleStoredockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStoredockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerAZBdevAppleStoredockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerAZCdevAppleStoredockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devAppleStoredockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZC"
+        }
+      }
+    },
+    "DockerAZCdevAppleStoredockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devAppleStorenetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZC"
+        }
+      }
+    },
+    "S3Endpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        },
+        "RouteTableIds": [
+          {
+            "Ref": "devAppleStoredockerrt"
+          }
+        ],
+        "ServiceName": "com.amazonaws.eu-central-1.s3",
+        "VpcEndpointType": "Gateway"
+      }
+    },
+    "ECRAPIEndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "SecurityGroupIds": [
+          {
+            "Ref": "DockerSecurityGroup"
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "DockerSubnetAZA"
+          },
+          {
+            "Ref": "DockerSubnetAZB"
+          },
+          {
+            "Ref": "DockerSubnetAZC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        },
+        "ServiceName": "com.amazonaws.eu-central-1.ecr.api",
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "ECRDKREndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "SecurityGroupIds": [
+          {
+            "Ref": "DockerSecurityGroup"
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "DockerSubnetAZA"
+          },
+          {
+            "Ref": "DockerSubnetAZB"
+          },
+          {
+            "Ref": "DockerSubnetAZC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        },
+        "ServiceName": "com.amazonaws.eu-central-1.ecr.dkr",
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "VPCGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        },
+        "VpnGatewayId": {
+          "Ref": "AppleStoreVPNGW"
+        }
+      }
+    },
+    "VPCGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "devAppleStoreinternetgw"
+        },
+        "VpcId": {
+          "Ref": "AppleStoreInfrastructure"
+        }
+      }
+    },
+    "AppleStoreVPNGW": {
+      "Type": "AWS::EC2::VPNGateway",
+      "Properties": {
+        "Type": "ipsec.1"
+      }
+    }
+  },
+  "Outputs": {
+    "RDSSubnetGroup": {
+      "Value": {
+        "Ref": "RDSSubnetGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDSSubnetGroup"
+        }
+      }
+    },
+    "RedisSubnetGroup": {
+      "Value": {
+        "Ref": "RedisSubnetGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RedisSubnetGroup"
+        }
+      }
+    },
+    "Redis": {
+      "Value": {
+        "Ref": "Redis"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "Redis"
+        }
+      }
+    },
+    "PumaLB": {
+      "Value": {
+        "Ref": "PumaLB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLB"
+        }
+      }
+    },
+    "Docker": {
+      "Value": {
+        "Ref": "Docker"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "Docker"
+        }
+      }
+    },
+    "RDS": {
+      "Value": {
+        "Ref": "RDS"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDS"
+        }
+      }
+    },
+    "PumaLBSubnetAZA": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBSubnetAZB": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBSubnetAZC": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "DockerSubnetAZA": {
+      "Value": {
+        "Ref": "DockerSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerSubnetAZB": {
+      "Value": {
+        "Ref": "DockerSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerSubnetAZC": {
+      "Value": {
+        "Ref": "DockerSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZC"
+        }
+      }
+    },
+    "AppleStoreInfrastructure": {
+      "Value": {
+        "Ref": "AppleStoreInfrastructure"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "AppleStoreInfrastructure"
+        }
+      }
+    }
+  }
+}

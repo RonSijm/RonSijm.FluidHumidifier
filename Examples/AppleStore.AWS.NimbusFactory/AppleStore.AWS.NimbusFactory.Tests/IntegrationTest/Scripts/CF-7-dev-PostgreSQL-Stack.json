@@ -1,0 +1,248 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For PostgreSQL For dev Environment",
+  "Resources": {
+    "PostgreSQLBackupPlan": {
+      "Type": "AWS::Backup::BackupPlan",
+      "Properties": {
+        "BackupPlan": {
+          "BackupPlanName": "PostgreSQL-BackupPlan",
+          "BackupPlanRule": [
+            {
+              "CompletionWindowMinutes": 10080,
+              "ScheduleExpression": "cron(0 12 * * ? *)",
+              "RecoveryPointTags": {
+                "App": "PostgreSQL-DB"
+              },
+              "Lifecycle": {
+                "DeleteAfterDays": 365,
+                "MoveToColdStorageAfterDays": 30
+              },
+              "TargetBackupVault": {
+                "Ref": "crossregionbackupvault"
+              },
+              "StartWindowMinutes": 60,
+              "RuleName": "DailyBackup"
+            }
+          ]
+        }
+      }
+    },
+    "PostgreSQLBackupSelection": {
+      "Type": "AWS::Backup::BackupSelection",
+      "Properties": {
+        "BackupSelection": {
+          "SelectionName": "MyDBBackupSelection",
+          "IamRoleArn": {
+            "Fn::GetAtt": [
+              "PostgreSQLBackupRole",
+              "Arn"
+            ]
+          },
+          "Resources": [{"Fn::Sub": "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:cluster:${AppleStorePostgreSQLdevCluster}"}]
+        },
+        "BackupPlanId": {
+          "Ref": "PostgreSQLBackupPlan"
+        }
+      },
+      "DependsOn": [
+        "AppleStorePostgreSQLdevCluster"
+      ]
+    },
+    "crossregionbackupvault": {
+      "Type": "AWS::Backup::BackupVault",
+      "Properties": {
+        "BackupVaultName": "cross-region-backup-vault",
+        "EncryptionKeyArn": "arn:aws:kms:eu-central-1:333333333333:key/mrk-00000000000000000000000000000001"
+      }
+    },
+    "AppleStorePostgreSQLdevCluster": {
+      "Type": "AWS::RDS::DBCluster",
+      "Properties": {
+        "StorageEncrypted": true,
+        "EngineMode": "provisioned",
+        "Port": 5432,
+        "Engine": "aurora-postgresql",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AppleStore-PostgreSQL-dev-Cluster"
+          }
+        ],
+        "EngineVersion": "13.13",
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-dev-CMK"
+        },
+        "DBSubnetGroupName": {
+          "Fn::ImportValue": "RDSSubnetGroup"
+        },
+        "DeletionProtection": false,
+        "MasterUserPassword": "{{resolve:secretsmanager:example-database:SecretString:password}}",
+        "MasterUsername": "root_username",
+        "EnableHttpEndpoint": false,
+        "PreferredBackupWindow": "03:15-03:45",
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::ImportValue": "RDSSecurityGroup"
+          }
+        ],
+        "AvailabilityZones": {
+          "Fn::GetAZs": "eu-central-1"
+        },
+        "PreferredMaintenanceWindow": "thu:04:18-thu:04:48",
+        "EnableIAMDatabaseAuthentication": false,
+        "DBClusterParameterGroupName": "default.aurora-postgresql13",
+        "BackupRetentionPeriod": 7
+      }
+    },
+    "applestoredevpostgresinstance1": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "StorageEncrypted": true,
+        "DBClusterIdentifier": {
+          "Ref": "AppleStorePostgreSQLdevCluster"
+        },
+        "MonitoringInterval": 60,
+        "DBParameterGroupName": "default.aurora-postgresql13",
+        "Engine": "aurora-postgresql",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-dev-postgres-instance-1"
+          }
+        ],
+        "EngineVersion": "13.13",
+        "StorageType": "aurora",
+        "DBInstanceClass": "db.t3.medium",
+        "PerformanceInsightsRetentionPeriod": 31,
+        "AvailabilityZone": {
+          "Fn::Sub": "${AWS::Region}a"
+        },
+        "OptionGroupName": "default:aurora-postgresql-13",
+        "EnablePerformanceInsights": true,
+        "AutoMinorVersionUpgrade": true,
+        "DBSubnetGroupName": {
+          "Fn::ImportValue": "RDSSubnetGroup"
+        },
+        "DBInstanceIdentifier": "applestore-dev-postgres-instance-1",
+        "PromotionTier": 1,
+        "PubliclyAccessible": false,
+        "MonitoringRoleArn": {
+          "Fn::GetAtt": [
+            "devECRMonitoringRole",
+            "Arn"
+          ]
+        },
+        "LicenseModel": "postgresql-license"
+      }
+    },
+    "PostgreSQLBackupPolicyPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "PostgreSQL-BackupPolicy-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds:DescribeDBClusters",
+                "rds:CreateDBClusterSnapshot",
+                "rds:CopyDBClusterSnapshot"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "devECRMonitoringRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "dev-ECR-Monitoring-Role",
+        "Policies": [
+          {
+            "PolicyName": "dev-ECR-Monitoring-Role-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogGroups",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:PutRetentionPolicy"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:log-group:RDS*"
+                },
+                {
+                  "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogStreams",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                    "logs:DescribeLogStreams",
+                    "logs:GetLogEvents"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:log-group:RDS*:log-stream:*"
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "monitoring.rds.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "dev-ECR-Monitoring-Role"
+          }
+        ]
+      }
+    },
+    "PostgreSQLBackupRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "PostgreSQLBackupPolicyPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "PostgreSQL-BackupRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "backup.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-BackupRole"
+          }
+        ]
+      }
+    }
+  }
+}

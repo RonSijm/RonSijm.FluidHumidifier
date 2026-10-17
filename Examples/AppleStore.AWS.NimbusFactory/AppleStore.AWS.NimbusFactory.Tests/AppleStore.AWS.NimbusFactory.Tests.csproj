@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="IntegrationTest\Results\**" />
+    <Compile Remove="IntegrationTest\Scripts\**" />
+    <EmbeddedResource Remove="IntegrationTest\Results\**" />
+    <EmbeddedResource Remove="IntegrationTest\Scripts\**" />
+    <None Remove="IntegrationTest\Results\**" />
+    <None Remove="IntegrationTest\Scripts\**" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="10.1.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="FluentAssertions" Version="8.11.0" />
+		<PackageReference Include="Verify.Xunit" Version="31.12.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AppleStore.AWS.NimbusFactory.CLI\AppleStore.AWS.NimbusFactory.CLI.csproj" />
+	</ItemGroup>
+
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

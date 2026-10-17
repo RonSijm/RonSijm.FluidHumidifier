@@ -2,6 +2,14 @@
 {
     public static class CodeGenSettings
     {
-        public const string OutputPath = "D:\\RonSijm\\RonSijm.FluidHumidifier\\src\\RonSijm.FluidHumidifier\\Factories\\Gen\\";
+        public static string OutputPath { get; } = Path.GetFullPath(Path.Combine(
+            AppContext.BaseDirectory,
+            "..",
+            "..",
+            "..",
+            "..",
+            "RonSijm.FluidHumidifier",
+            "Factories",
+            "Gen"));
     }
 }

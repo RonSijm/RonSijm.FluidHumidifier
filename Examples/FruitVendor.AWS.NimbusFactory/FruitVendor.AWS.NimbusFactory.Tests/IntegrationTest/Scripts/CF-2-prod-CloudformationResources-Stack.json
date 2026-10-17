@@ -1,0 +1,340 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Cloudformation Resources For prod Environment",
+  "Resources": {
+    "fruitvendorprodwebappprecompiledassetsCF": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Origins": [
+            {
+              "DomainName": "fruitvendor-prod-webapp-precompiledassets.s3.eu-central-1.amazonaws.com",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": ""
+              },
+              "Id": "fruitvendor-prod-webapp-precompiledassets"
+            }
+          ],
+          "ViewerCertificate": {
+            "SslSupportMethod": "sni-only",
+            "MinimumProtocolVersion": "TLSv1.2_2021",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:666666666666:certificate/00000000-0000-0000-0000-000000000012"
+          },
+          "PriceClass": "PriceClass_All",
+          "DefaultCacheBehavior": {
+            "Compress": true,
+            "TargetOriginId": "fruitvendor-prod-webapp-precompiledassets",
+            "ViewerProtocolPolicy": "https-only",
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "SmoothStreaming": false,
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6"
+          },
+          "Enabled": true,
+          "Aliases": [
+            "assets.prod-fruitvendor.example"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-prod-webapp-precompiledassets-CF"
+          }
+        ]
+      }
+    },
+    "prodSlackLoggerPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "prod-SlackLogger-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateLogGroup",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "prodSlackLogger": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "prodSlackLoggerPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "prod-SlackLogger",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "prod-SlackLogger"
+          }
+        ]
+      }
+    },
+    "awsprodcloudformationfruitvendor": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "aws-prod-cloudformation-fruitvendor",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-prod-cloudformation-fruitvendor"
+          }
+        ]
+      }
+    },
+    "fruitvendorprodwebappenvironmentvariables": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-prod-webapp-environmentvariables",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-prod-webapp-environmentvariables"
+          }
+        ]
+      }
+    },
+    "fruitvendorprodwebplayer": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-prod-webplayer",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-prod-webplayer"
+          }
+        ]
+      }
+    },
+    "fruitvendorprodmanagertoolkit": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "fruitvendor-prod-managertoolkit",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-prod-managertoolkit"
+          }
+        ]
+      }
+    },
+    "fruitvendorprodwebappprecompiledassets": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "PublicAccessBlockConfiguration": {
+          "RestrictPublicBuckets": false,
+          "BlockPublicPolicy": false,
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false
+        },
+        "BucketName": "fruitvendor-prod-webapp-precompiledassets",
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-prod-webapp-precompiledassets"
+          }
+        ]
+      }
+    },
+    "fruitvendorsysopsprodTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "TopicName": "fruitvendor-sysops-prod-Topic",
+        "DisplayName": "fruitvendor-sysops-prod",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-sysops-prod-Topic"
+          }
+        ]
+      }
+    },
+    "assetsprodfruitvendorcom": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "prod-fruitvendor.example.",
+        "Name": "assets.prod-fruitvendor.example",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "fruitvendorprodwebappprecompiledassetsCF",
+              "DomainName"
+            ]
+          }
+        ],
+        "TTL": 300,
+        "Type": "CNAME"
+      }
+    },
+    "fruitvendorprodwebappprecompiledassetsPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "fruitvendorprodwebappprecompiledassets"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::fruitvendor-prod-webapp-precompiledassets/*"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "AWS:SourceArn": "arn:aws:cloudfront::666666666666:distribution/*"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "fruitvendorsysopsprodTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "fruitvendorsysopsprodTopic"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSNS",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsprodTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "AllowCloudtrail",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "SNS:Publish"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsprodTopic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "prodSlackLogger": {
+      "Value": {
+        "Ref": "prodSlackLogger"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "prodSlackLogger"
+        }
+      }
+    },
+    "awsprodcloudformationfruitvendor": {
+      "Value": {
+        "Ref": "awsprodcloudformationfruitvendor"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "awsprodcloudformationfruitvendor"
+        }
+      }
+    },
+    "fruitvendorsysopsprodTopic": {
+      "Value": {
+        "Ref": "fruitvendorsysopsprodTopic"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorsysopsprodTopic"
+        }
+      }
+    }
+  }
+}

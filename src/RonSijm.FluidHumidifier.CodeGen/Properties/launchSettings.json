@@ -9,7 +9,7 @@
     },
     "FluidHumidifier.CodeGen": {
       "commandName": "Project",
-      "commandLineArgs": "-ForceRegenerate -directory D:\\RonSijm\\RonSijm.Humidifier\\src",
+      "commandLineArgs": "-ForceRegenerate -NoUpdateCheck -directory ..\\..\\..\\RonSijm.Humidifier",
       "environmentVariables": {
         "BUILD_PATH": "C:\\dev\\Humidifier"
       }

@@ -1,0 +1,119 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Github User For dev Environment",
+  "Resources": {
+    "OidcSafetyPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "OidcSafety-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "OidcSafeties",
+              "Effect": "Deny",
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "GitHubActionsDeployPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "GitHub-Actions-Deploy-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "GitHubActionsOidcProvider": {
+      "Type": "AWS::IAM::OIDCProvider",
+      "Properties": {
+        "ClientIdList": [
+          "sts.amazonaws.com"
+        ],
+        "ThumbprintList": [
+          "6938fd4d98bab03faadb97b34396831e3780aea1"
+        ],
+        "Url": "https://token.actions.githubusercontent.com",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "GitHubActionsOidcProvider"
+          }
+        ]
+      }
+    },
+    "GitHubActionsRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "OidcSafetyPolicy"
+          },
+          {
+            "Ref": "GitHubActionsDeployPolicy"
+          }
+        ],
+        "RoleName": "GitHub-Actions-Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": {
+                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+                }
+              },
+              "Action": [
+                "sts:AssumeRoleWithWebIdentity"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": [
+                    "repo:FruitVendor/*"
+                  ]
+                },
+                "StringEqualsIgnoreCase": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "GitHub-Actions-Role"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "OidcSafetyPolicy": {
+      "Value": {
+        "Ref": "OidcSafetyPolicy"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "OidcSafetyPolicy"
+        }
+      }
+    }
+  }
+}

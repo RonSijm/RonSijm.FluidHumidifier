@@ -24,7 +24,12 @@ public class FluentGeneratorCore(SourceDirectoryLocator sourceDirectoryLocator, 
             return;
         }
 
-        var humidifierPath = Path.Combine(sourcePath, "Humidifier");
+        if (Directory.Exists(CodeGenSettings.OutputPath))
+        {
+            Directory.Delete(CodeGenSettings.OutputPath, true);
+        }
+
+        Directory.CreateDirectory(CodeGenSettings.OutputPath);
 
         PropertyNameFormatter.WriteSpecsToFile(sourcePath, json);
 

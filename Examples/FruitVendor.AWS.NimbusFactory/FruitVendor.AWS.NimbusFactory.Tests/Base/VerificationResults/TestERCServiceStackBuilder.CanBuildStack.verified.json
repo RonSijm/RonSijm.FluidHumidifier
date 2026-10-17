@@ -1,0 +1,90 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For ECRService For UnitTest Environment",
+  "Resources": {
+    "fruitvendorUnitTestecrregistry": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryPolicyText": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": [
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "aws:PrincipalArn": [
+                    "arn:aws:iam::123:role/ECR-assets-AccessRole",
+                    "arn:aws:iam::345:role/ECR-assets-AccessRole"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "RepositoryName": "fruitvendor-UnitTest-ecr-registry",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-UnitTest-ecr-registry"
+          }
+        ]
+      }
+    },
+    "ExternalAccessToECRRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ExternalAccessToECRRole",
+        "Policies": [
+          {
+            "PolicyName": "ExternalAccessToECRRole-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ecr:GetDownloadUrlForLayer",
+                    "ecr:BatchGetImage",
+                    "ecr:BatchCheckLayerAvailability"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/fruitvendorUnitTestecrregistry"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  "arn:aws:iam::123:root",
+                  "arn:aws:iam::345:root"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ExternalAccessToECRRole"
+          }
+        ]
+      }
+    }
+  }
+}

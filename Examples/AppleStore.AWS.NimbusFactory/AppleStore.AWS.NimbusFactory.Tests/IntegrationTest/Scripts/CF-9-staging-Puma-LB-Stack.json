@@ -1,0 +1,236 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Puma-LB For staging Environment",
+  "Resources": {
+    "AppleStorePumaLBstagingLB": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "IpAddressType": "ipv4",
+        "SecurityGroups": [
+          {
+            "Fn::ImportValue": "PumaLBSecurityGroup"
+          }
+        ],
+        "LoadBalancerAttributes": [
+          {
+            "Value": "60",
+            "Key": "idle_timeout.timeout_seconds"
+          },
+          {
+            "Value": "false",
+            "Key": "deletion_protection.enabled"
+          },
+          {
+            "Value": "true",
+            "Key": "routing.http2.enabled"
+          },
+          {
+            "Value": "false",
+            "Key": "routing.http.drop_invalid_header_fields.enabled"
+          },
+          {
+            "Value": "true",
+            "Key": "routing.http.xff_client_port.enabled"
+          },
+          {
+            "Value": "true",
+            "Key": "routing.http.preserve_host_header.enabled"
+          },
+          {
+            "Value": "append",
+            "Key": "routing.http.xff_header_processing.mode"
+          },
+          {
+            "Value": "true",
+            "Key": "load_balancing.cross_zone.enabled"
+          },
+          {
+            "Value": "defensive",
+            "Key": "routing.http.desync_mitigation_mode"
+          },
+          {
+            "Value": "3600",
+            "Key": "client_keep_alive.seconds"
+          },
+          {
+            "Value": "false",
+            "Key": "waf.fail_open.enabled"
+          },
+          {
+            "Value": "false",
+            "Key": "routing.http.x_amzn_tls_version_and_cipher_suite.enabled"
+          },
+          {
+            "Value": "aws-applestore-staging-logging",
+            "Key": "access_logs.s3.bucket"
+          },
+          {
+            "Value": "LoadbalancerLogs/applestore/AccessLogs",
+            "Key": "access_logs.s3.prefix"
+          },
+          {
+            "Value": "true",
+            "Key": "connection_logs.s3.enabled"
+          },
+          {
+            "Value": "aws-applestore-staging-logging",
+            "Key": "connection_logs.s3.bucket"
+          },
+          {
+            "Value": "LoadbalancerLogs/applestore/ConnectionLogs",
+            "Key": "connection_logs.s3.prefix"
+          }
+        ],
+        "Subnets": [
+          {
+            "Fn::ImportValue": "PumaLBSubnetAZA"
+          },
+          {
+            "Fn::ImportValue": "PumaLBSubnetAZB"
+          },
+          {
+            "Fn::ImportValue": "PumaLBSubnetAZC"
+          }
+        ],
+        "Type": "application",
+        "Scheme": "internet-facing",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AppleStore-Puma-LB-staging-LB"
+          }
+        ],
+        "Name": "AppleStore-Puma-LB-staging-LB"
+      }
+    },
+    "AppleStorePumaLBstagingLBListener": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "LoadBalancerArn": {
+          "Fn::GetAtt": [
+            "AppleStorePumaLBstagingLB",
+            "LoadBalancerArn"
+          ]
+        },
+        "DefaultActions": [
+          {
+            "Order": 1,
+            "TargetGroupArn": {
+              "Ref": "AppleStorePumaLBstagingLBTG"
+            },
+            "Type": "forward"
+          }
+        ],
+        "Port": 443,
+        "Certificates": [
+          {
+            "CertificateArn": "arn:aws:acm:eu-central-1:444444444444:certificate/00000000-0000-0000-0000-000000000005"
+          }
+        ],
+        "Protocol": "HTTPS"
+      },
+      "DependsOn": [
+        "AppleStorePumaLBstagingLB"
+      ]
+    },
+    "AppleStorePumaLBstagingLBTG": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 300,
+        "Matcher": {
+          "HttpCode": "200-499"
+        },
+        "HealthCheckPath": "/up",
+        "Port": 3000,
+        "HealthCheckEnabled": true,
+        "UnhealthyThresholdCount": 2,
+        "HealthCheckTimeoutSeconds": 30,
+        "Name": "AppleStore-Puma-LB-staging-LB-TG",
+        "VpcId": {
+          "Fn::ImportValue": "AppleStoreInfrastructure"
+        },
+        "HealthyThresholdCount": 5,
+        "HealthCheckProtocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Value": "off",
+            "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.percentage"
+          },
+          {
+            "Value": "300",
+            "Key": "deregistration_delay.timeout_seconds"
+          },
+          {
+            "Value": "lb_cookie",
+            "Key": "stickiness.type"
+          },
+          {
+            "Value": "86400",
+            "Key": "stickiness.lb_cookie.duration_seconds"
+          },
+          {
+            "Value": "0",
+            "Key": "slow_start.duration_seconds"
+          },
+          {
+            "Value": "86400",
+            "Key": "stickiness.app_cookie.duration_seconds"
+          },
+          {
+            "Value": "off",
+            "Key": "target_group_health.dns_failover.minimum_healthy_targets.percentage"
+          },
+          {
+            "Value": "use_load_balancer_configuration",
+            "Key": "load_balancing.cross_zone.enabled"
+          },
+          {
+            "Value": "round_robin",
+            "Key": "load_balancing.algorithm.type"
+          },
+          {
+            "Value": "1",
+            "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.count"
+          },
+          {
+            "Value": "false",
+            "Key": "stickiness.enabled"
+          },
+          {
+            "Value": "1",
+            "Key": "target_group_health.dns_failover.minimum_healthy_targets.count"
+          },
+          {
+            "Value": "off",
+            "Key": "load_balancing.algorithm.anomaly_mitigation"
+          },
+          {
+            "Value": "",
+            "Key": "stickiness.app_cookie.cookie_name"
+          }
+        ],
+        "TargetType": "ip",
+        "HealthCheckPort": "3000",
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AppleStore-Puma-LB-staging-LB-TG"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "AppleStorePumaLBstagingLBTG": {
+      "Value": {
+        "Ref": "AppleStorePumaLBstagingLBTG"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "AppleStorePumaLBstagingLBTG"
+        }
+      }
+    }
+  }
+}

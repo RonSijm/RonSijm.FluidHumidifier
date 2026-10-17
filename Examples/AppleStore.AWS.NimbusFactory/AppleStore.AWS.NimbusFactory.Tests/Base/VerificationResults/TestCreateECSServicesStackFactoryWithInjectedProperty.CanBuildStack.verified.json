@@ -1,0 +1,975 @@
+﻿{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "AppleStoredevpuma": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              null
+            ],
+            "Subnets": "DSB",
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "EnableExecuteCommand": true,
+        "Cluster": {
+          "Ref": "AppleStoredevCluster"
+        },
+        "LoadBalancers": [
+          {
+            "TargetGroupArn": "LB",
+            "ContainerName": "dev-puma-ContainerDefinition",
+            "ContainerPort": 3000
+          }
+        ],
+        "DesiredCount": 3,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "TaskDefinition": {
+          "Ref": "devpuma"
+        },
+        "ServiceName": "AppleStore-dev-puma",
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 0,
+          "Timeout": "PT1S"
+        }
+      }
+    },
+    "AppleStoredevsidekiq": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              null
+            ],
+            "Subnets": "DSB",
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "EnableExecuteCommand": true,
+        "Cluster": {
+          "Ref": "AppleStoredevCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "TaskDefinition": {
+          "Ref": "devsidekiq"
+        },
+        "ServiceName": "AppleStore-dev-sidekiq",
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 0,
+          "Timeout": "PT1S"
+        }
+      }
+    },
+    "AppleStoredevrpush": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              null
+            ],
+            "Subnets": "DSB",
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "EnableExecuteCommand": true,
+        "Cluster": {
+          "Ref": "AppleStoredevCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "TaskDefinition": {
+          "Ref": "devrpush"
+        },
+        "ServiceName": "AppleStore-dev-rpush",
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 0,
+          "Timeout": "PT1S"
+        }
+      }
+    },
+    "AppleStoredevcronjobs": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              null
+            ],
+            "Subnets": "DSB",
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "EnableExecuteCommand": true,
+        "Cluster": {
+          "Ref": "AppleStoredevCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "TaskDefinition": {
+          "Ref": "devcronjobs"
+        },
+        "ServiceName": "AppleStore-dev-cronjobs",
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 0,
+          "Timeout": "PT1S"
+        }
+      }
+    },
+    "AppleStoredevidle": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              null
+            ],
+            "Subnets": "DSB",
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "EnableExecuteCommand": true,
+        "Cluster": {
+          "Ref": "AppleStoredevCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "TaskDefinition": {
+          "Ref": "devidle"
+        },
+        "ServiceName": "AppleStore-dev-idle",
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 0,
+          "Timeout": "PT1S"
+        }
+      }
+    },
+    "PumaServiceScalableTarget": {
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+      "Properties": {
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "AppleStoredevCluster"
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "AppleStoredevpuma",
+                  "Name"
+                ]
+              }
+            ]
+          ]
+        },
+        "ServiceNamespace": "ecs",
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "MinCapacity": 3,
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "ECSAutoScaleRole",
+            "Arn"
+          ]
+        },
+        "MaxCapacity": 15
+      }
+    },
+    "PumaServiceCPUScalingPolicy": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": {
+          "Ref": "PumaServiceScalableTarget"
+        },
+        "PolicyName": "PumaCpuScalingPolicy",
+        "TargetTrackingScalingPolicyConfiguration": {
+          "ScaleOutCooldown": 60,
+          "TargetValue": 80,
+          "ScaleInCooldown": 600,
+          "PredefinedMetricSpecification": {
+            "PredefinedMetricType": "ECSServiceAverageCPUUtilization"
+          }
+        }
+      }
+    },
+    "PumaServiceMemoryScalingPolicy": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": {
+          "Ref": "PumaServiceScalableTarget"
+        },
+        "PolicyName": "PumaMemoryScalingPolicy",
+        "TargetTrackingScalingPolicyConfiguration": {
+          "ScaleOutCooldown": 60,
+          "TargetValue": 80,
+          "ScaleInCooldown": 600,
+          "PredefinedMetricSpecification": {
+            "PredefinedMetricType": "ECSServiceAverageMemoryUtilization"
+          }
+        }
+      }
+    },
+    "AppleStoredevCluster": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "CapacityProviders": [
+          "FARGATE",
+          "FARGATE_SPOT"
+        ],
+        "ClusterName": "AppleStore-dev-Cluster"
+      }
+    },
+    "devpuma": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "8192",
+        "Cpu": "2048",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-puma",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-puma-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "PortMappings": [
+              {
+                "AppProtocol": "http",
+                "HostPort": "3000",
+                "ContainerPort": "3000",
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Family": "dev-puma"
+      }
+    },
+    "devsidekiq": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "8192",
+        "Cpu": "1024",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq.yml"
+            ]
+          },
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-export-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-content-export.yml"
+            ]
+          },
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-duplication-high-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-duplication-high-priority.yml"
+            ]
+          },
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-sidekiq-duplication-low-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/rails/config/sidekiq-duplication-low-priority.yml"
+            ]
+          }
+        ],
+        "Family": "dev-sidekiq",
+        "EphemeralStorage": {
+          "SizeInGiB": "40"
+        }
+      }
+    },
+    "devrpush": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "3072",
+        "Cpu": "1024",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-rpush",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-rpush-rpush-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "rpush",
+              "start",
+              "-f"
+            ]
+          }
+        ],
+        "Family": "dev-rpush"
+      }
+    },
+    "devcronjobs": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "3072",
+        "Cpu": "1024",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "User": "root",
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-cronjobs",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-cronjobs-jobs1-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "cron",
+              "-f"
+            ],
+            "Environment": [
+              {
+                "Value": "jobs_1",
+                "Name": "SERVER_ROLE"
+              }
+            ]
+          },
+          {
+            "User": "root",
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-cronjobs",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-cronjobs-jobs2-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "cron",
+              "-f"
+            ],
+            "Environment": [
+              {
+                "Value": "jobs_2",
+                "Name": "SERVER_ROLE"
+              }
+            ]
+          }
+        ],
+        "Family": "dev-cronjobs"
+      }
+    },
+    "devidle": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Ref": "RF"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Ref": "RF"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "exit 0"
+              ],
+              "Timeout": 30,
+              "Retries": 3,
+              "Interval": 30,
+              "StartPeriod": 1
+            },
+            "EntryPoint": [
+              "/rails/bin/docker-entrypoint"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/applestore-webapp:latest-dev",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/dev-idle",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::applestore-dev-webapp-environmentvariables/applestore-webapp.env"
+              }
+            ],
+            "Name": "dev-idle-idle-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "tail",
+              "-f",
+              "/dev/null"
+            ]
+          }
+        ],
+        "Family": "dev-idle"
+      }
+    },
+    "ECSAutoScaleRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ECS-AutoScale-Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ecs:UpdateService",
+                    "ecs:DescribeServices",
+                    "cloudwatch:DescribeAlarms",
+                    "cloudwatch:GetMetricStatistics",
+                    "cloudwatch:ListMetrics",
+                    "cloudwatch:PutMetricAlarm"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "application-autoscaling.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "ecsdevpuma": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-puma"
+      }
+    },
+    "ecsdevsidekiq": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-sidekiq"
+      }
+    },
+    "ecsdevrpush": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-rpush"
+      }
+    },
+    "ecsdevcronjobs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-cronjobs"
+      }
+    },
+    "ecsdevidle": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/dev-idle"
+      }
+    }
+  }
+}

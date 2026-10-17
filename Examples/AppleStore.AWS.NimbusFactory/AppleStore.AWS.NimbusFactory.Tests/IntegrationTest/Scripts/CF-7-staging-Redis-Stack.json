@@ -1,0 +1,40 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Redis For staging Environment",
+  "Resources": {
+    "AppleStoreRedisClusterReplicationGroup": {
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+      "Properties": {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": true,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": {
+          "Fn::ImportValue": "RedisSubnetGroup"
+        },
+        "Engine": "redis",
+        "EngineVersion": "7.1",
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-staging-CMK"
+        },
+        "MultiAZEnabled": true,
+        "NumCacheClusters": 3,
+        "ReplicationGroupDescription": "AppleStore Redis Cluster For staging",
+        "ReplicationGroupId": "AppleStore-Redis-Cluster-RG",
+        "SecurityGroupIds": [
+          {
+            "Fn::ImportValue": "RedisSecurityGroup"
+          }
+        ],
+        "SnapshotRetentionLimit": "0",
+        "SnapshotWindow": "06:00-07:00",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AppleStore Redis Cluster"
+          }
+        ],
+        "TransitEncryptionEnabled": true
+      }
+    }
+  }
+}

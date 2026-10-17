@@ -1,0 +1,407 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For ECSService For poc Environment",
+  "Resources": {
+    "FruitVendorpocPuma": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "Cluster": {
+          "Ref": "FruitVendorpocCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": {
+          "Ref": "pocPuma"
+        },
+        "ServiceName": "FruitVendor-poc-Puma",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              "sg-011391e7245be5841"
+            ],
+            "Subnets": [
+              "subnet-043e29e342367021a",
+              "subnet-00bfd24e3590a4179",
+              "subnet-0119877a12898e00e"
+            ],
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-poc-Puma"
+          }
+        ],
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      }
+    },
+    "FruitVendorpocsidekiq": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "PlatformVersion": "1.4.0",
+        "Cluster": {
+          "Ref": "FruitVendorpocCluster"
+        },
+        "DesiredCount": 1,
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": {
+          "Ref": "pocsidekiq"
+        },
+        "ServiceName": "FruitVendor-poc-sidekiq",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "SecurityGroups": [
+              "sg-011391e7245be5841"
+            ],
+            "Subnets": [
+              "subnet-043e29e342367021a",
+              "subnet-00bfd24e3590a4179",
+              "subnet-0119877a12898e00e"
+            ],
+            "AssignPublicIp": "ENABLED"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-poc-sidekiq"
+          }
+        ],
+        "DeploymentConfiguration": {
+          "DeploymentCircuitBreaker": {
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        }
+      }
+    },
+    "FruitVendorpocCluster": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "CapacityProviders": [
+          "FARGATE",
+          "FARGATE_SPOT"
+        ],
+        "ClusterName": "FruitVendor-poc-Cluster",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-poc-Cluster"
+          }
+        ]
+      }
+    },
+    "pocPuma": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Fn::ImportValue": "ECRpoctoassetsAccessRole"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Fn::ImportValue": "ECRpoctoassetsAccessRole"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/poc-Puma",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-poc-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "poc-Puma-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "PortMappings": [
+              {
+                "AppProtocol": "http",
+                "HostPort": "3000",
+                "ContainerPort": "3000",
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Family": "poc-Puma",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "poc-Puma"
+          }
+        ]
+      }
+    },
+    "pocsidekiq": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "TaskRoleArn": {
+          "Fn::ImportValue": "ECRpoctoassetsAccessRole"
+        },
+        "Memory": "512",
+        "Cpu": "256",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Fn::ImportValue": "ECRpoctoassetsAccessRole"
+        },
+        "RuntimePlatform": {
+          "OperatingSystemFamily": "LINUX",
+          "CpuArchitecture": "X86_64"
+        },
+        "Volumes": [
+          {
+            "Name": "log"
+          }
+        ],
+        "ContainerDefinitions": [
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/poc-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-poc-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "poc-sidekiq-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/webapp/config/sidekiq.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/poc-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-poc-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "poc-sidekiq-export-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/webapp/config/sidekiq-content-export.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/poc-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-poc-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "poc-sidekiq-duplication-high-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/webapp/config/sidekiq-duplication-high-priority.yml"
+            ]
+          },
+          {
+            "EntryPoint": [
+              "/usr/local/bin/docker-entrypoint.sh"
+            ],
+            "Image": "111111111111.dkr.ecr.eu-central-1.amazonaws.com/fruitvendor-assets-ecr-registry:latest",
+            "Essential": true,
+            "LogConfiguration": {
+              "Options": {
+                "awslogs-group": "/ecs/poc-sidekiq",
+                "awslogs-create-group": "true",
+                "awslogs-region": "eu-central-1",
+                "awslogs-stream-prefix": "ecs"
+              },
+              "LogDriver": "awslogs"
+            },
+            "EnvironmentFiles": [
+              {
+                "Type": "s3",
+                "Value": "arn:aws:s3:::fruitvendor-poc-webapp-environmentvariables/fruitvendor-webapp.env"
+              }
+            ],
+            "Name": "poc-sidekiq-duplication-low-priority-ContainerDefinition",
+            "MountPoints": [
+              {
+                "ReadOnly": false,
+                "SourceVolume": "log",
+                "ContainerPath": "/webapp/log"
+              }
+            ],
+            "Command": [
+              "/usr/local/bin/bundle",
+              "exec",
+              "sidekiq",
+              "-C",
+              "/webapp/config/sidekiq-duplication-low-priority.yml"
+            ]
+          }
+        ],
+        "Family": "poc-sidekiq",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "poc-sidekiq"
+          }
+        ]
+      }
+    },
+    "ecspocPuma": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-poc-CMK"
+        },
+        "LogGroupName": "/ecs/poc-Puma",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "/ecs/poc-Puma"
+          }
+        ]
+      }
+    },
+    "ecspocsidekiq": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-poc-CMK"
+        },
+        "LogGroupName": "/ecs/poc-sidekiq",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "/ecs/poc-sidekiq"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <FluidHumidifierVersionPrefix>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/version.txt').Trim())</FluidHumidifierVersionPrefix>
+    <HumidifierPackageVersion>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/humidifier-version.txt').Trim())</HumidifierPackageVersion>
+    <HumidifierSpecVersion>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/humidifier-spec-version.txt').Trim())</HumidifierSpecVersion>
+    <HumidifierSpecVersionCompact>$([System.String]::Copy('$(HumidifierSpecVersion)').Replace('.', ''))</HumidifierSpecVersionCompact>
+    <FluidHumidifierPackageVersion>$(FluidHumidifierVersionPrefix).$(HumidifierSpecVersionCompact)</FluidHumidifierPackageVersion>
+    <HumidifierRepositoryRoot Condition="'$(HumidifierRepositoryRoot)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\RonSijm.Humidifier'))</HumidifierRepositoryRoot>
+    <UseHumidifierProjectReference Condition="'$(UseHumidifierProjectReference)' == '' and Exists('$(HumidifierRepositoryRoot)\src\Humidifier\Humidifier.csproj')">true</UseHumidifierProjectReference>
+    <UseHumidifierProjectReference Condition="'$(UseHumidifierProjectReference)' == ''">false</UseHumidifierProjectReference>
+  </PropertyGroup>
+</Project>

@@ -13,7 +13,7 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators.PropertyGenerators
 
             var code = GenerateCode(resourceName, resource);
 
-            var outputPath = $"{CodeGenSettings.OutputPath}{ParentGroup}\\Extensions\\";
+            var outputPath = Path.Combine(CodeGenSettings.OutputPath, ParentGroup, "Extensions");
             var outputFile = $"{Parent}.With{resourceName}{FileNameAppendage}Extension.cs";
 
             if (!Directory.Exists(outputPath))
@@ -21,7 +21,7 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators.PropertyGenerators
                 Directory.CreateDirectory(outputPath);
             }
 
-            var file = outputPath + outputFile;
+            var file = Path.Combine(outputPath, outputFile);
 
             File.WriteAllText(file, code);
         }

@@ -46,10 +46,14 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators
             if (resource.Properties != null)
             {
                 var allSingularClassTypes = resource.Properties.Where(x => x.PrimitiveType != "String" && x.PrimitiveType != "Boolean" && x.PrimitiveType != "Integer" && x.Type != "List").ToList();
-                singularClassTypes = allSingularClassTypes.Where(classType => specification.PropertyTypes.Any(x => x.Group == resource.Group && x.ResourceClassName == serviceName && x.ClassName == classType.Type)).ToList();
+                singularClassTypes = allSingularClassTypes.Where(classType =>
+                    classType.CsFullTypeName == $"Humidifier.{resource.Group}.{serviceName}Types.{classType.Type}" &&
+                    specification.PropertyTypes.Any(x => x.Group == resource.Group && x.ResourceClassName == serviceName && x.ClassName == classType.Type)).ToList();
 
                 var allListClassTypes = resource.Properties.Where(x => x.PrimitiveType != "String" && x.PrimitiveType != "Boolean" && x.PrimitiveType != "Integer" && x.Type == "List").ToList();
-                listClassTypes = allListClassTypes.Where(listClassType => specification.PropertyTypes.Any(x => x.Group == resource.Group && x.ResourceClassName == resource.ClassName && x.ClassName == listClassType.ItemType)).ToList();
+                listClassTypes = allListClassTypes.Where(listClassType =>
+                    listClassType.CsFullTypeName == $"List<Humidifier.{resource.Group}.{serviceName}Types.{listClassType.ItemType}>" &&
+                    specification.PropertyTypes.Any(x => x.Group == resource.Group && x.ResourceClassName == resource.ClassName && x.ClassName == listClassType.ItemType)).ToList();
             }
 
             bob.AppendLine("// ReSharper disable InconsistentNaming");
@@ -178,14 +182,14 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators
             bob.AppendLine($"}}");
             var result = bob.ToString();
 
-            var directory = $"{outputPath}\\{resource.Group}\\";
+            var directory = Path.Combine(outputPath, resource.Group);
 
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
 
-            var file = $"{directory}\\{name}Factory.cs";
+            var file = Path.Combine(directory, $"{name}Factory.cs");
 
             await File.WriteAllTextAsync(file, result);
 
@@ -256,7 +260,7 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators
                 var inputType = CreateInputType(depth, name, factoryPosition, genericTypes, resultIdentifier);
                 var methodParameters = $"(this {inputType} combinedResult, {actionParam})";
 
-                var subFactoryInvocation = $"With{className}(combinedResult.T{factoryPosition}, subFactoryAction)";
+                var subFactoryInvocation = $"With{className}(combinedResult.T{factoryPosition}, subFactoryAction).T2";
 
                 var resultTypes = string.Join(", ", Enumerable.Range(1, depth + 1).Select(_ => $"combinedResult").ToList());
 

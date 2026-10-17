@@ -1,0 +1,549 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For VCDM applestore Logging For dev Environment",
+  "Resources": {
+    "applestoreCloudTrailLogging": {
+      "Type": "AWS::CloudTrail::Trail",
+      "Properties": {
+        "IncludeGlobalServiceEvents": true,
+        "EventSelectors": [
+          {
+            "IncludeManagementEvents": true,
+            "ReadWriteType": "All",
+            "ExcludeManagementEventSources": [
+              "kms.amazonaws.com"
+            ]
+          }
+        ],
+        "KMSKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-dev-CMK"
+        },
+        "TrailName": "applestore-CloudTrail-Logging",
+        "IsMultiRegionTrail": true,
+        "S3BucketName": {
+          "Ref": "awsapplestoredevlogging"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-CloudTrail-Logging"
+          }
+        ],
+        "IsLogging": true
+      },
+      "DependsOn": [
+        "awsapplestoredevloggingpolicy"
+      ]
+    },
+    "applestoreAWSConfigurationRecorder": {
+      "Type": "AWS::Config::ConfigurationRecorder",
+      "Properties": {
+        "Name": "applestore-AWS-Configuration-Recorder",
+        "RecordingGroup": {
+          "AllSupported": true,
+          "IncludeGlobalResourceTypes": true
+        },
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "AWSConfigLoggingapplestoreRole",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "applestoreAWSConfigurationDeliveryChannel": {
+      "Type": "AWS::Config::DeliveryChannel",
+      "Properties": {
+        "ConfigSnapshotDeliveryProperties": {
+          "DeliveryFrequency": "TwentyFour_Hours"
+        },
+        "Name": "applestore-AWS-Configuration-DeliveryChannel",
+        "S3BucketName": {
+          "Ref": "awsapplestoredevlogging"
+        }
+      }
+    },
+    "applestoreCloudTrailLoggingQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "SqsManagedSseEnabled": true,
+        "QueueName": "applestore-CloudTrail-Logging-Queue",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-CloudTrail-Logging-Queue"
+          }
+        ]
+      }
+    },
+    "applestoreLoadBalancerLoggingQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "SqsManagedSseEnabled": true,
+        "QueueName": "applestore-LoadBalancer-Logging-Queue",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-LoadBalancer-Logging-Queue"
+          }
+        ]
+      }
+    },
+    "applestoreGuardDutyLoggingQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "SqsManagedSseEnabled": true,
+        "QueueName": "applestore-GuardDuty-Logging-Queue",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-GuardDuty-Logging-Queue"
+          }
+        ]
+      }
+    },
+    "GSOCSLMLoggingapplestoreRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "GSOC-SLM-Logging-applestore-Role",
+        "Policies": [
+          {
+            "PolicyName": "GSOC-SLM-Logging-applestore-Role-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "AllowGetObjectsFromBucket",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::aws-applestore-dev-logging/*",
+                    "arn:aws:s3:::aws-applestore-dev-logging"
+                  ]
+                },
+                {
+                  "Sid": "AllowCloudTrailLogsQueueToUseSQS",
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:*"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "applestoreCloudTrailLoggingQueue",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Sid": "AllowLoadBalancerLogsQueueToUseSQS",
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:*"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "applestoreLoadBalancerLoggingQueue",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Sid": "AllowGuardDutyLogsQueueToUseSQS",
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:*"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "applestoreGuardDutyLoggingQueue",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Sid": "AllowUseKMSKey",
+                  "Effect": "Allow",
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-dev-CMK"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::900000000001:user/example-security-logs-stage"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "GSOC-SLM-Logging-applestore-Role"
+          }
+        ]
+      }
+    },
+    "AWSConfigLoggingapplestoreRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "AWSConfig-Logging-applestore-Role",
+        "Policies": [
+          {
+            "PolicyName": "AWSConfig-Logging-applestore-Role-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "AllowAWSConfigGetObjectsFromBucket",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject",
+                    "s3:PutObjectAcl",
+                    "s3:GetBucketAcl",
+                    "s3:GetBucketLocation"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::aws-applestore-dev-logging/*",
+                    "arn:aws:s3:::aws-applestore-dev-logging"
+                  ]
+                },
+                {
+                  "Sid": "AllowAWSConfigOtherThings",
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:Describe*",
+                    "s3:ListBucket",
+                    "rds:Describe*",
+                    "rds:ListTagsForResource",
+                    "cloudtrail:DescribeTrails",
+                    "cloudtrail:GetTrailStatus",
+                    "cloudtrail:ListTags",
+                    "cloudtrail:ListTrails"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "config.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceAccount": "333333333333"
+                }
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AWSConfig-Logging-applestore-Role"
+          }
+        ]
+      }
+    },
+    "awsapplestoredevlogging": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "NotificationConfiguration": {
+          "QueueConfigurations": [
+            {
+              "Filter": {
+                "S3Key": {
+                  "Rules": [
+                    {
+                      "Value": "CloudTrailLogs/*",
+                      "Name": "prefix"
+                    }
+                  ]
+                }
+              },
+              "Event": "s3:ObjectCreated:*",
+              "Queue": {
+                "Fn::GetAtt": [
+                  "applestoreCloudTrailLoggingQueue",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Filter": {
+                "S3Key": {
+                  "Rules": [
+                    {
+                      "Value": "LoadBalancerLogs/*",
+                      "Name": "prefix"
+                    }
+                  ]
+                }
+              },
+              "Event": "s3:ObjectCreated:*",
+              "Queue": {
+                "Fn::GetAtt": [
+                  "applestoreLoadBalancerLoggingQueue",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Filter": {
+                "S3Key": {
+                  "Rules": [
+                    {
+                      "Value": "GuardDutyLogs/*",
+                      "Name": "prefix"
+                    }
+                  ]
+                }
+              },
+              "Event": "s3:ObjectCreated:*",
+              "Queue": {
+                "Fn::GetAtt": [
+                  "applestoreGuardDutyLoggingQueue",
+                  "Arn"
+                ]
+              }
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Status": "Enabled",
+              "Transitions": [
+                {
+                  "StorageClass": "STANDARD_IA",
+                  "TransitionInDays": 30
+                }
+              ],
+              "ExpirationInDays": 120,
+              "Id": "ex_year_trans_mo"
+            }
+          ]
+        },
+        "BucketName": "aws-applestore-dev-logging",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-applestore-dev-logging"
+          }
+        ]
+      },
+      "DependsOn": [
+        "applestoreCloudTrailLoggingQueue",
+        "applestoreLoadBalancerLoggingQueue",
+        "applestoreGuardDutyLoggingQueue"
+      ]
+    },
+    "awsapplestoredevloggingpolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "awsapplestoredevlogging"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AWSCloudTrailAclCheck",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetBucketAcl"
+              ],
+              "Resource": [
+                "arn:aws:s3:::aws-applestore-dev-logging"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "AWS:SourceArn": "arn:aws:cloudtrail:eu-central-1:333333333333:trail/*"
+                }
+              }
+            },
+            {
+              "Sid": "AWSCloudTrailWrite",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::aws-applestore-dev-logging/*",
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+              }
+            },
+            {
+              "Sid": "AWSConfigWrite",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "config.amazonaws.com"
+              },
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::aws-applestore-dev-logging/*",
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+              }
+            },
+            {
+              "Sid": "Allow LoadBalancer Logging Account",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::900000000002:root"
+              },
+              "Action": "s3:PutObject",
+              "Resource": "arn:aws:s3:::aws-applestore-dev-logging/*"
+            },
+            {
+              "Sid": "Allow GuardDuty Get Bucket Location",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "guardduty.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetBucketLocation",
+                "s3:ListBucket"
+              ],
+              "Resource": "arn:aws:s3:::aws-applestore-dev-logging",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "Allow GuardDuty PutObject",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "guardduty.amazonaws.com"
+              },
+              "Action": "s3:PutObject",
+              "Resource": "arn:aws:s3:::aws-applestore-dev-logging/*",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "applestoreCloudTrailLoggingQueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com"
+              },
+              "Action": [
+                "SQS:SendMessage"
+              ],
+              "Resource": "arn:aws:sqs:eu-central-1:333333333333:applestore-CloudTrail-Logging-Queue"
+            }
+          ]
+        },
+        "Queues": [
+          {
+            "Ref": "applestoreCloudTrailLoggingQueue"
+          }
+        ]
+      }
+    },
+    "applestoreLoadBalancerLoggingQueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com"
+              },
+              "Action": [
+                "SQS:SendMessage"
+              ],
+              "Resource": "arn:aws:sqs:eu-central-1:333333333333:applestore-LoadBalancer-Logging-Queue"
+            }
+          ]
+        },
+        "Queues": [
+          {
+            "Ref": "applestoreLoadBalancerLoggingQueue"
+          }
+        ]
+      }
+    },
+    "applestoreGuardDutyLoggingQueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com"
+              },
+              "Action": [
+                "SQS:SendMessage"
+              ],
+              "Resource": "arn:aws:sqs:eu-central-1:333333333333:applestore-GuardDuty-Logging-Queue"
+            }
+          ]
+        },
+        "Queues": [
+          {
+            "Ref": "applestoreGuardDutyLoggingQueue"
+          }
+        ]
+      }
+    }
+  }
+}

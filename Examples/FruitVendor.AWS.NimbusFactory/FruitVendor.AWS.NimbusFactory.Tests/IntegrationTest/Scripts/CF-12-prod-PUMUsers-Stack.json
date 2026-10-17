@@ -1,0 +1,80 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For PUM Users For prod Environment",
+  "Resources": {
+    "DatabaseAccessPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "DatabaseAccess-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateAndTerminateSessions",
+              "Effect": "Allow",
+              "Action": [
+                "ssm:StartSession",
+                "ssm:TerminateSession"
+              ],
+              "Resource": [
+                "arn:aws:ssm:eu-central-1:666666666666:document/AWS-StartPortForwardingSessionToRemoteHost",
+                "arn:aws:ssm:eu-central-1::document/AWS-StartPortForwardingSessionToRemoteHost",
+                "arn:aws:ecs:eu-central-1:666666666666:task/FruitVendor-prod-Cluster/*"
+              ]
+            },
+            {
+              "Sid": "AllowDescribeSessions",
+              "Effect": "Allow",
+              "Action": [
+                "ssm:DescribeSessions"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "StringEquals": {
+                  "ssm:DocumentName": "AWS-StartPortForwardingSessionToRemoteHost"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "DatabaseAccess": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "DatabaseAccessPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "DatabaseAccess",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:aws:iam::666666666666:saml-provider/ADFS"
+              },
+              "Action": [
+                "sts:AssumeRoleWithSAML"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "SAML:aud": "https://signin.aws.amazon.com/saml"
+                }
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "DatabaseAccess"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -2,6 +2,8 @@
 
 public class StackOutputResult : BaseOutputResult<Stack>
 {
+    public string Region { get; set; }
+
     public override string Description => Result.Description;
     public override string FileName => $"{Name}.json";
 }

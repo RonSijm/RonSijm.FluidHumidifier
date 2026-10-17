@@ -169,3 +169,6 @@ $RECYCLE.BIN/
 
 # Rider Files
 .idea/
+
+# Temporary upstream checkout used by the update workflow
+upstream-humidifier/

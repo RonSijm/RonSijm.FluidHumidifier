@@ -1,0 +1,304 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Cloudformation Resources For assets Environment",
+  "Resources": {
+    "fruitvendorassetswebappprecompiledassetsCF": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Origins": [
+            {
+              "DomainName": "fruitvendor-assets-webapp-precompiledassets.s3.eu-central-1.amazonaws.com",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": ""
+              },
+              "Id": "fruitvendor-assets-webapp-precompiledassets"
+            }
+          ],
+          "ViewerCertificate": {
+            "SslSupportMethod": "sni-only",
+            "MinimumProtocolVersion": "TLSv1.2_2021",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:111111111111:certificate/00000000-0000-0000-0000-000000000007"
+          },
+          "PriceClass": "PriceClass_All",
+          "DefaultCacheBehavior": {
+            "Compress": true,
+            "TargetOriginId": "fruitvendor-assets-webapp-precompiledassets",
+            "ViewerProtocolPolicy": "https-only",
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "SmoothStreaming": false,
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6"
+          },
+          "Enabled": true,
+          "Aliases": [
+            "assets.assets-fruitvendor.example"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-assets-webapp-precompiledassets-CF"
+          }
+        ]
+      }
+    },
+    "assetsSlackLoggerPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "assets-SlackLogger-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateLogGroup",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "assetsSlackLogger": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "assetsSlackLoggerPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "assets-SlackLogger",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "assets-SlackLogger"
+          }
+        ]
+      }
+    },
+    "awsassetscloudformationfruitvendor": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "aws-assets-cloudformation-fruitvendor",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-assets-cloudformation-fruitvendor"
+          }
+        ]
+      }
+    },
+    "fruitvendorassetswebappprecompiledassets": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "PublicAccessBlockConfiguration": {
+          "RestrictPublicBuckets": false,
+          "BlockPublicPolicy": false,
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false
+        },
+        "BucketName": "fruitvendor-assets-webapp-precompiledassets",
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-assets-webapp-precompiledassets"
+          }
+        ]
+      }
+    },
+    "fruitvendorsysopsassetsTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "TopicName": "fruitvendor-sysops-assets-Topic",
+        "DisplayName": "fruitvendor-sysops-assets",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-sysops-assets-Topic"
+          }
+        ]
+      }
+    },
+    "assetsassetsfruitvendorcom": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "assets-fruitvendor.example.",
+        "Name": "assets.assets-fruitvendor.example",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "fruitvendorassetswebappprecompiledassetsCF",
+              "DomainName"
+            ]
+          }
+        ],
+        "TTL": 300,
+        "Type": "CNAME"
+      }
+    },
+    "fruitvendorassetswebappprecompiledassetsPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "fruitvendorassetswebappprecompiledassets"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::fruitvendor-assets-webapp-precompiledassets/*"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "AWS:SourceArn": "arn:aws:cloudfront::111111111111:distribution/*"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "fruitvendorsysopsassetsTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "fruitvendorsysopsassetsTopic"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSNS",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsassetsTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "AllowCloudtrail",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "SNS:Publish"
+              ],
+              "Resource": {
+                "Ref": "fruitvendorsysopsassetsTopic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "assetsSlackLogger": {
+      "Value": {
+        "Ref": "assetsSlackLogger"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "assetsSlackLogger"
+        }
+      }
+    },
+    "awsassetscloudformationfruitvendor": {
+      "Value": {
+        "Ref": "awsassetscloudformationfruitvendor"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "awsassetscloudformationfruitvendor"
+        }
+      }
+    },
+    "fruitvendorsysopsassetsTopic": {
+      "Value": {
+        "Ref": "fruitvendorsysopsassetsTopic"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorsysopsassetsTopic"
+        }
+      }
+    }
+  }
+}

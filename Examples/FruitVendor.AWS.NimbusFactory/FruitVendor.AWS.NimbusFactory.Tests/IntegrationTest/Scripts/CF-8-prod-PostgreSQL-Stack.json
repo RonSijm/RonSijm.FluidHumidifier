@@ -1,0 +1,377 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For PostgreSQL For prod Environment",
+  "Resources": {
+    "PostgreSQLBackupPlan": {
+      "Type": "AWS::Backup::BackupPlan",
+      "Properties": {
+        "BackupPlan": {
+          "BackupPlanName": "PostgreSQL-BackupPlan",
+          "BackupPlanRule": [
+            {
+              "CompletionWindowMinutes": 10080,
+              "ScheduleExpression": "cron(0 12 * * ? *)",
+              "RecoveryPointTags": {
+                "App": "PostgreSQL-DB"
+              },
+              "Lifecycle": {
+                "DeleteAfterDays": 100,
+                "MoveToColdStorageAfterDays": 7
+              },
+              "TargetBackupVault": {
+                "Ref": "crossregionbackupvault"
+              },
+              "StartWindowMinutes": 60,
+              "RuleName": "DailyBackup"
+            }
+          ]
+        }
+      }
+    },
+    "PostgreSQLBackupSelection": {
+      "Type": "AWS::Backup::BackupSelection",
+      "Properties": {
+        "BackupSelection": {
+          "SelectionName": "PostgreSQL-BackupSelection",
+          "IamRoleArn": {
+            "Fn::GetAtt": [
+              "PostgreSQLBackupRole",
+              "Arn"
+            ]
+          },
+          "Resources": [{"Fn::Sub": "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:cluster:${FruitVendorPostgreSQLprodCluster}"}]
+        },
+        "BackupPlanId": {
+          "Ref": "PostgreSQLBackupPlan"
+        }
+      },
+      "DependsOn": [
+        "FruitVendorPostgreSQLprodCluster"
+      ]
+    },
+    "crossregionbackupvault": {
+      "Type": "AWS::Backup::BackupVault",
+      "Properties": {
+        "BackupVaultName": "cross-region-backup-vault",
+        "EncryptionKeyArn": "arn:aws:kms:eu-central-1:666666666666:key/mrk-00000000000000000000000000000003"
+      }
+    },
+    "PostgreSQLNumberOfBackupJobsCompleted": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Period": 30,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Backup",
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "fruitvendorsysopsprodTopic"
+          }
+        ],
+        "MetricName": "NumberOfBackupJobsCompleted",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm for successful backup completion",
+        "AlarmName": "PostgreSQL-NumberOfBackupJobsCompleted",
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-NumberOfBackupJobsCompleted"
+          }
+        ],
+        "Threshold": 1
+      }
+    },
+    "PostgreSQLNumberOfBackupJobsFailed": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Period": 30,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Backup",
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "fruitvendorsysopsprodTopic"
+          }
+        ],
+        "MetricName": "NumberOfBackupJobsFailed",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm for failed backup completion",
+        "AlarmName": "PostgreSQL-NumberOfBackupJobsFailed",
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-NumberOfBackupJobsFailed"
+          }
+        ],
+        "Threshold": 1
+      }
+    },
+    "PostgreSQLNumberOfRestoreJobsCompleted": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Period": 30,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Backup",
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "fruitvendorsysopsprodTopic"
+          }
+        ],
+        "MetricName": "NumberOfRestoreJobsCompleted",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm for successful backup restoration",
+        "AlarmName": "PostgreSQL-NumberOfRestoreJobsCompleted",
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-NumberOfRestoreJobsCompleted"
+          }
+        ],
+        "Threshold": 1
+      }
+    },
+    "PostgreSQLNumberOfRestoreJobsFailed": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Period": 30,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Backup",
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "fruitvendorsysopsprodTopic"
+          }
+        ],
+        "MetricName": "NumberOfRestoreJobsFailed",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm for failed backup restoration",
+        "AlarmName": "PostgreSQL-NumberOfRestoreJobsFailed",
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-NumberOfRestoreJobsFailed"
+          }
+        ],
+        "Threshold": 1
+      }
+    },
+    "FruitVendorPostgreSQLprodCluster": {
+      "Type": "AWS::RDS::DBCluster",
+      "Properties": {
+        "StorageEncrypted": true,
+        "EngineMode": "provisioned",
+        "Port": 5432,
+        "Engine": "aurora-postgresql",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-PostgreSQL-prod-Cluster"
+          }
+        ],
+        "EngineVersion": "13.13",
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-prod-CMK"
+        },
+        "DBSubnetGroupName": {
+          "Fn::ImportValue": "RDSSubnetGroup"
+        },
+        "DeletionProtection": false,
+        "MasterUserPassword": "{{resolve:secretsmanager:example-database:SecretString:password}}",
+        "MasterUsername": "root_user_prod",
+        "EnableHttpEndpoint": false,
+        "PreferredBackupWindow": "03:15-03:45",
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::ImportValue": "RDSSecurityGroup"
+          }
+        ],
+        "AvailabilityZones": {
+          "Fn::GetAZs": "eu-central-1"
+        },
+        "PreferredMaintenanceWindow": "thu:04:18-thu:04:48",
+        "EnableIAMDatabaseAuthentication": false,
+        "DBClusterParameterGroupName": "default.aurora-postgresql13",
+        "BackupRetentionPeriod": 7
+      }
+    },
+    "fruitvendorprodpostgresinstance1": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "StorageEncrypted": true,
+        "DBClusterIdentifier": {
+          "Ref": "FruitVendorPostgreSQLprodCluster"
+        },
+        "MonitoringInterval": 60,
+        "DBParameterGroupName": "default.aurora-postgresql13",
+        "Engine": "aurora-postgresql",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-prod-postgres-instance-1"
+          }
+        ],
+        "EngineVersion": "13.13",
+        "StorageType": "aurora",
+        "DBInstanceClass": "db.t3.medium",
+        "PerformanceInsightsRetentionPeriod": 31,
+        "AvailabilityZone": {
+          "Fn::Sub": "${AWS::Region}a"
+        },
+        "OptionGroupName": "default:aurora-postgresql-13",
+        "EnablePerformanceInsights": true,
+        "AutoMinorVersionUpgrade": true,
+        "DBSubnetGroupName": {
+          "Fn::ImportValue": "RDSSubnetGroup"
+        },
+        "DBInstanceIdentifier": "fruitvendor-prod-postgres-instance-1",
+        "PromotionTier": 1,
+        "PubliclyAccessible": false,
+        "MonitoringRoleArn": {
+          "Fn::GetAtt": [
+            "prodECRMonitoringRole",
+            "Arn"
+          ]
+        },
+        "LicenseModel": "postgresql-license"
+      }
+    },
+    "PostgreSQLBackupPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "PostgreSQL-Backup-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds:DescribeDBClusters",
+                "rds:CreateDBClusterSnapshot",
+                "rds:CopyDBClusterSnapshot",
+                "rds:ListTagsForResource",
+                "rds:AddTagsToResource",
+                "rds:RemoveTagsFromResource",
+                "rds:CreateDBSnapshot",
+                "rds:CopyDBSnapshot",
+                "rds:DescribeDBInstances",
+                "rds:DescribeDBClusterSnapshots",
+                "rds:CopyDBClusterSnapshot"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "prodECRMonitoringRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "prod-ECR-Monitoring-Role",
+        "Policies": [
+          {
+            "PolicyName": "prod-ECR-Monitoring-Role-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogGroups",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:PutRetentionPolicy"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:log-group:RDS*"
+                },
+                {
+                  "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogStreams",
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                    "logs:DescribeLogStreams",
+                    "logs:GetLogEvents"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:log-group:RDS*:log-stream:*"
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "monitoring.rds.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "prod-ECR-Monitoring-Role"
+          }
+        ]
+      }
+    },
+    "PostgreSQLBackupRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "PostgreSQLBackupPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "PostgreSQL-BackupRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "backup.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "PostgreSQL-BackupRole"
+          }
+        ]
+      }
+    },
+    "databaseprodfruitvendorcom": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "prod-fruitvendor.example.",
+        "Name": "database.prod-fruitvendor.example",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "FruitVendorPostgreSQLprodCluster",
+              "Endpoint.Address"
+            ]
+          }
+        ],
+        "TTL": 300,
+        "Type": "CNAME"
+      }
+    }
+  }
+}

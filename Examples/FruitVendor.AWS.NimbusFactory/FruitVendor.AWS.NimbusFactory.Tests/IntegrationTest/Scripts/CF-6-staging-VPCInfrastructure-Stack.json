@@ -1,0 +1,1196 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For VPC Infrastructure For staging Environment",
+  "Resources": {
+    "internetroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorpubrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "stagingFruitVendorinternetgw"
+        }
+      }
+    },
+    "dockerroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendordockerrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "stagingFruitVendorinternetgw"
+        }
+      }
+    },
+    "localnatroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "FruitVendorNAT"
+        }
+      }
+    },
+    "FruitVendorNATEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-NAT-EIP"
+          }
+        ]
+      }
+    },
+    "FruitVendorNWEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-NW-EIP"
+          }
+        ]
+      }
+    },
+    "FruitVendorEIPAss": {
+      "Type": "AWS::EC2::EIPAssociation",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FruitVendorNWEIP",
+            "AllocationId"
+          ]
+        },
+        "NetworkInterfaceId": {
+          "Ref": "FruitVendorNI"
+        }
+      }
+    },
+    "stagingFruitVendorinternetgw": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-FruitVendor-internet-gw"
+          }
+        ]
+      }
+    },
+    "FruitVendorNAT": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FruitVendorNATEIP",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-NAT"
+          }
+        ]
+      }
+    },
+    "stagingFruitVendornetworkacl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-FruitVendor-network-acl"
+          }
+        ]
+      }
+    },
+    "stagingFruitVendornetworkaclinet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": true,
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "stagingFruitVendornetworkaclet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "FruitVendorNI": {
+      "Type": "AWS::EC2::NetworkInterface",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-NI"
+          }
+        ]
+      }
+    },
+    "stagingFruitVendorpubrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-FruitVendor-pub-rt"
+          }
+        ]
+      }
+    },
+    "stagingFruitVendorlocalrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-FruitVendor-local-rt"
+          }
+        ]
+      }
+    },
+    "stagingFruitVendordockerrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "staging-FruitVendor-docker-rt"
+          }
+        ]
+      }
+    },
+    "PumaLBToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Puma - Lets PumaLBSecurityGroup Talk to DockerSecurityGroup",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "DockerSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "PumaLBSecurityGroup"
+        }
+      }
+    },
+    "DockerToPumaLBSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Puma - Lets PumaLBSecurityGroup Talk to DockerSecurityGroup",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "PumaLBSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "DockerSecurityGroup"
+        }
+      }
+    },
+    "DockerToRDSSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets DockerSecurityGroup Talk to RDSSecurityGroup",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "RDSSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "DockerSecurityGroup"
+        }
+      }
+    },
+    "RDSToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets DockerSecurityGroup Talk to RDSSecurityGroup",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "DockerSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "RDSSecurityGroup"
+        }
+      }
+    },
+    "DockerToRedisSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Redis - Lets DockerSecurityGroup Talk to RedisSecurityGroup",
+        "FromPort": 6379,
+        "ToPort": 6379,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "RedisSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "DockerSecurityGroup"
+        }
+      }
+    },
+    "RedisToDockerSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For Redis - Lets DockerSecurityGroup Talk to RedisSecurityGroup",
+        "FromPort": 6379,
+        "ToPort": 6379,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "DockerSecurityGroup"
+        },
+        "GroupId": {
+          "Ref": "RedisSecurityGroup"
+        }
+      }
+    },
+    "RDSSubnetGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupName": "RDS Subnet Group",
+        "DBSubnetGroupDescription": "VPC Infrastructure-staging-RDS Subnet Group Subnet Group",
+        "SubnetIds": [
+          {
+            "Ref": "RDSSubnetAZA"
+          },
+          {
+            "Ref": "RDSSubnetAZB"
+          },
+          {
+            "Ref": "RDSSubnetAZC"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "RDS Subnet Group"
+          }
+        ]
+      },
+      "DependsOn": [
+        "RDSSubnetAZA",
+        "RDSSubnetAZB",
+        "RDSSubnetAZC"
+      ]
+    },
+    "RedisSubnetGroup": {
+      "Type": "AWS::ElastiCache::SubnetGroup",
+      "Properties": {
+        "Description": "Default Subnet Group for ElastiCache",
+        "SubnetIds": [
+          {
+            "Ref": "RedisSubnetAZA"
+          },
+          {
+            "Ref": "RedisSubnetAZB"
+          },
+          {
+            "Ref": "RedisSubnetAZC"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Redis Subnet Group"
+          }
+        ]
+      },
+      "DependsOn": [
+        "RedisSubnetAZA",
+        "RedisSubnetAZB",
+        "RedisSubnetAZC"
+      ]
+    },
+    "RedisSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Default staging Security Group for Redis",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Redis-SecurityGroup"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "PumaLBSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Default staging Security Group for Puma-LB",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Http Inbound - Lets PumaLBSecurityGroup Communicate over tcp 80-80",
+            "FromPort": 80,
+            "ToPort": 80,
+            "IpProtocol": "tcp"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Https Inbound - Lets PumaLBSecurityGroup Communicate over tcp 443-443",
+            "FromPort": 443,
+            "ToPort": 443,
+            "IpProtocol": "tcp"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Puma-LB-SecurityGroup"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "DockerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Default staging Security Group for Docker",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Docker-SecurityGroup"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RDSSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Default staging Security Group for RDS",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "RDS-SecurityGroup"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "PumaLBSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Puma-LB Subnet AZ-A"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "PumaLBSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.2.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Puma-LB Subnet AZ-B"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "PumaLBSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.3.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Puma-LB Subnet AZ-C"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RDSSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.4.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "RDS Subnet AZ-A"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RDSSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.5.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "RDS Subnet AZ-B"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RDSSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.6.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "RDS Subnet AZ-C"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RedisSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.7.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Redis Subnet AZ-A"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RedisSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.8.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Redis Subnet AZ-B"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "RedisSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.9.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Redis Subnet AZ-C"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "DockerSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.10.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Docker Subnet AZ-A"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "DockerSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.11.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Docker Subnet AZ-B"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "DockerSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.12.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Docker Subnet AZ-C"
+          }
+        ]
+      },
+      "DependsOn": [
+        "FruitVendorInfrastructure"
+      ]
+    },
+    "FruitVendorInfrastructure": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor Infrastructure"
+          }
+        ]
+      }
+    },
+    "PumaLBAZAstagingFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBAZAstagingFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBAZBstagingFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBAZBstagingFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBAZCstagingFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "PumaLBAZCstagingFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "RDSAZAstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZAstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZBstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZBstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZCstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "RDSAZCstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "RedisAZAstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZA"
+        }
+      }
+    },
+    "RedisAZAstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZA"
+        }
+      }
+    },
+    "RedisAZBstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZB"
+        }
+      }
+    },
+    "RedisAZBstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZB"
+        }
+      }
+    },
+    "RedisAZCstagingFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZC"
+        }
+      }
+    },
+    "RedisAZCstagingFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RedisSubnetAZC"
+        }
+      }
+    },
+    "DockerAZAstagingFruitVendordockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendordockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerAZAstagingFruitVendordockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerAZBstagingFruitVendordockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendordockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerAZBstagingFruitVendordockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerAZCstagingFruitVendordockerrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "stagingFruitVendordockerrt"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZC"
+        }
+      }
+    },
+    "DockerAZCstagingFruitVendordockerrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "stagingFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "DockerSubnetAZC"
+        }
+      }
+    },
+    "S3Endpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "RouteTableIds": [
+          {
+            "Ref": "stagingFruitVendordockerrt"
+          }
+        ],
+        "ServiceName": "com.amazonaws.eu-central-1.s3",
+        "VpcEndpointType": "Gateway",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "S3Endpoint"
+          }
+        ]
+      }
+    },
+    "ECRAPIEndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "SecurityGroupIds": [
+          {
+            "Ref": "DockerSecurityGroup"
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "DockerSubnetAZA"
+          },
+          {
+            "Ref": "DockerSubnetAZB"
+          },
+          {
+            "Ref": "DockerSubnetAZC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "ServiceName": "com.amazonaws.eu-central-1.ecr.api",
+        "VpcEndpointType": "Interface",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ECRAPIEndpoint"
+          }
+        ]
+      }
+    },
+    "ECRDKREndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "SecurityGroupIds": [
+          {
+            "Ref": "DockerSecurityGroup"
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "DockerSubnetAZA"
+          },
+          {
+            "Ref": "DockerSubnetAZB"
+          },
+          {
+            "Ref": "DockerSubnetAZC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "ServiceName": "com.amazonaws.eu-central-1.ecr.dkr",
+        "VpcEndpointType": "Interface",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ECRDKREndpoint"
+          }
+        ]
+      }
+    },
+    "VPCGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "VpnGatewayId": {
+          "Ref": "FruitVendorVPNGW"
+        }
+      }
+    },
+    "VPCGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "stagingFruitVendorinternetgw"
+        },
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "FruitVendorVPNGW": {
+      "Type": "AWS::EC2::VPNGateway",
+      "Properties": {
+        "Type": "ipsec.1",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor-VPNGW"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "RDSSubnetGroup": {
+      "Value": {
+        "Ref": "RDSSubnetGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDSSubnetGroup"
+        }
+      }
+    },
+    "RedisSubnetGroup": {
+      "Value": {
+        "Ref": "RedisSubnetGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RedisSubnetGroup"
+        }
+      }
+    },
+    "RedisSecurityGroup": {
+      "Value": {
+        "Ref": "RedisSecurityGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RedisSecurityGroup"
+        }
+      }
+    },
+    "PumaLBSecurityGroup": {
+      "Value": {
+        "Ref": "PumaLBSecurityGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSecurityGroup"
+        }
+      }
+    },
+    "DockerSecurityGroup": {
+      "Value": {
+        "Ref": "DockerSecurityGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSecurityGroup"
+        }
+      }
+    },
+    "RDSSecurityGroup": {
+      "Value": {
+        "Ref": "RDSSecurityGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDSSecurityGroup"
+        }
+      }
+    },
+    "PumaLBSubnetAZA": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZA"
+        }
+      }
+    },
+    "PumaLBSubnetAZB": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZB"
+        }
+      }
+    },
+    "PumaLBSubnetAZC": {
+      "Value": {
+        "Ref": "PumaLBSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "PumaLBSubnetAZC"
+        }
+      }
+    },
+    "DockerSubnetAZA": {
+      "Value": {
+        "Ref": "DockerSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZA"
+        }
+      }
+    },
+    "DockerSubnetAZB": {
+      "Value": {
+        "Ref": "DockerSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZB"
+        }
+      }
+    },
+    "DockerSubnetAZC": {
+      "Value": {
+        "Ref": "DockerSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "DockerSubnetAZC"
+        }
+      }
+    },
+    "FruitVendorInfrastructure": {
+      "Value": {
+        "Ref": "FruitVendorInfrastructure"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "FruitVendorInfrastructure"
+        }
+      }
+    }
+  }
+}

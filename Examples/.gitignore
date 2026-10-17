@@ -1,0 +1,4 @@
+# Local generation and validation output.
+generated/
+*.received.*
+IntegrationTest/Results/

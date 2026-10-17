@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.Connect;
+
+public class InnerTestCaseEntryPointFactory(Action<Humidifier.Connect.TestCaseTypes.EntryPoint> factoryAction = null) : SubResourceFactory<Humidifier.Connect.TestCaseTypes.EntryPoint>
+{
+
+    internal InnerTestCaseChatEntryPointParametersFactory ChatEntryPointParametersFactory { get; set; }
+
+    internal InnerTestCaseVoiceCallEntryPointParametersFactory VoiceCallEntryPointParametersFactory { get; set; }
+
+    protected override Humidifier.Connect.TestCaseTypes.EntryPoint Create()
+    {
+        var entryPointResult = CreateEntryPoint();
+        factoryAction?.Invoke(entryPointResult);
+
+        return entryPointResult;
+    }
+
+    private Humidifier.Connect.TestCaseTypes.EntryPoint CreateEntryPoint()
+    {
+        var entryPointResult = new Humidifier.Connect.TestCaseTypes.EntryPoint();
+
+        return entryPointResult;
+    }
+    public override void CreateChildren(Humidifier.Connect.TestCaseTypes.EntryPoint result)
+    {
+        base.CreateChildren(result);
+
+        result.ChatEntryPointParameters ??= ChatEntryPointParametersFactory?.Build();
+        result.VoiceCallEntryPointParameters ??= VoiceCallEntryPointParametersFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerTestCaseEntryPointFactoryExtensions
+{
+    public static CombinedResult<InnerTestCaseEntryPointFactory, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters(this InnerTestCaseEntryPointFactory parentFactory, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null)
+    {
+        parentFactory.ChatEntryPointParametersFactory = new InnerTestCaseChatEntryPointParametersFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ChatEntryPointParametersFactory);
+    }
+
+    public static CombinedResult<InnerTestCaseEntryPointFactory, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters(this InnerTestCaseEntryPointFactory parentFactory, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null)
+    {
+        parentFactory.VoiceCallEntryPointParametersFactory = new InnerTestCaseVoiceCallEntryPointParametersFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.VoiceCallEntryPointParametersFactory);
+    }
+
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1>(this CombinedResult<InnerTestCaseEntryPointFactory, T1> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1>(this CombinedResult<T1, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, T4, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, T4, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, T4, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, T4, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerTestCaseEntryPointFactory, InnerTestCaseChatEntryPointParametersFactory> WithChatEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.ChatEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithChatEntryPointParameters(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1>(this CombinedResult<InnerTestCaseEntryPointFactory, T1> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1>(this CombinedResult<T1, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, T4, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<InnerTestCaseEntryPointFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, T4, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, InnerTestCaseEntryPointFactory, T2, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, T4, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerTestCaseEntryPointFactory, T3, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, T4, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerTestCaseEntryPointFactory, T4> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerTestCaseEntryPointFactory, InnerTestCaseVoiceCallEntryPointParametersFactory> WithVoiceCallEntryPointParameters<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerTestCaseEntryPointFactory> combinedResult, Action<Humidifier.Connect.TestCaseTypes.VoiceCallEntryPointParameters> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithVoiceCallEntryPointParameters(combinedResult.T5, subFactoryAction).T2);
+}

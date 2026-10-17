@@ -1,0 +1,102 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For ECRService For assets Environment",
+  "Resources": {
+    "fruitvendorwebapp": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "EncryptionConfiguration": {
+          "EncryptionType": "KMS",
+          "KmsKey": {
+            "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-assets-CMK"
+          }
+        },
+        "RepositoryPolicyText": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": [
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "aws:PrincipalArn": [
+                    "arn:aws:iam::222222222222:role/ECR-poc-to-assets-AccessRole",
+                    "arn:aws:iam::333333333333:role/ECR-dev-to-assets-AccessRole",
+                    "arn:aws:iam::444444444444:role/ECR-staging-to-assets-AccessRole",
+                    "arn:aws:iam::555555555555:role/ECR-preprod-to-assets-AccessRole",
+                    "arn:aws:iam::666666666666:role/ECR-prod-to-assets-AccessRole"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "RepositoryName": "fruitvendor-webapp",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "fruitvendor-webapp"
+          }
+        ]
+      }
+    },
+    "ECRassetsAccessRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ECR-assets-AccessRole",
+        "Policies": [
+          {
+            "PolicyName": "ECR-assets-AccessRole-Policy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ecr:GetDownloadUrlForLayer",
+                    "ecr:BatchGetImage",
+                    "ecr:BatchCheckLayerAvailability"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/fruitvendorwebapp"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  "arn:aws:iam::222222222222:root",
+                  "arn:aws:iam::333333333333:root",
+                  "arn:aws:iam::444444444444:root",
+                  "arn:aws:iam::555555555555:root",
+                  "arn:aws:iam::666666666666:root"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ECR-assets-AccessRole"
+          }
+        ]
+      }
+    }
+  }
+}

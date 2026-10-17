@@ -1,0 +1,103 @@
+﻿{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "OidcSafety": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "OidcSafety",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Sid": "OidcSafeties",
+              "Effect": "Deny",
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "GitHubActionsDeploy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "GitHub-Actions-Deploy",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "GitHubActionsOidcProvider": {
+      "Type": "AWS::IAM::OIDCProvider",
+      "Properties": {
+        "ClientIdList": [
+          "sts.amazonaws.com"
+        ],
+        "ThumbprintList": [
+          "6938fd4d98bab03faadb97b34396831e3780aea1"
+        ],
+        "Url": "https://token.actions.githubusercontent.com"
+      }
+    },
+    "GitHubActionsRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "OidcSafety"
+          },
+          {
+            "Ref": "GitHubActionsDeploy"
+          }
+        ],
+        "RoleName": "GitHub-Actions-Role",
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": {
+                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+                }
+              },
+              "Action": [
+                "sts:AssumeRoleWithWebIdentity"
+              ],
+              "Condition": {
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": [
+                    "repo:AppleStore/*"
+                  ]
+                },
+                "StringEqualsIgnoreCase": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "OidcSafety": {
+      "Value": {
+        "Ref": "OidcSafety"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "OidcSafety"
+        }
+      }
+    }
+  }
+}

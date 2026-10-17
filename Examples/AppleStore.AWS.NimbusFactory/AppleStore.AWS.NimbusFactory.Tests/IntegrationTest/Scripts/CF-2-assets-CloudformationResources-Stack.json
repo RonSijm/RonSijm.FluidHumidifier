@@ -1,0 +1,183 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Cloudformation Resources For assets Environment",
+  "Resources": {
+    "assetsSlackLoggerPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "ManagedPolicyName": "assets-SlackLogger-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCreateLogGroup",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "assetsSlackLogger": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          {
+            "Ref": "assetsSlackLoggerPolicy"
+          }
+        ],
+        "MaxSessionDuration": 3600,
+        "RoleName": "assets-SlackLogger",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "assets-SlackLogger"
+          }
+        ]
+      }
+    },
+    "awsassetscloudformationapplestore": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "aws-assets-cloudformation-applestore",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "aws-assets-cloudformation-applestore"
+          }
+        ]
+      }
+    },
+    "applestoresysopsassetsTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "applestore-sysops-assets",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "applestore-sysops-assets-Topic"
+          }
+        ],
+        "TopicName": "applestore-sysops-assets-Topic"
+      }
+    },
+    "applestoresysopsassetsTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "applestoresysopsassetsTopic"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSNS",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "applestoresysopsassetsTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Fn::Sub": "${AWS::AccountId}"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "AllowCloudtrail",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+              },
+              "Action": [
+                "SNS:Publish"
+              ],
+              "Resource": {
+                "Ref": "applestoresysopsassetsTopic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "assetsSlackLogger": {
+      "Value": {
+        "Ref": "assetsSlackLogger"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "assetsSlackLogger"
+        }
+      }
+    },
+    "awsassetscloudformationapplestore": {
+      "Value": {
+        "Ref": "awsassetscloudformationapplestore"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "awsassetscloudformationapplestore"
+        }
+      }
+    },
+    "applestoresysopsassetsTopic": {
+      "Value": {
+        "Ref": "applestoresysopsassetsTopic"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "applestoresysopsassetsTopic"
+        }
+      }
+    }
+  }
+}

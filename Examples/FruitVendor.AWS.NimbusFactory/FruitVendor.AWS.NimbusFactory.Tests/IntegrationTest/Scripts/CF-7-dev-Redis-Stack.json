@@ -1,0 +1,57 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Redis For dev Environment",
+  "Resources": {
+    "FruitVendorRedisClusterReplicationGroup": {
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+      "Properties": {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": true,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": {
+          "Fn::ImportValue": "RedisSubnetGroup"
+        },
+        "Engine": "redis",
+        "EngineVersion": "7.1",
+        "KmsKeyId": {
+          "Fn::Sub": "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/KMS-dev-CMK"
+        },
+        "MultiAZEnabled": true,
+        "NumCacheClusters": 3,
+        "ReplicationGroupDescription": "FruitVendor Redis Cluster For dev",
+        "ReplicationGroupId": "FruitVendor-Redis-Cluster-RG",
+        "SecurityGroupIds": [
+          {
+            "Fn::ImportValue": "RedisSecurityGroup"
+          }
+        ],
+        "SnapshotRetentionLimit": "0",
+        "SnapshotWindow": "06:00-07:00",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "FruitVendor Redis Cluster"
+          }
+        ],
+        "TransitEncryptionEnabled": true
+      }
+    },
+    "redisdevfruitvendorcom": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName": "dev-fruitvendor.example.",
+        "Name": "redis.dev-fruitvendor.example",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "FruitVendorRedisClusterReplicationGroup",
+              "PrimaryEndPoint.Address"
+            ]
+          }
+        ],
+        "TTL": 300,
+        "Type": "CNAME"
+      }
+    }
+  }
+}

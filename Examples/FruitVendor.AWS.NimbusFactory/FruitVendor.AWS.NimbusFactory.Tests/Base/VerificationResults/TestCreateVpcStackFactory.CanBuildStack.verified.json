@@ -1,0 +1,714 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "internetroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorpubrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "devFruitVendorinternetgw"
+        }
+      }
+    },
+    "dockerroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorbeanstalkrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "devFruitVendorinternetgw"
+        }
+      }
+    },
+    "localnatroute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorlocalrt"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "FruitVendorNAT"
+        }
+      }
+    },
+    "FruitVendorNATEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {}
+    },
+    "FruitVendorNWEIP": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {}
+    },
+    "FruitVendorEIPAss": {
+      "Type": "AWS::EC2::EIPAssociation",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FruitVendorNWEIP",
+            "AllocationId"
+          ]
+        },
+        "NetworkInterfaceId": {
+          "Ref": "FruitVendorNI"
+        }
+      }
+    },
+    "devFruitVendorinternetgw": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {}
+    },
+    "FruitVendorNAT": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FruitVendorNATEIP",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZA"
+        }
+      }
+    },
+    "devFruitVendornetworkacl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "devFruitVendornetworkaclinet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": true,
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "devFruitVendornetworkaclet": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "RuleNumber": 100,
+        "Protocol": -1
+      }
+    },
+    "FruitVendorNI": {
+      "Type": "AWS::EC2::NetworkInterface",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZA"
+        }
+      }
+    },
+    "devFruitVendorpubrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "devFruitVendorlocalrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "devFruitVendorbeanstalkrt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendoraiLBTofruitvendorbeSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For fruitvendorai - Lets fruitvendoraiLB Talk to fruitvendorbe",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "fruitvendorbe"
+        },
+        "GroupId": {
+          "Ref": "fruitvendoraiLB"
+        }
+      }
+    },
+    "fruitvendorbeTofruitvendoraiLBSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For fruitvendorai - Lets fruitvendoraiLB Talk to fruitvendorbe",
+        "FromPort": 3000,
+        "ToPort": 3000,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "fruitvendoraiLB"
+        },
+        "GroupId": {
+          "Ref": "fruitvendorbe"
+        }
+      }
+    },
+    "fruitvendorbeToRDSSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets fruitvendorbe Talk to RDS",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "RDS"
+        },
+        "GroupId": {
+          "Ref": "fruitvendorbe"
+        }
+      }
+    },
+    "RDSTofruitvendorbeSGIn": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "Description": "For PostgreSQL - Lets fruitvendorbe Talk to RDS",
+        "FromPort": 5432,
+        "ToPort": 5432,
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Ref": "fruitvendorbe"
+        },
+        "GroupId": {
+          "Ref": "RDS"
+        }
+      }
+    },
+    "RDSSubnetGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupName": "RDS Subnet Group",
+        "SubnetIds": [
+          {
+            "Ref": "RDSSubnetAZA"
+          },
+          {
+            "Ref": "RDSSubnetAZB"
+          },
+          {
+            "Ref": "RDSSubnetAZC"
+          }
+        ]
+      }
+    },
+    "fruitvendoraiLB": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Http Inbound - Lets fruitvendoraiLB Communicate over tcp 80-80",
+            "FromPort": 80,
+            "ToPort": 80,
+            "IpProtocol": "tcp"
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "For Https Inbound - Lets fruitvendoraiLB Communicate over tcp 443-443",
+            "FromPort": 443,
+            "ToPort": 443,
+            "IpProtocol": "tcp"
+          }
+        ]
+      }
+    },
+    "fruitvendorbe": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "RDS": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.1.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.2.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.3.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.4.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.5.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "RDSSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.6.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1a",
+        "CidrBlock": "10.0.10.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1b",
+        "CidrBlock": "10.0.11.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": "eu-central-1c",
+        "CidrBlock": "10.0.12.0/24",
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "FruitVendorInfrastructure": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": true
+      }
+    },
+    "fruitvendoraiLBAZAdevFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZA"
+        }
+      }
+    },
+    "fruitvendoraiLBAZAdevFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZA"
+        }
+      }
+    },
+    "fruitvendoraiLBAZBdevFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZB"
+        }
+      }
+    },
+    "fruitvendoraiLBAZBdevFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZB"
+        }
+      }
+    },
+    "fruitvendoraiLBAZCdevFruitVendorpubrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorpubrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZC"
+        }
+      }
+    },
+    "fruitvendoraiLBAZCdevFruitVendorpubrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendoraiLBSubnetAZC"
+        }
+      }
+    },
+    "RDSAZAdevFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZAdevFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZA"
+        }
+      }
+    },
+    "RDSAZBdevFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZBdevFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZB"
+        }
+      }
+    },
+    "RDSAZCdevFruitVendorlocalrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorlocalrt"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "RDSAZCdevFruitVendorlocalrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "RDSSubnetAZC"
+        }
+      }
+    },
+    "fruitvendorbeAZAdevFruitVendorbeanstalkrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorbeanstalkrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZA"
+        }
+      }
+    },
+    "fruitvendorbeAZAdevFruitVendorbeanstalkrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZA"
+        }
+      }
+    },
+    "fruitvendorbeAZBdevFruitVendorbeanstalkrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorbeanstalkrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZB"
+        }
+      }
+    },
+    "fruitvendorbeAZBdevFruitVendorbeanstalkrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZB"
+        }
+      }
+    },
+    "fruitvendorbeAZCdevFruitVendorbeanstalkrtAS": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "devFruitVendorbeanstalkrt"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZC"
+        }
+      }
+    },
+    "fruitvendorbeAZCdevFruitVendorbeanstalkrtNWASS": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "devFruitVendornetworkacl"
+        },
+        "SubnetId": {
+          "Ref": "fruitvendorbeSubnetAZC"
+        }
+      }
+    },
+    "S3Endpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "RouteTableIds": [
+          {
+            "Ref": "devFruitVendorbeanstalkrt"
+          }
+        ],
+        "ServiceName": "com.amazonaws.eu-central-1.s3",
+        "VpcEndpointType": "Gateway"
+      }
+    },
+    "VPCGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        },
+        "VpnGatewayId": {
+          "Ref": "FruitVendorVPNGW"
+        }
+      }
+    },
+    "VPCGatewayAttachment": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "devFruitVendorinternetgw"
+        },
+        "VpcId": {
+          "Ref": "FruitVendorInfrastructure"
+        }
+      }
+    },
+    "FruitVendorVPNGW": {
+      "Type": "AWS::EC2::VPNGateway",
+      "Properties": {
+        "Type": "ipsec.1"
+      }
+    }
+  },
+  "Outputs": {
+    "RDSSubnetGroup": {
+      "Value": {
+        "Ref": "RDSSubnetGroup"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDSSubnetGroup"
+        }
+      }
+    },
+    "fruitvendoraiLB": {
+      "Value": {
+        "Ref": "fruitvendoraiLB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendoraiLB"
+        }
+      }
+    },
+    "fruitvendorbe": {
+      "Value": {
+        "Ref": "fruitvendorbe"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorbe"
+        }
+      }
+    },
+    "RDS": {
+      "Value": {
+        "Ref": "RDS"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "RDS"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZA": {
+      "Value": {
+        "Ref": "fruitvendoraiLBSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendoraiLBSubnetAZA"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZB": {
+      "Value": {
+        "Ref": "fruitvendoraiLBSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendoraiLBSubnetAZB"
+        }
+      }
+    },
+    "fruitvendoraiLBSubnetAZC": {
+      "Value": {
+        "Ref": "fruitvendoraiLBSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendoraiLBSubnetAZC"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZA": {
+      "Value": {
+        "Ref": "fruitvendorbeSubnetAZA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorbeSubnetAZA"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZB": {
+      "Value": {
+        "Ref": "fruitvendorbeSubnetAZB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorbeSubnetAZB"
+        }
+      }
+    },
+    "fruitvendorbeSubnetAZC": {
+      "Value": {
+        "Ref": "fruitvendorbeSubnetAZC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "fruitvendorbeSubnetAZC"
+        }
+      }
+    },
+    "FruitVendorInfrastructure": {
+      "Value": {
+        "Ref": "FruitVendorInfrastructure"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "FruitVendorInfrastructure"
+        }
+      }
+    }
+  }
+}

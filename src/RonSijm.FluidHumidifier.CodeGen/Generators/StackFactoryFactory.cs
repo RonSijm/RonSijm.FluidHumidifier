@@ -85,14 +85,14 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators
 
             var result = bob.ToString();
 
-            var directory = $"{outputPath}\\";
+            var directory = outputPath;
 
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
 
-            var file = $"{directory}\\{name}Factory.cs";
+            var file = Path.Combine(directory, $"{name}Factory.cs");
 
             await File.WriteAllTextAsync(file, result);
         }

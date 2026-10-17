@@ -1,0 +1,46 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Combine version numbers
+      run: |
+        VERSION=$(cat src/version.txt)
+        SPEC_VERSION=$(cat src/humidifier-spec-version.txt | tr -d '.')
+        FINAL_VERSION="${VERSION}.${SPEC_VERSION}"
+        echo "FINAL_VERSION=$FINAL_VERSION" >> "$GITHUB_ENV"
+
+    - name: Restore dependencies
+      run: dotnet restore src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj /p:UseHumidifierProjectReference=false
+
+    - name: Build and package FluidHumidifier
+      env:
+        FINAL_VERSION: ${{ env.FINAL_VERSION }}
+      run: dotnet build src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj --configuration Release --no-restore /p:UseHumidifierProjectReference=false /p:PackageVersion=$FINAL_VERSION /p:PackageOutputPath="$GITHUB_WORKSPACE/packages"
+
+    - name: Log in to NuGet with trusted publishing
+      id: login
+      uses: NuGet/login@v1
+      with:
+        user: Ron.Sijm
+
+    - name: Publish to NuGet
+      run: dotnet nuget push "./packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate

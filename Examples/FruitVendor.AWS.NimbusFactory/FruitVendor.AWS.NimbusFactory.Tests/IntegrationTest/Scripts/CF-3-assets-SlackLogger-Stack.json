@@ -1,0 +1,73 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation Stack For Slack Logger For assets Environment",
+  "Resources": {
+    "LambdaInvokePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AWSSlackNotificationLoggingFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "SourceArn": {
+          "Fn::ImportValue": "fruitvendorsysopsassetsTopic"
+        },
+        "Principal": "sns.amazonaws.com"
+      }
+    },
+    "AWSSlackNotificationLoggingFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "FunctionName": "AWS-SlackNotificationLoggingFunction",
+        "Runtime": "nodejs20.x",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AWS-SlackNotificationLoggingFunction"
+          }
+        ],
+        "MemorySize": 128,
+        "Timeout": 3,
+        "Handler": "index.handler",
+        "Code": {
+          "S3Bucket": {
+            "Fn::ImportValue": "awsassetscloudformationfruitvendor"
+          },
+          "S3Key": "LambdaLoggerCode.zip"
+        },
+        "Role": {
+          "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/assets-SlackLogger"
+        },
+        "Environment": {
+          "Variables": {
+            "channel": "fruitvendor-sysops-assets"
+          }
+        },
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "Architectures": [
+          "x86_64"
+        ]
+      }
+    },
+    "fruitvendorsysopsassetsTopicSubscription": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "AWSSlackNotificationLoggingFunction",
+            "Arn"
+          ]
+        },
+        "TopicArn": {
+          "Fn::ImportValue": "fruitvendorsysopsassetsTopic"
+        },
+        "Protocol": "lambda"
+      }
+    }
+  }
+}
