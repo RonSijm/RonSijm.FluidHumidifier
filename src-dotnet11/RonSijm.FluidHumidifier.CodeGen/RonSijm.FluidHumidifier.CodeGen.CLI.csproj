@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net11.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="$(HumidifierRepositoryRoot)\$(HumidifierSourceDirectory)\Humidifier.CodeGen.Lib\Humidifier.CodeGen.Lib.csproj" />
+	</ItemGroup>
+
+  <Import Project="$(HumidifierRepositoryRoot)\$(HumidifierSourceDirectory)\BuildSettings\Roslyn.props" />
+</Project>

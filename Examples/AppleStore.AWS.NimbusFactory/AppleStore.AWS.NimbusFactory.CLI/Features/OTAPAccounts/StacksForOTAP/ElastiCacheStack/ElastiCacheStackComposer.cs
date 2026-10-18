@@ -16,13 +16,13 @@ public class ElastiCacheStackComposer : BaseStackComposer<ElastiCacheStackConfig
             replicationGroup.CacheNodeType = "cache.t3.micro";
             replicationGroup.Engine = "redis";
             replicationGroup.EngineVersion = "7.1";
-            replicationGroup.SnapshotRetentionLimit = "0";
+            replicationGroup.SnapshotRetentionLimit = Fn.Literal("0");
             replicationGroup.SnapshotWindow = "06:00-07:00";
             replicationGroup.TransitEncryptionEnabled = true;
             replicationGroup.AtRestEncryptionEnabled = true;
             replicationGroup.MultiAZEnabled = true;
             replicationGroup.CacheSubnetGroupName = config.Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.ElastiCache.SubnetGroup).ImportValue();
-            replicationGroup.SecurityGroupIds = new List<dynamic> { config.Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.Contains(ResourceConfigSettings.RedisName)).ImportValue() };
+            replicationGroup.SecurityGroupIds = new List<Union<string, BaseFunction>> { config.Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.GetLiteral().Contains(ResourceConfigSettings.RedisName)).ImportValue() };
         });
 
         stack.WithRecordSet(record =>
@@ -30,8 +30,8 @@ public class ElastiCacheStackComposer : BaseStackComposer<ElastiCacheStackConfig
             record.HostedZoneName = $"{Environment.EnvironmentName}-applestore.example.";
             record.Type = "CNAME";
             record.Name = $"redis.{Environment.EnvironmentName}-applestore.example";
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(replicationGroupFactory, "PrimaryEndPoint.Address") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(replicationGroupFactory, "PrimaryEndPoint.Address") };
         });
 
         var stackResult = environmentFactory.Build().First();

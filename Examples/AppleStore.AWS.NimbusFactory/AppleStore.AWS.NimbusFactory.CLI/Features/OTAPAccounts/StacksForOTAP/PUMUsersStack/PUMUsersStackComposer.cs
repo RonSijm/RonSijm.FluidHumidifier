@@ -38,7 +38,7 @@ public class PUMUsersStackComposer : BaseStackComposer<PUMUsersStackConfig>
             $"arn:aws:ecs:{Environment.Region}:{Environment.AWSAccountId}:task/AppleStore-{Environment.EnvironmentName}-Cluster/*"
         }, sid: "AllowCreateAndTerminateSessions");
 
-        var allowDescribeSessionsConditions = new Dictionary<string, Dictionary<string, dynamic>>
+        var allowDescribeSessionsConditions = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringEquals"] = new() { ["ssm:DocumentName"] = "AWS-StartPortForwardingSessionToRemoteHost" },
         };
@@ -48,15 +48,15 @@ public class PUMUsersStackComposer : BaseStackComposer<PUMUsersStackConfig>
         var role = stack.WithRole(name, role =>
         {
             role.MaxSessionDuration = 3600;
-            role.ManagedPolicyArns = new List<dynamic> { policy.FFnREF() };
+            role.ManagedPolicyArns = new List<Union<string, BaseFunction>> { policy.FFnREF() };
         });
 
-        var describeSessionsPrinciple = new Dictionary<string, dynamic>()
+        var describeSessionsPrinciple = new Dictionary<string, object>()
         {
             { "Federated", $"arn:aws:iam::{Environment.AWSAccountId}:saml-provider/ADFS" }
         };
 
-        var assumeRoleWithSAMLConditions = new Dictionary<string, Dictionary<string, dynamic>>
+        var assumeRoleWithSAMLConditions = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringEquals"] = new() { ["SAML:aud"] = "https://signin.aws.amazon.com/saml" },
         };

@@ -179,8 +179,8 @@ public class LoadBalancerStackComposer : BaseStackComposer<LoadbalancerStackConf
             record.HostedZoneName = $"{Environment.EnvironmentName}-applestore.example.";
             record.Type = "CNAME";
             record.Name = $"loadbalancer.{Environment.EnvironmentName}-applestore.example";
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(loadBalancer.T1, "DNSName") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(loadBalancer.T1, "DNSName") };
         });
 
         var export = new ExportModel { ecsTargetGroup.T1 };

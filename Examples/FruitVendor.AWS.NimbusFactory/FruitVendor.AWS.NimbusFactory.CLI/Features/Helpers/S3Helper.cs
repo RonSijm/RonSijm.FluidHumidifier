@@ -8,7 +8,7 @@ public static class S3Helper
 {
     public static void WithPublicCloudFrontPolicy(StackFactory stack, string name, BucketFactory environmentVarBucket)
     {
-        //var condition = new Dictionary<string, Dictionary<string, dynamic>>
+        //var condition = new Dictionary<string, Dictionary<string, object>>
         //{
         //    ["StringLike"] = new()
         //    {
@@ -27,7 +27,7 @@ public static class S3Helper
                     new
                     {
                         Effect = "Allow",
-                        // Principal = new { Service = "cloudfront.amazonaws.com"},
+                        // Principal = new PolicyPrincipal { Service = "cloudfront.amazonaws.com"},
                         Principal = "*",
                         Action = new[] { "s3:GetObject" },
                         Resource = new[] { $"arn:aws:s3:::{name}/*" },
@@ -105,8 +105,8 @@ public static class S3Helper
             record.HostedZoneName = "fruitvendor.example.";
             record.Type = "CNAME";
             record.Name = domain;
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(distribution, "DomainName") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(distribution, "DomainName") };
             record.ResourceName = $"{domain}-cname";
         });
 
@@ -143,10 +143,7 @@ public static class S3Helper
                 ObjectOwnership = "BucketOwnerEnforced"
             };
 
-            owner.Rules =
-            [
-                rule
-            ];
+            owner.Rules = new[] { rule };
         });
 
         if (asWebsite)

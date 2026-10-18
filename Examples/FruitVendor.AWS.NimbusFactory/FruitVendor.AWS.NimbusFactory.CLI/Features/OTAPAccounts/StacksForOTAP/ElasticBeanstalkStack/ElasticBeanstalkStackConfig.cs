@@ -7,25 +7,25 @@ public class ElasticBeanstalkStackConfig
 {
     public ElasticBeanstalkStackConfig()
     {
-        VPCId = new WithFallback<dynamic>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.VPC).ImportValue());
+        VPCId = new WithFallback<StringValue>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.VPC).ImportValue());
 
-        Subnets = new WithFallback<dynamic>(() => (new List<dynamic>
+        Subnets = new WithFallback<StringListValue>(() => (new List<Union<string, BaseFunction>>
         {
             Fn.ImportValue($"{ResourceConfigSettings.BackendName}SubnetAZA"),
             Fn.ImportValue($"{ResourceConfigSettings.BackendName}SubnetAZB"),
             Fn.ImportValue($"{ResourceConfigSettings.BackendName}SubnetAZC"),
         }).ToArray());
 
-        LoadBalancerSubnets = new WithFallback<dynamic>(() => (new List<dynamic>
+        LoadBalancerSubnets = new WithFallback<StringListValue>(() => (new List<Union<string, BaseFunction>>
         {
             Fn.ImportValue($"{ResourceConfigSettings.ServiceName}LBSubnetAZA"),
             Fn.ImportValue($"{ResourceConfigSettings.ServiceName}LBSubnetAZB"),
             Fn.ImportValue($"{ResourceConfigSettings.ServiceName}LBSubnetAZC"),
         }).ToArray());
 
-        //SecurityGroups = new WithFallback<dynamic>(() => new List<dynamic>
+        //SecurityGroups = new WithFallback<StringListValue>(() => new List<Union<string, BaseFunction>>
         //{
-        //    Import?.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.Contains(ResourceConfigSettings.BackendName + "-SecurityGroup")).ImportValue()
+        //    Import?.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.GetLiteral().Contains(ResourceConfigSettings.BackendName + "-SecurityGroup")).ImportValue()
         //});
     }
 
@@ -35,9 +35,9 @@ public class ElasticBeanstalkStackConfig
     public int MinInstances { get; set; } = 1;
     public int MaxInstances { get; set; } = 2;
     public bool EnableLoadBalancer { get; set; } = true;
-    public WithFallback<dynamic> SecurityGroups { get; set; }
-    public WithFallback<dynamic> Subnets { get; set; }
-    public WithFallback<dynamic> LoadBalancerSubnets { get; set; }
-    public WithFallback<dynamic> VPCId { get; set; }
+    public WithFallback<StringListValue> SecurityGroups { get; set; }
+    public WithFallback<StringListValue> Subnets { get; set; }
+    public WithFallback<StringListValue> LoadBalancerSubnets { get; set; }
+    public WithFallback<StringValue> VPCId { get; set; }
     public Dictionary<string, string> EnvironmentVariables { get; set; } = new();
 } 

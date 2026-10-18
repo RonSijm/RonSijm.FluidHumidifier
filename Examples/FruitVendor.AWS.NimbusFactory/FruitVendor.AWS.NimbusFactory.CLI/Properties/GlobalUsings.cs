@@ -21,3 +21,6 @@ global using RonSijm.FluidHumidifier.Features.Factories.Base;
 global using RonSijm.FluidHumidifier.Features.Output;
 global using RonSijm.FluidHumidifier.Github;
 global using Humidifier.Json.Serializer;
+global using StringValue = Humidifier.Union<string, Humidifier.BaseFunction>?;
+global using StringListValue = Humidifier.Union<System.Collections.Generic.IReadOnlyList<string>, System.Collections.Generic.IReadOnlyList<Humidifier.Union<string, Humidifier.BaseFunction>>, Humidifier.BaseFunction>?;
+global using RonSijm.FluidHumidifier.Features.Helpers;

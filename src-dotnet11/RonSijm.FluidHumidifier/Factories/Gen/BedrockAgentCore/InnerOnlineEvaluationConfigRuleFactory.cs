@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.BedrockAgentCore;
+
+public class InnerOnlineEvaluationConfigRuleFactory(Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule> factoryAction = null) : SubResourceFactory<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule>
+{
+
+    internal InnerOnlineEvaluationConfigSessionConfigFactory SessionConfigFactory { get; set; }
+
+    internal InnerOnlineEvaluationConfigSamplingConfigFactory SamplingConfigFactory { get; set; }
+
+    protected override Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule Create()
+    {
+        var ruleResult = CreateRule();
+        factoryAction?.Invoke(ruleResult);
+
+        return ruleResult;
+    }
+
+    private Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule CreateRule()
+    {
+        var ruleResult = new Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule();
+
+        return ruleResult;
+    }
+    public override void CreateChildren(Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.Rule result)
+    {
+        base.CreateChildren(result);
+
+        result.SessionConfig ??= SessionConfigFactory?.Build();
+        result.SamplingConfig ??= SamplingConfigFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerOnlineEvaluationConfigRuleFactoryExtensions
+{
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig(this InnerOnlineEvaluationConfigRuleFactory parentFactory, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null)
+    {
+        parentFactory.SessionConfigFactory = new InnerOnlineEvaluationConfigSessionConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.SessionConfigFactory);
+    }
+
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig(this InnerOnlineEvaluationConfigRuleFactory parentFactory, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null)
+    {
+        parentFactory.SamplingConfigFactory = new InnerOnlineEvaluationConfigSamplingConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.SamplingConfigFactory);
+    }
+
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSessionConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSessionConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, T4, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3, T4>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, T4, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3, T4>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, T4, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, T4, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSessionConfigFactory> WithSessionConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SessionConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSessionConfig(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSamplingConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSamplingConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, T4, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3, T4>(this CombinedResult<InnerOnlineEvaluationConfigRuleFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, T4, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3, T4>(this CombinedResult<T1, InnerOnlineEvaluationConfigRuleFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, T4, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerOnlineEvaluationConfigRuleFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, T4, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerOnlineEvaluationConfigRuleFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerOnlineEvaluationConfigRuleFactory, InnerOnlineEvaluationConfigSamplingConfigFactory> WithSamplingConfig<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerOnlineEvaluationConfigRuleFactory> combinedResult, Action<Humidifier.BedrockAgentCore.OnlineEvaluationConfigTypes.SamplingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSamplingConfig(combinedResult.T5, subFactoryAction).T2);
+}

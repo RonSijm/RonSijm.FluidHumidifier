@@ -1,0 +1,57 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.BedrockAgentCore;
+
+public class InnerMemoryUserPreferenceMemoryStrategyFactory(Action<Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy> factoryAction = null) : SubResourceFactory<Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy>
+{
+
+    internal InnerMemoryMemoryRecordSchemaFactory MemoryRecordSchemaFactory { get; set; }
+
+    protected override Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy Create()
+    {
+        var userPreferenceMemoryStrategyResult = CreateUserPreferenceMemoryStrategy();
+        factoryAction?.Invoke(userPreferenceMemoryStrategyResult);
+
+        return userPreferenceMemoryStrategyResult;
+    }
+
+    private Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy CreateUserPreferenceMemoryStrategy()
+    {
+        var userPreferenceMemoryStrategyResult = new Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy();
+
+        return userPreferenceMemoryStrategyResult;
+    }
+    public override void CreateChildren(Humidifier.BedrockAgentCore.MemoryTypes.UserPreferenceMemoryStrategy result)
+    {
+        base.CreateChildren(result);
+
+        result.MemoryRecordSchema ??= MemoryRecordSchemaFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerMemoryUserPreferenceMemoryStrategyFactoryExtensions
+{
+    public static CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema(this InnerMemoryUserPreferenceMemoryStrategyFactory parentFactory, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null)
+    {
+        parentFactory.MemoryRecordSchemaFactory = new InnerMemoryMemoryRecordSchemaFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.MemoryRecordSchemaFactory);
+    }
+
+    public static CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1>(this CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1>(this CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2>(this CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2>(this CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2>(this CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2, T3, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3>(this CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2, T3, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3>(this CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory, T3, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3>(this CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerMemoryUserPreferenceMemoryStrategyFactory, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerMemoryUserPreferenceMemoryStrategyFactory> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2, T3, T4, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3, T4>(this CombinedResult<InnerMemoryUserPreferenceMemoryStrategyFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2, T3, T4, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3, T4>(this CombinedResult<T1, InnerMemoryUserPreferenceMemoryStrategyFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory, T3, T4, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerMemoryUserPreferenceMemoryStrategyFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerMemoryUserPreferenceMemoryStrategyFactory, T4, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerMemoryUserPreferenceMemoryStrategyFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerMemoryUserPreferenceMemoryStrategyFactory, InnerMemoryMemoryRecordSchemaFactory> WithMemoryRecordSchema<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerMemoryUserPreferenceMemoryStrategyFactory> combinedResult, Action<Humidifier.BedrockAgentCore.MemoryTypes.MemoryRecordSchema> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithMemoryRecordSchema(combinedResult.T5, subFactoryAction).T2);
+}

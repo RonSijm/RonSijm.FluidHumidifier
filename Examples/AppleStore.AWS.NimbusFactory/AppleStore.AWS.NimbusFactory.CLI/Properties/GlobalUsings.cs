@@ -29,3 +29,6 @@ global using AppleStore.AWS.NimbusFactory.CLI.Features.AssetsAccount.AssetEnviro
 global using AppleStore.AWS.NimbusFactory.CLI.Features.OTAPAccounts.OTAPEnvironmentComposer;
 global using AppleStore.AWS.NimbusFactory.CLI.Features.POCAccount.POCEnvironmentComposer;
 global using Humidifier.Json.Serializer;
+global using StringValue = Humidifier.Union<string, Humidifier.BaseFunction>?;
+global using StringListValue = Humidifier.Union<System.Collections.Generic.IReadOnlyList<string>, System.Collections.Generic.IReadOnlyList<Humidifier.Union<string, Humidifier.BaseFunction>>, Humidifier.BaseFunction>?;
+global using RonSijm.FluidHumidifier.Features.Helpers;

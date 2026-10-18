@@ -22,8 +22,8 @@ public class TestCreateECSServicesStackFactoryWithInjectedProperty : BaseBuilder
         var ecsServiceStackConfig = new ECSServiceStackConfig()
         {
             AssetsAccountId = "111111111111",
-            LoadBalancer = new WithFallback<dynamic>("LB"),
-            DockerSubnets = new WithFallback<dynamic>("DSB"),
+            LoadBalancer = new WithFallback<StringValue>("LB"),
+            DockerSubnets = new WithFallback<StringListValue>(Fn.Literal("DSB")),
             TaskRole = new WithFallback<RoleFactory>(roleFactory),
             CreateServices = true,
         };
@@ -63,7 +63,7 @@ public class TestCreateECSServicesStackFactoryWithImportedTargetGroupProperty : 
         {
             AssetsAccountId = "111111111111",
             Import = new ImportModel(ecsTargetGroup),
-            DockerSubnets = new WithFallback<dynamic>("DSB"),
+            DockerSubnets = new WithFallback<StringListValue>(Fn.Literal("DSB")),
             TaskRole = new WithFallback<RoleFactory>(roleFactory)
         };
 

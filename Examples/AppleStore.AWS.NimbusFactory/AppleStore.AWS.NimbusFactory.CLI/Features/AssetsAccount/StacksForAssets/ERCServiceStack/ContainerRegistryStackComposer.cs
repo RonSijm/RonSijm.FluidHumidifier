@@ -13,7 +13,7 @@ public class ContainerRegistryStackComposer : BaseStackComposer<ContainerRegistr
             config.RepositoryName = ECRServiceConfig.RepositoryName;
         });
 
-        var condition = new Dictionary<string, Dictionary<string, dynamic>>
+        var condition = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringEquals"] = new() { ["aws:PrincipalArn"] = config.ExternalAccountIdsWithAccess.Select(x => $"arn:aws:iam::{x.AWSAccountId}:role/{ResourceConfigSettings.AccessToAssetsRoleName(x.EnvironmentName)}").ToList() },
         };
@@ -30,8 +30,7 @@ public class ContainerRegistryStackComposer : BaseStackComposer<ContainerRegistr
         var roleFactory = stack.WithRole(ResourceConfigSettings.AccessToAssetsRoleName(Environment.EnvironmentName));
 
         roleFactory.WithAssumeRolePolicy()
-            .WithStatement("sts:AssumeRole", principle: new
-            {
+            .WithStatement("sts:AssumeRole", principle: new PolicyPrincipal {
                 AWS = config.ExternalAccountIdsWithAccess.Select(x => $"arn:aws:iam::{x.AWSAccountId}:root").ToList()
             });
 

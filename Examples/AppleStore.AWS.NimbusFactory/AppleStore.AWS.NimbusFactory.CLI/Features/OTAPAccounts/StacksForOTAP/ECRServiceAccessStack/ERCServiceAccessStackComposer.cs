@@ -19,7 +19,7 @@ public class ERCServiceAccessStackComposer : BaseStackComposer<ERCServiceAccessS
         var role = stack.WithRole(ResourceConfigSettings.AccessToAssetsRoleName(Environment.EnvironmentName), roleConfig =>
         {
             roleConfig.MaxSessionDuration = 3600;
-            roleConfig.ManagedPolicyArns = new List<dynamic>
+            roleConfig.ManagedPolicyArns = new List<Union<string, BaseFunction>>
             {
                 ecsTaskExecutionRolePolicy.FFnREF(),
                 getEnvironmentVariablesPolicy.FFnREF()
@@ -29,10 +29,10 @@ public class ERCServiceAccessStackComposer : BaseStackComposer<ERCServiceAccessS
 
         var assumeRolePolicy = role.WithAssumeRolePolicy();
 
-        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new { Service = "ecs-tasks.amazonaws.com" });
-        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new { AWS = $"arn:aws:iam::{config.AssetAccountId}:root" });
-        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new { AWS = $"arn:aws:iam::{Environment.AWSAccountId}:root" });
-        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new { AWS = $"arn:aws:iam::{config.AssetAccountId}:role/{ResourceConfigSettings.AccessToAssetsRoleName(AccountConfigSettings.AssetAccountName)}" });
+        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "ecs-tasks.amazonaws.com" });
+        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { AWS = $"arn:aws:iam::{config.AssetAccountId}:root" });
+        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { AWS = $"arn:aws:iam::{Environment.AWSAccountId}:root" });
+        assumeRolePolicy.WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { AWS = $"arn:aws:iam::{config.AssetAccountId}:role/{ResourceConfigSettings.AccessToAssetsRoleName(AccountConfigSettings.AssetAccountName)}" });
 
         var export = new ExportModel { role };
 

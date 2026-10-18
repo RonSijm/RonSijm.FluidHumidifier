@@ -1,0 +1,103 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.ElementalInference;
+
+public class InnerFeedOutputConfigFactory(Action<Humidifier.ElementalInference.FeedTypes.OutputConfig> factoryAction = null) : SubResourceFactory<Humidifier.ElementalInference.FeedTypes.OutputConfig>
+{
+
+    internal InnerFeedClippingConfigFactory ClippingFactory { get; set; }
+
+    internal InnerFeedSubtitlingConfigFactory SubtitlingFactory { get; set; }
+
+    internal InnerFeedCroppingConfigFactory CroppingFactory { get; set; }
+
+    protected override Humidifier.ElementalInference.FeedTypes.OutputConfig Create()
+    {
+        var outputConfigResult = CreateOutputConfig();
+        factoryAction?.Invoke(outputConfigResult);
+
+        return outputConfigResult;
+    }
+
+    private Humidifier.ElementalInference.FeedTypes.OutputConfig CreateOutputConfig()
+    {
+        var outputConfigResult = new Humidifier.ElementalInference.FeedTypes.OutputConfig();
+
+        return outputConfigResult;
+    }
+    public override void CreateChildren(Humidifier.ElementalInference.FeedTypes.OutputConfig result)
+    {
+        base.CreateChildren(result);
+
+        result.Clipping ??= ClippingFactory?.Build();
+        result.Subtitling ??= SubtitlingFactory?.Build();
+        result.Cropping ??= CroppingFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerFeedOutputConfigFactoryExtensions
+{
+    public static CombinedResult<InnerFeedOutputConfigFactory, InnerFeedClippingConfigFactory> WithClipping(this InnerFeedOutputConfigFactory parentFactory, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null)
+    {
+        parentFactory.ClippingFactory = new InnerFeedClippingConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ClippingFactory);
+    }
+
+    public static CombinedResult<InnerFeedOutputConfigFactory, InnerFeedSubtitlingConfigFactory> WithSubtitling(this InnerFeedOutputConfigFactory parentFactory, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null)
+    {
+        parentFactory.SubtitlingFactory = new InnerFeedSubtitlingConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.SubtitlingFactory);
+    }
+
+    public static CombinedResult<InnerFeedOutputConfigFactory, InnerFeedCroppingConfigFactory> WithCropping(this InnerFeedOutputConfigFactory parentFactory, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null)
+    {
+        parentFactory.CroppingFactory = new InnerFeedCroppingConfigFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.CroppingFactory);
+    }
+
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, InnerFeedClippingConfigFactory> WithClipping<T1>(this CombinedResult<InnerFeedOutputConfigFactory, T1> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithClipping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, InnerFeedClippingConfigFactory> WithClipping<T1>(this CombinedResult<T1, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithClipping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, InnerFeedClippingConfigFactory> WithClipping<T1, T2>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, InnerFeedClippingConfigFactory> WithClipping<T1, T2>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, InnerFeedClippingConfigFactory> WithClipping<T1, T2>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3, T4>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3, T4>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory, InnerFeedClippingConfigFactory> WithClipping<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.ClippingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithClipping(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1>(this CombinedResult<InnerFeedOutputConfigFactory, T1> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSubtitling(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1>(this CombinedResult<T1, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithSubtitling(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3, T4>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3, T4>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory, InnerFeedSubtitlingConfigFactory> WithSubtitling<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.SubtitlingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSubtitling(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, InnerFeedCroppingConfigFactory> WithCropping<T1>(this CombinedResult<InnerFeedOutputConfigFactory, T1> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithCropping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, InnerFeedCroppingConfigFactory> WithCropping<T1>(this CombinedResult<T1, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, WithCropping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, InnerFeedCroppingConfigFactory> WithCropping<T1, T2>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, InnerFeedCroppingConfigFactory> WithCropping<T1, T2>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, InnerFeedCroppingConfigFactory> WithCropping<T1, T2>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3, T4>(this CombinedResult<InnerFeedOutputConfigFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3, T4>(this CombinedResult<T1, InnerFeedOutputConfigFactory, T2, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerFeedOutputConfigFactory, T3, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerFeedOutputConfigFactory, T4> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory, InnerFeedCroppingConfigFactory> WithCropping<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerFeedOutputConfigFactory> combinedResult, Action<Humidifier.ElementalInference.FeedTypes.CroppingConfig> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCropping(combinedResult.T5, subFactoryAction).T2);
+}

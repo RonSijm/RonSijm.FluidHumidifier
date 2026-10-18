@@ -54,8 +54,8 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
                 new()
                 {
                     Protocol = "tcp",
-                    HostPort = PortConfig.PumaPort.ToString(),
-                    ContainerPort = PortConfig.PumaPort.ToString(),
+                    HostPort = Fn.Literal(PortConfig.PumaPort.ToString()),
+                    ContainerPort = Fn.Literal(PortConfig.PumaPort.ToString()),
                     AppProtocol = "http"
                 }
             };
@@ -89,7 +89,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
         });
 
         autoScaleRole.WithAssumeRolePolicy()
-            .WithStatement("sts:AssumeRole", principle: new { Service = "application-autoscaling.amazonaws.com" });
+            .WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "application-autoscaling.amazonaws.com" });
 
         InnerRolePolicyFactory policy = autoScaleRole.WithPolicies();
 
@@ -125,7 +125,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
             {
                 PredefinedMetricType = "ECSServiceAverageCPUUtilization"
             };
-            targetTrackingScalingPolicyConfiguration.TargetValue = 80;
+            targetTrackingScalingPolicyConfiguration.TargetValue = Fn.Literal(80);
             targetTrackingScalingPolicyConfiguration.ScaleInCooldown = 600;
             targetTrackingScalingPolicyConfiguration.ScaleOutCooldown = 60;
         });
@@ -141,7 +141,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
             {
                 PredefinedMetricType = "ECSServiceAverageMemoryUtilization"
             };
-            targetTrackingScalingPolicyConfiguration.TargetValue = 80;
+            targetTrackingScalingPolicyConfiguration.TargetValue = Fn.Literal(80);
             targetTrackingScalingPolicyConfiguration.ScaleInCooldown = 600;
             targetTrackingScalingPolicyConfiguration.ScaleOutCooldown = 60;
         });
@@ -285,7 +285,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
         }
     }
 
-    private void CreateContainerDefinition(ECSServiceStackConfig config, ContainerDefinition containerDefinition, string sidekiqServiceName, dynamic command = null, dynamic entryPoint = null, List<PortMapping> portMapping = null, List<KeyValuePair> environment = null, string username = null)
+    private void CreateContainerDefinition(ECSServiceStackConfig config, ContainerDefinition containerDefinition, string sidekiqServiceName, StringListValue command = null, StringListValue entryPoint = null, List<PortMapping> portMapping = null, List<KeyValuePair> environment = null, string username = null)
     {
         containerDefinition.Name = $"{sidekiqServiceName}-ContainerDefinition";
         containerDefinition.Command = command;
@@ -293,26 +293,24 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
         containerDefinition.Environment = environment;
         containerDefinition.User = username;
 
-        containerDefinition.EnvironmentFiles =
-        [
+        containerDefinition.EnvironmentFiles = new EnvironmentFile[] {
             new EnvironmentFile
             {
                 Type = "s3",
                 Value = $"arn:aws:s3:::{ResourceConfigSettings.ConceptNameLower}-{Environment.EnvironmentName}-webapp-{ResourceConfigSettings.EnvVarBucketName}/{ResourceConfigSettings.ConceptNameLower}-webapp.env"
             }
-        ];
+        };
 
         containerDefinition.Essential = true;
         containerDefinition.Image = $"{config.AssetsAccountId}.dkr.ecr.{AWSConfigSettings.AssetsRegion}.amazonaws.com/{ECRServiceConfig.RepositoryName}:{Environment.GetDockerImageTag()}";
-        containerDefinition.MountPoints =
-        [
+        containerDefinition.MountPoints = new MountPoint[] {
             new MountPoint
             {
                 ContainerPath = "/webapp/log",
                 ReadOnly = false,
                 SourceVolume = "log"
             }
-        ];
+        };
 
         containerDefinition.PortMappings = portMapping;
 
@@ -407,7 +405,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
         {
             taskDefinition.WithEphemeralStorage(x =>
             {
-                x.SizeInGiB = storageInGb.Value.ToString();
+                x.SizeInGiB = Fn.Literal(storageInGb.Value.ToString());
             });
         }
 
@@ -418,7 +416,7 @@ public class ECSServiceStackComposer : BaseStackComposer<ECSServiceStackConfig>
             containerDefinitions.WithLogConfiguration(logging =>
             {
                 logging.LogDriver = "awslogs";
-                logging.Options = new Dictionary<string, dynamic>
+                logging.Options = new Dictionary<string, Union<string, BaseFunction>>
                 {
                     { "awslogs-group", $"/ecs/{serviceName}" },
                     { "awslogs-create-group", "true" },

@@ -10,76 +10,57 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
     - name: Checkout FluidHumidifier
       uses: actions/checkout@v7
-
     - name: Checkout Humidifier
       uses: actions/checkout@v7
       with:
         repository: RonSijm/RonSijm.Humidifier
         path: upstream-humidifier
-
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v6
+    - uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: '10.0.x'
-
-    - name: Check Humidifier version
-      id: version_check
+        global-json-file: src/global.json
+    - uses: actions/setup-dotnet@v6
+      with:
+        global-json-file: src-dotnet11/global.json
+    - name: Update each source track from the matching Humidifier track
       shell: bash
-      run: |
-        HUMIDIFIER_VERSION_PREFIX=$(cat upstream-humidifier/src/version.txt)
-        HUMIDIFIER_SPEC_VERSION=$(cat upstream-humidifier/src/spec-version.txt)
-        HUMIDIFIER_SPEC_VERSION_COMPACT=$(echo "$HUMIDIFIER_SPEC_VERSION" | tr -d '.')
-        HUMIDIFIER_VERSION="${HUMIDIFIER_VERSION_PREFIX}.${HUMIDIFIER_SPEC_VERSION_COMPACT}"
-        CURRENT_VERSION=$(cat src/humidifier-version.txt)
-
-        echo "HUMIDIFIER_VERSION=$HUMIDIFIER_VERSION" >> "$GITHUB_ENV"
-        echo "HUMIDIFIER_SPEC_VERSION=$HUMIDIFIER_SPEC_VERSION" >> "$GITHUB_ENV"
-
-        if [ "$CURRENT_VERSION" = "$HUMIDIFIER_VERSION" ]; then
-          echo "FluidHumidifier already targets Humidifier $HUMIDIFIER_VERSION"
-          echo "changed=false" >> "$GITHUB_OUTPUT"
-        else
-          echo "Humidifier changed from $CURRENT_VERSION to $HUMIDIFIER_VERSION"
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-        fi
-
-    - name: Restore generator dependencies
-      if: steps.version_check.outputs.changed == 'true'
       env:
         HumidifierRepositoryRoot: ${{ github.workspace }}/upstream-humidifier
-      run: dotnet restore src/RonSijm.FluidHumidifier.CodeGen/RonSijm.FluidHumidifier.CodeGen.CLI.csproj
-
-    - name: Regenerate FluidHumidifier
-      if: steps.version_check.outputs.changed == 'true'
-      env:
-        HumidifierRepositoryRoot: ${{ github.workspace }}/upstream-humidifier
-      run: dotnet run --project src/RonSijm.FluidHumidifier.CodeGen/RonSijm.FluidHumidifier.CodeGen.CLI.csproj --configuration Release --framework net10.0 --no-launch-profile -- -ForceRegenerate -NoUpdateCheck -directory "$GITHUB_WORKSPACE/upstream-humidifier/src"
-
-    - name: Record Humidifier version
-      if: steps.version_check.outputs.changed == 'true'
-      shell: bash
       run: |
-        echo "$HUMIDIFIER_VERSION" > src/humidifier-version.txt
-        echo "$HUMIDIFIER_SPEC_VERSION" > src/humidifier-spec-version.txt
-
-    - name: Verify published Humidifier dependency
-      if: steps.version_check.outputs.changed == 'true'
-      run: dotnet restore src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj /p:UseHumidifierProjectReference=false
-
-    - name: Build FluidHumidifier
-      if: steps.version_check.outputs.changed == 'true'
-      run: dotnet build src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj --configuration Release --no-restore /p:UseHumidifierProjectReference=false /p:GeneratePackageOnBuild=false
-
-    - name: Commit changes
-      if: steps.version_check.outputs.changed == 'true'
+        for SOURCE in src src-dotnet11; do
+          UPSTREAM="$GITHUB_WORKSPACE/upstream-humidifier/$SOURCE"
+          VERSION="$(cat "$UPSTREAM/version.txt").$(tr -d '.' < "$UPSTREAM/spec-version.txt")"
+          if [ -f "$UPSTREAM/version-suffix.txt" ]; then VERSION="$VERSION-$(cat "$UPSTREAM/version-suffix.txt")"; fi
+          if [ "$(cat "$SOURCE/humidifier-version.txt")" = "$VERSION" ]; then continue; fi
+          FRAMEWORK=net10.0
+          if [ "$SOURCE" = src-dotnet11 ]; then FRAMEWORK=net11.0; fi
+          (
+            cd "$SOURCE"
+            dotnet run --project RonSijm.FluidHumidifier.CodeGen -c Release -f "$FRAMEWORK" --no-launch-profile -- -ForceRegenerate -NoUpdateCheck -directory "$UPSTREAM"
+            printf '%s\n' "$VERSION" > humidifier-version.txt
+            cp "$UPSTREAM/spec-version.txt" humidifier-spec-version.txt
+            dotnet restore RonSijm.FluidHumidifier -p:UseHumidifierProjectReference=false
+            dotnet build RonSijm.FluidHumidifier -c Release --no-restore -p:UseHumidifierProjectReference=false -p:GeneratePackageOnBuild=false
+          )
+        done
+    - name: Commit updates to both tracks
       shell: bash
       run: |
         git config user.email "RonSijm@Github.Action"
         git config user.name "Ron Sijm"
-        git add --all
-        git commit -m "Automated update for RonSijm.Humidifier version $HUMIDIFIER_VERSION"
-        git push origin main
+        git add src src-dotnet11
+        if git diff --cached --quiet; then
+          echo "No upstream changes to commit. Package versions will still be checked."
+        else
+          git commit -m "Automated update from Humidifier"
+          git push origin main
+        fi
+
+  publish:
+    needs: update
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/build-and-publish-nuget.yml

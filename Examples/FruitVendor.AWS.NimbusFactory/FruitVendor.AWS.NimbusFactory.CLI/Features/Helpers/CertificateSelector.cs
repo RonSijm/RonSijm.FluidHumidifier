@@ -2,12 +2,12 @@ namespace FruitVendor.AWS.NimbusFactory.CLI.Features.Helpers;
 
 public static class CertificateSelector
 {
-    public static dynamic GetCertificateArnFromRegion(string environmentName)
+    public static string GetCertificateArnFromRegion(string environmentName)
     {
         throw new NotImplementedException();
     }
 
-    public static dynamic GetCertificateArnFromGlobal(string environmentName)
+    public static string GetCertificateArnFromGlobal(string environmentName)
     {
         if (environmentName == "fruitvendor-prod")
         {

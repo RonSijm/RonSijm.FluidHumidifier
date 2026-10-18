@@ -34,7 +34,7 @@ public class SlackLoggerStackComposer : BaseStackComposer<SlackLoggerStackConfig
                   x.S3Key = "LambdaLoggerCode.zip";
               }).WithEnvironment(env =>
                 {
-                    env.Variables = new Dictionary<string, dynamic>
+                    env.Variables = new Dictionary<string, Union<string, BaseFunction>>
                         {
                             { "channel", loggingName }
                         };

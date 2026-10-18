@@ -40,7 +40,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         var document = policies.WithDocument();
         document.WithStatement(["logs:CreateLogGroup", "logs:PutRetentionPolicy"], resource: "arn:aws:logs:*:*:log-group:RDS*", sid: "EnableCreationAndManagementOfRDSCloudwatchLogGroups");
         document.WithStatement(["logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams", "logs:GetLogEvents"], resource: "arn:aws:logs:*:*:log-group:RDS*:log-stream:*", sid: "EnableCreationAndManagementOfRDSCloudwatchLogStreams");
-        roleFactory.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new { Service = "monitoring.rds.amazonaws.com" });
+        roleFactory.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "monitoring.rds.amazonaws.com" });
 
         stack.WithRDSDBInstance($"applestore-{Environment.EnvironmentName}-postgres-instance-1", x =>
         {
@@ -75,28 +75,27 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             bvConfig.EncryptionKeyArn = Environment.GetKMSKeyArm(AWSConfigSettings.DefaultRegion);
         });
 
-        var backupBackupVaultFactory = config.BackupDestinationVault.Value as FFnImportValue;
+        var backupBackupVaultFactory = UnionValue.Unwrap(config.BackupDestinationVault.Value) as FFnImportValue;
         var backupBackupVault = backupBackupVaultFactory.Result.Result;
 
         var backupPlan = stack.WithBackupPlan("PostgreSQL-BackupPlan")
             .WithBackupPlan_(x =>
             {
                 x.BackupPlanName = "PostgreSQL-BackupPlan";
-                x.BackupPlanRule =
-                [
+                x.BackupPlanRule = new BackupRuleResourceType[] {
                     new BackupRuleResourceType()
                     {
                         RuleName = "DailyBackup",
                         TargetBackupVault = backupVault.FFnREF(),
                         ScheduleExpression = "cron(0 12 * * ? *)",
-                        StartWindowMinutes = 60,
-                        CompletionWindowMinutes = 10080,
+                        StartWindowMinutes = Fn.Literal(60),
+                        CompletionWindowMinutes = Fn.Literal(10080),
                         Lifecycle = new LifecycleResourceType()
                         {
-                            MoveToColdStorageAfterDays = 7,
-                            DeleteAfterDays = 100
+                            MoveToColdStorageAfterDays = Fn.Literal(7),
+                            DeleteAfterDays = Fn.Literal(100)
                         },
-                        RecoveryPointTags = new Dictionary<string, dynamic>
+                        RecoveryPointTags = new Dictionary<string, string>
                         {
                             { "App", "PostgreSQL-DB" }
                         },
@@ -106,13 +105,13 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
                             {
                                 Lifecycle = new LifecycleResourceType()
                                 {
-                                    DeleteAfterDays = 100
+                                    DeleteAfterDays = Fn.Literal(100)
                                 },
                                 DestinationBackupVaultArn = $"arn:aws:backup:{AWSConfigSettings.BackupRegion}:{Environment.AWSAccountId}:backup-vault:{backupBackupVault.GivenName}"
                             }
                         }
                     }
-                ];
+                };
             });
 
         var backupRole = CreateBackupRole(stack);
@@ -126,7 +125,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         {
             x.SelectionName = "PostgreSQL-BackupSelection";
             x.IamRoleArn = backupRole.FFnGetARN();
-            x.Resources = new List<dynamic>
+            x.Resources = new List<Union<string, BaseFunction>>
             {
                 // TODO: This is a bit fucked up to do. Maybe invent a better function
                 posgresCluster.FFnRawFunc(itemName=> $"{{\"Fn::Sub\": \"arn:aws:rds:${{AWS::Region}}:${{AWS::AccountId}}:cluster:${{{itemName}}}\"}}")
@@ -141,8 +140,8 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             record.HostedZoneName = $"{Environment.EnvironmentName}-applestore.example.";
             record.Type = "CNAME";
             record.Name = $"database.{Environment.EnvironmentName}-applestore.example";
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(posgresCluster, "Endpoint.Address") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(posgresCluster, "Endpoint.Address") };
         });
 
         var stackResult = environmentFactory.Build().First();
@@ -164,7 +163,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -179,7 +178,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -194,7 +193,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -209,7 +208,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -240,10 +239,10 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         var backupRole = stack.WithRole("PostgreSQL-BackupRole", roleConfig =>
         {
             roleConfig.MaxSessionDuration = 3600;
-            roleConfig.ManagedPolicyArns = new List<dynamic> { backupPolicy.FFnREF() };
+            roleConfig.ManagedPolicyArns = new List<Union<string, BaseFunction>> { backupPolicy.FFnREF() };
         });
 
-        backupRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new { Service = "backup.amazonaws.com" });
+        backupRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "backup.amazonaws.com" });
 
         return backupRole;
     }

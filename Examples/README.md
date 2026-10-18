@@ -9,18 +9,18 @@ Project names, namespaces, resource names, DNS names, account IDs, certificate a
 
 ## Build and test
 
-Use the .NET 10 SDK. The examples reference this repository's projects under `src` and the Humidifier projects in a sibling checkout:
+Use the .NET 11 preview SDK pinned in `global.json`. The examples reference this repository's projects under `src-dotnet11` and the Humidifier projects in a sibling checkout:
 
 ```text
 workspace/
   RonSijm.FluidHumidifier/
     Examples/
-    src/
+    src-dotnet11/
   RonSijm.Humidifier/
-    src/
+    src-dotnet11/
 ```
 
-Run these commands from the FluidHumidifier repository root. Changing to the examples directory selects the stable SDK configured by its `global.json`:
+Run these commands from the FluidHumidifier repository root. Changing to the examples directory selects the preview SDK configured by its `global.json`:
 
 ```powershell
 cd Examples
@@ -33,6 +33,8 @@ dotnet test FruitVendor.AWS.NimbusFactory/FruitVendor.AWS.NimbusFactory.Nugets.s
 The `LocalDev.sln` variants additionally show the library and code-generation projects. The focused `Nugets.sln` variants contain the application and its tests; the applications still use source references for the FluidHumidifier projects.
 
 The template-validation integration tests also require `cfn-lint` on PATH.
+
+To check the full CLI output against the output captured before the union migration, run `./Examples/Verify-GeneratedOutput.ps1` from the repository root using PowerShell 7 on Windows. Use `-NoBuild` to check an existing Release build. This checks all 58 generated files, including CloudFormation templates, deployment scripts, and GitHub workflows. Only the absolute generation directory embedded in batch scripts is normalized.
 
 ## Generate templates
 

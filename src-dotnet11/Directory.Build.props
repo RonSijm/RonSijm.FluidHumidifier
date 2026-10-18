@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <FluidHumidifierSourceRoot>$(MSBuildThisFileDirectory)</FluidHumidifierSourceRoot>
+    <HumidifierSourceDirectory>src-dotnet11</HumidifierSourceDirectory>
+  </PropertyGroup>
+  <Import Project="../Directory.Build.props" />
+</Project>

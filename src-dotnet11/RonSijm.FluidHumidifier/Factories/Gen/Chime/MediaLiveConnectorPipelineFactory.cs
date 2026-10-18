@@ -1,0 +1,83 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.Chime;
+
+public class MediaLiveConnectorPipelineFactory(string resourceName = null, Action<Humidifier.Chime.MediaLiveConnectorPipeline> factoryAction = null) : ResourceFactory<Humidifier.Chime.MediaLiveConnectorPipeline>(resourceName)
+{
+
+    internal List<InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> SinksFactories { get; set; } = [];
+
+    internal List<InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> SourcesFactories { get; set; } = [];
+
+    protected override Humidifier.Chime.MediaLiveConnectorPipeline Create()
+    {
+        var mediaLiveConnectorPipelineResult = CreateMediaLiveConnectorPipeline();
+        factoryAction?.Invoke(mediaLiveConnectorPipelineResult);
+
+        return mediaLiveConnectorPipelineResult;
+    }
+
+    private Humidifier.Chime.MediaLiveConnectorPipeline CreateMediaLiveConnectorPipeline()
+    {
+        var mediaLiveConnectorPipelineResult = new Humidifier.Chime.MediaLiveConnectorPipeline
+        {
+            GivenName = InputResourceName,
+        };
+
+        return mediaLiveConnectorPipelineResult;
+    }
+    public override void CreateChildren(Humidifier.Chime.MediaLiveConnectorPipeline result)
+    {
+        base.CreateChildren(result);
+
+        result.Sinks = SinksFactories.Any() ? SinksFactories.Select(x => x.Build()).ToList() : null;
+        result.Sources = SourcesFactories.Any() ? SourcesFactories.Select(x => x.Build()).ToList() : null;
+    }
+
+} // End Of Class
+
+public static class MediaLiveConnectorPipelineFactoryExtensions
+{
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks(this MediaLiveConnectorPipelineFactory parentFactory, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null)
+    {
+        var factory = new InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory(subFactoryAction);
+        parentFactory.SinksFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources(this MediaLiveConnectorPipelineFactory parentFactory, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null)
+    {
+        var factory = new InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory(subFactoryAction);
+        parentFactory.SourcesFactories.Add(factory);
+        return CombinedResultFactory.Create(parentFactory, factory);
+    }
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithSinks(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithSinks(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3>(this CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3, T4>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3, T4>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3, T4>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, T4, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSinkConfigurationFactory> WithSinks<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSinkConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSinks(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithSources(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithSources(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3>(this CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3, T4>(this CombinedResult<MediaLiveConnectorPipelineFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3, T4>(this CombinedResult<T1, MediaLiveConnectorPipelineFactory, T2, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, T4, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3, T4>(this CombinedResult<T1, T2, MediaLiveConnectorPipelineFactory, T3, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, T4, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, MediaLiveConnectorPipelineFactory, T4> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, MediaLiveConnectorPipelineFactory, InnerMediaLiveConnectorPipelineLiveConnectorSourceConfigurationFactory> WithSources<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, MediaLiveConnectorPipelineFactory> combinedResult, Action<Humidifier.Chime.MediaLiveConnectorPipelineTypes.LiveConnectorSourceConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithSources(combinedResult.T5, subFactoryAction).T2);
+}

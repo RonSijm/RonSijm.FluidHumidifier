@@ -1,9 +1,10 @@
-name: Publish NuGet Package
+name: Publish NuGet Packages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   publish:
@@ -11,36 +12,61 @@ jobs:
     permissions:
       contents: read
       id-token: write
-
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [src, src-dotnet11]
+    defaults:
+      run:
+        working-directory: ${{ matrix.source }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
+      with:
+        ref: ${{ github.ref_name }}
 
-    - name: Set up .NET
+    - name: Check for unpublished package versions
+      id: package_version
+      shell: bash
+      run: |
+        VERSION="$(cat version.txt).$(tr -d '.' < humidifier-spec-version.txt)"
+        if [ -f version-suffix.txt ]; then VERSION="$VERSION-$(cat version-suffix.txt)"; fi
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        PUBLISH=false
+        for PACKAGE in RonSijm.FluidHumidifier; do
+          PACKAGE_ID="${PACKAGE,,}"
+          URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID/${VERSION,,}/$PACKAGE_ID.nuspec"
+          STATUS=$(curl --silent --show-error --location --head --retry 3 --connect-timeout 15 --max-time 60 --output /dev/null --write-out '%{http_code}' "$URL")
+          case "$STATUS" in
+            200) echo "$PACKAGE $VERSION is already published." ;;
+            404) echo "$PACKAGE $VERSION needs publishing."; PUBLISH=true ;;
+            *) echo "::error::Could not check $PACKAGE $VERSION on NuGet (HTTP $STATUS)."; exit 1 ;;
+          esac
+        done
+        echo "publish=$PUBLISH" >> "$GITHUB_OUTPUT"
+
+    - name: Set up the SDK for this source track
+      if: steps.package_version.outputs.publish == 'true'
       uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: '10.0.x'
+        global-json-file: ${{ matrix.source }}/global.json
 
-    - name: Combine version numbers
-      run: |
-        VERSION=$(cat src/version.txt)
-        SPEC_VERSION=$(cat src/humidifier-spec-version.txt | tr -d '.')
-        FINAL_VERSION="${VERSION}.${SPEC_VERSION}"
-        echo "FINAL_VERSION=$FINAL_VERSION" >> "$GITHUB_ENV"
-
-    - name: Restore dependencies
-      run: dotnet restore src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj /p:UseHumidifierProjectReference=false
-
-    - name: Build and package FluidHumidifier
+    - name: Build NuGet packages
+      if: steps.package_version.outputs.publish == 'true'
       env:
-        FINAL_VERSION: ${{ env.FINAL_VERSION }}
-      run: dotnet build src/RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj --configuration Release --no-restore /p:UseHumidifierProjectReference=false /p:PackageVersion=$FINAL_VERSION /p:PackageOutputPath="$GITHUB_WORKSPACE/packages"
+        VERSION: ${{ steps.package_version.outputs.version }}
+      shell: bash
+      run: |
+        dotnet restore RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj -p:UseHumidifierProjectReference=false
+        dotnet pack RonSijm.FluidHumidifier/RonSijm.FluidHumidifier.csproj -c Release --no-restore -p:UseHumidifierProjectReference=false -p:PackageVersion="$VERSION" -p:Version="$VERSION" -p:GeneratePackageOnBuild=false -o "$GITHUB_WORKSPACE/packages/${{ matrix.source }}"
 
     - name: Log in to NuGet with trusted publishing
+      if: steps.package_version.outputs.publish == 'true'
       id: login
       uses: NuGet/login@v1
       with:
         user: Ron.Sijm
 
     - name: Publish to NuGet
-      run: dotnet nuget push "./packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
+      if: steps.package_version.outputs.publish == 'true'
+      run: dotnet nuget push "$GITHUB_WORKSPACE/packages/${{ matrix.source }}/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate

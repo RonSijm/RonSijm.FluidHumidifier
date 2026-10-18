@@ -6,19 +6,19 @@ public class DatabaseStackConfig
 {
     public DatabaseStackConfig()
     {
-        VpcSecurityGroupIds = new WithFallback<dynamic>(() => new List<dynamic> { Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.Contains(ResourceConfigSettings.DatabaseGroupName)).ImportValue() });
-        DBSubnetGroupName = new WithFallback<dynamic>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.RDS.DBSubnetGroup).ImportValue());
-        BackupDestinationVault = new WithFallback<dynamic>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.Backup.BackupVault).ImportValue());
-        SlackLoggingTopic = new WithFallback<List<dynamic>>(() => [Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.SNS.Topic).ImportValue()]);
+        VpcSecurityGroupIds = new WithFallback<StringListValue>(() => new List<Union<string, BaseFunction>> { Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.GetLiteral().Contains(ResourceConfigSettings.DatabaseGroupName)).ImportValue() });
+        DBSubnetGroupName = new WithFallback<StringValue>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.RDS.DBSubnetGroup).ImportValue());
+        BackupDestinationVault = new WithFallback<StringValue>(() => Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.Backup.BackupVault).ImportValue());
+        SlackLoggingTopic = new WithFallback<StringListValue>(() => new Union<string, BaseFunction>[] { Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.SNS.Topic).ImportValue() });
     }
 
     public ImportModel Import { private get; set; }
 
-    public dynamic DatabaseMasterUsername { get; set; }
-    public dynamic DatabaseMasterUserPassword { get; set; }
+    public StringValue DatabaseMasterUsername { get; set; }
+    public StringValue DatabaseMasterUserPassword { get; set; }
 
-    public WithFallback<dynamic> VpcSecurityGroupIds { get; set; }
-    public WithFallback<dynamic> DBSubnetGroupName { get; set; }
-    public WithFallback<List<dynamic>> SlackLoggingTopic { get; set; }
-    public WithFallback<dynamic> BackupDestinationVault { get; set; }
+    public WithFallback<StringListValue> VpcSecurityGroupIds { get; set; }
+    public WithFallback<StringValue> DBSubnetGroupName { get; set; }
+    public WithFallback<StringListValue> SlackLoggingTopic { get; set; }
+    public WithFallback<StringValue> BackupDestinationVault { get; set; }
 }

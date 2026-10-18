@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.BedrockAgentCore;
+
+public class InnerRuntimeAgentRuntimeArtifactFactory(Action<Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact> factoryAction = null) : SubResourceFactory<Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact>
+{
+
+    internal InnerRuntimeCodeConfigurationFactory CodeConfigurationFactory { get; set; }
+
+    internal InnerRuntimeContainerConfigurationFactory ContainerConfigurationFactory { get; set; }
+
+    protected override Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact Create()
+    {
+        var agentRuntimeArtifactResult = CreateAgentRuntimeArtifact();
+        factoryAction?.Invoke(agentRuntimeArtifactResult);
+
+        return agentRuntimeArtifactResult;
+    }
+
+    private Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact CreateAgentRuntimeArtifact()
+    {
+        var agentRuntimeArtifactResult = new Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact();
+
+        return agentRuntimeArtifactResult;
+    }
+    public override void CreateChildren(Humidifier.BedrockAgentCore.RuntimeTypes.AgentRuntimeArtifact result)
+    {
+        base.CreateChildren(result);
+
+        result.CodeConfiguration ??= CodeConfigurationFactory?.Build();
+        result.ContainerConfiguration ??= ContainerConfigurationFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerRuntimeAgentRuntimeArtifactFactoryExtensions
+{
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration(this InnerRuntimeAgentRuntimeArtifactFactory parentFactory, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null)
+    {
+        parentFactory.CodeConfigurationFactory = new InnerRuntimeCodeConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.CodeConfigurationFactory);
+    }
+
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration(this InnerRuntimeAgentRuntimeArtifactFactory parentFactory, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null)
+    {
+        parentFactory.ContainerConfigurationFactory = new InnerRuntimeContainerConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ContainerConfigurationFactory);
+    }
+
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, T4, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3, T4>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, T4, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, T4, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, T4, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeCodeConfigurationFactory> WithCodeConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.CodeConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithCodeConfiguration(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, T4, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3, T4>(this CombinedResult<InnerRuntimeAgentRuntimeArtifactFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, T4, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, InnerRuntimeAgentRuntimeArtifactFactory, T2, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, T4, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerRuntimeAgentRuntimeArtifactFactory, T3, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, T4, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerRuntimeAgentRuntimeArtifactFactory, T4> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerRuntimeAgentRuntimeArtifactFactory, InnerRuntimeContainerConfigurationFactory> WithContainerConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerRuntimeAgentRuntimeArtifactFactory> combinedResult, Action<Humidifier.BedrockAgentCore.RuntimeTypes.ContainerConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithContainerConfiguration(combinedResult.T5, subFactoryAction).T2);
+}

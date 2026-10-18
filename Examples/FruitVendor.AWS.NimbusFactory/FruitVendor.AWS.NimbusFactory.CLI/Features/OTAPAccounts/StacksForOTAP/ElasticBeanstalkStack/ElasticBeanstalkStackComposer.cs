@@ -11,7 +11,7 @@ public class ElasticBeanstalkStackComposer : BaseStackComposer<ElasticBeanstalkS
 
         var ebRole = stack.WithRole("aws-elasticbeanstalk-ec2-role", roleConfig =>
         {
-            roleConfig.ManagedPolicyArns = new List<dynamic>
+            roleConfig.ManagedPolicyArns = new List<Union<string, BaseFunction>>
             {
                 "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier",
                 "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier",
@@ -22,15 +22,14 @@ public class ElasticBeanstalkStackComposer : BaseStackComposer<ElasticBeanstalkS
             };
         });
 
-        ebRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new
-        {
+        ebRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal {
             Service = "ec2.amazonaws.com"
         });
 
         var instanceProfile = stack.WithIAMInstanceProfile("aws-elasticbeanstalk-instanceprofile", profile =>
         {
             profile.InstanceProfileName = "aws-elasticbeanstalk-ec2-role";
-            profile.Roles = new List<dynamic>
+            profile.Roles = new List<Union<string, BaseFunction>>
             {
                 ebRole.FFnREF()
             };
@@ -132,14 +131,14 @@ public class ElasticBeanstalkStackComposer : BaseStackComposer<ElasticBeanstalkS
         {
             options.Namespace_ = "aws:ec2:vpc";
             options.OptionName = "Subnets";
-            options.Value = Fn.Join(",", config.Subnets.Value);
+            options.Value = Fn.JoinList(",", config.Subnets.Value);
         });
 
         environment.WithOptionSettings(options =>
         {
             options.Namespace_ = "aws:ec2:vpc";
             options.OptionName = "ELBSubnets";
-            options.Value = Fn.Join(",", config.LoadBalancerSubnets.Value);
+            options.Value = Fn.JoinList(",", config.LoadBalancerSubnets.Value);
         });
 
         environment.WithOptionSettings(options =>
@@ -206,8 +205,8 @@ public class ElasticBeanstalkStackComposer : BaseStackComposer<ElasticBeanstalkS
         //    record.HostedZoneName = $"fruitvendor.example.";
         //    record.Type = "CNAME";
         //    record.Name = $"api.fruitvendor.example";
-        //    record.TTL = 300;
-        //    record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(loadBalancer.T1, "DNSName") };
+        //    record.TTL = Fn.Literal(300);
+        //    record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(loadBalancer.T1, "DNSName") };
         //});
 
         var stackResult = environmentFactory.Build().First();

@@ -1,0 +1,42 @@
+[
+  {
+    "Path": ".github/workflows/auto-deploy-cf-fruitvendor-prod.yml",
+    "Hash": "5F1CA03DBA24F0C3234A69A1FE97004F7FF84ABA8ED6F82CD4B39D19CF0B9136"
+  },
+  {
+    "Path": "Cloud Formation/deploy-cf-fruitvendor-prod.bat",
+    "Hash": "14F082C98ECC76B4310FD52D790922B4039B6BB8F8572D3C800014C767F2AA19"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-1-fruitvendor-prod-GithubUser-Stack.json",
+    "Hash": "73A1C1685EDD5875A38671799DC31AA25D5405597A37A3B8D2AAA757E6FC7600"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-2-fruitvendor-prod-CloudformationResources-Stack.json",
+    "Hash": "462F9289996EF03C16A9F8FC76B4DB204918844609E73EB5924EEE68218F0BAF"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-3-fruitvendor-prod-SlackLogger-Stack.json",
+    "Hash": "ECC263E8E65765F2D07230176830513802C63E364CE0C1FB86D901BD8185DA02"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-4-fruitvendor-prod-VPCInfrastructure-Stack.json",
+    "Hash": "8E62D6232AF4286F9E4A767E2E26AC05BD56BF979D0D563E73A06B986E8AD9C0"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-5-fruitvendor-prod-MySQL-Stack.json",
+    "Hash": "FFB076C795276ABCC6868DCDE95B24FF842D3D0FCA58E8167BEA72095E7A68FA"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-6-fruitvendor-prod-beanstalk-Stack.json",
+    "Hash": "0FACEAEEB29D726AF2EA075B97EA4077952685CEAE148494793D042C115579FB"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-7-fruitvendor-prod-Frontend-Stack.json",
+    "Hash": "F24F8C93B1033CF5DB660F63131AF3F620738BE20C4518F21A4D9953038346B6"
+  },
+  {
+    "Path": "Cloud Formation/Environments/fruitvendor-prod/CF-8-fruitvendor-prod-fruitvendor-prodImageProcessing-Stack.json",
+    "Hash": "E6891C0F88C70D50C011D1AFE50E7655FCC02886C5F4F243D892665198C45E50"
+  }
+]

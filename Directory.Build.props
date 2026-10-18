@@ -1,12 +1,16 @@
 <Project>
   <PropertyGroup>
-    <FluidHumidifierVersionPrefix>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/version.txt').Trim())</FluidHumidifierVersionPrefix>
-    <HumidifierPackageVersion>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/humidifier-version.txt').Trim())</HumidifierPackageVersion>
-    <HumidifierSpecVersion>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)src/humidifier-spec-version.txt').Trim())</HumidifierSpecVersion>
+    <FluidHumidifierSourceRoot Condition="'$(FluidHumidifierSourceRoot)' == ''">$(MSBuildThisFileDirectory)src/</FluidHumidifierSourceRoot>
+    <HumidifierSourceDirectory Condition="'$(HumidifierSourceDirectory)' == ''">src</HumidifierSourceDirectory>
+    <FluidHumidifierVersionPrefix>$([System.IO.File]::ReadAllText('$(FluidHumidifierSourceRoot)version.txt').Trim())</FluidHumidifierVersionPrefix>
+    <HumidifierPackageVersion>$([System.IO.File]::ReadAllText('$(FluidHumidifierSourceRoot)humidifier-version.txt').Trim())</HumidifierPackageVersion>
+    <HumidifierSpecVersion>$([System.IO.File]::ReadAllText('$(FluidHumidifierSourceRoot)humidifier-spec-version.txt').Trim())</HumidifierSpecVersion>
     <HumidifierSpecVersionCompact>$([System.String]::Copy('$(HumidifierSpecVersion)').Replace('.', ''))</HumidifierSpecVersionCompact>
     <FluidHumidifierPackageVersion>$(FluidHumidifierVersionPrefix).$(HumidifierSpecVersionCompact)</FluidHumidifierPackageVersion>
+    <FluidHumidifierVersionSuffix Condition="Exists('$(FluidHumidifierSourceRoot)version-suffix.txt')">$([System.IO.File]::ReadAllText('$(FluidHumidifierSourceRoot)version-suffix.txt').Trim())</FluidHumidifierVersionSuffix>
+    <FluidHumidifierPackageVersion Condition="'$(FluidHumidifierVersionSuffix)' != ''">$(FluidHumidifierPackageVersion)-$(FluidHumidifierVersionSuffix)</FluidHumidifierPackageVersion>
     <HumidifierRepositoryRoot Condition="'$(HumidifierRepositoryRoot)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\RonSijm.Humidifier'))</HumidifierRepositoryRoot>
-    <UseHumidifierProjectReference Condition="'$(UseHumidifierProjectReference)' == '' and Exists('$(HumidifierRepositoryRoot)\src\Humidifier\Humidifier.csproj')">true</UseHumidifierProjectReference>
+    <UseHumidifierProjectReference Condition="'$(UseHumidifierProjectReference)' == '' and Exists('$(HumidifierRepositoryRoot)\$(HumidifierSourceDirectory)\Humidifier\Humidifier.csproj')">true</UseHumidifierProjectReference>
     <UseHumidifierProjectReference Condition="'$(UseHumidifierProjectReference)' == ''">false</UseHumidifierProjectReference>
   </PropertyGroup>
 </Project>

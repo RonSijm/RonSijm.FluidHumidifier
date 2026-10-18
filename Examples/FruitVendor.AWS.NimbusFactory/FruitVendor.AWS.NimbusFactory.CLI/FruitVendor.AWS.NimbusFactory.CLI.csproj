@@ -2,27 +2,27 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.*" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.*" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.*" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="RonSijm.Syringe" Version="1.1.0" />
         <PackageReference Include="RonSijm.Syringe.Lib" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\src\RonSijm.FluidHumidifier.Batch\RonSijm.FluidHumidifier.Batch.csproj" />
-		<ProjectReference Include="..\..\..\src\RonSijm.FluidHumidifier.Github\RonSijm.FluidHumidifier.Github.csproj" />
-		<ProjectReference Include="..\..\..\src\RonSijm.FluidHumidifier.VCDM\RonSijm.FluidHumidifier.VCDM.csproj" />
-		<ProjectReference Include="..\..\..\src\RonSijm.FluidHumidifier\RonSijm.FluidHumidifier.csproj" />
-		<ProjectReference Include="..\..\..\..\RonSijm.Humidifier\src\Humidifier.Json\Humidifier.Json.csproj" />
+		<ProjectReference Include="..\..\..\src-dotnet11\RonSijm.FluidHumidifier.Batch\RonSijm.FluidHumidifier.Batch.csproj" />
+		<ProjectReference Include="..\..\..\src-dotnet11\RonSijm.FluidHumidifier.Github\RonSijm.FluidHumidifier.Github.csproj" />
+		<ProjectReference Include="..\..\..\src-dotnet11\RonSijm.FluidHumidifier.VCDM\RonSijm.FluidHumidifier.VCDM.csproj" />
+		<ProjectReference Include="..\..\..\src-dotnet11\RonSijm.FluidHumidifier\RonSijm.FluidHumidifier.csproj" />
+		<ProjectReference Include="..\..\..\..\RonSijm.Humidifier\src-dotnet11\Humidifier.Json\Humidifier.Json.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

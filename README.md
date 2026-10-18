@@ -18,6 +18,27 @@ The result is still a normal `Humidifier.Stack` containing normal Humidifier res
 
 The name is basically a fluent/fluid joke on top of Humidifier. Explaining it has not improved it.
 
+The stable implementation remains in `src` and targets .NET 10 (`0.1.<spec>`).
+The typed union implementation lives in `src-dotnet11` and targets .NET 11 preview (`0.2.<spec>-dotnet11`).
+Both use the package ID `RonSijm.FluidHumidifier`; prerelease versions do not mark stable versions as preview.
+Each track references the corresponding Humidifier source tree or NuGet version.
+
+Run `dotnet` from the chosen source directory to select its pinned SDK. Build a local package with
+`dotnet pack RonSijm.FluidHumidifier -c Release -p:GeneratePackageOnBuild=false -o ../../packages`.
+Version files are separate for each track; `src-dotnet11/version-suffix.txt` sets the .NET 11 package suffix to `dotnet11`.
+The publishing and upstream generation workflows process both tracks.
+
+To release a new major or minor version without an upstream AWS update, change `version.txt`
+in the relevant source directory and push to `main`. Publishing checks the complete NuGet
+version, including `-dotnet11` where applicable. Scheduled and manual update runs also check
+for unpublished versions even when no upstream files change; published versions are skipped.
+
+Install the .NET 11 version with `dotnet add package RonSijm.FluidHumidifier --version 0.2.26700-dotnet11`.
+
+The API notes below and the maintained examples describe `src-dotnet11`, which uses the preview C# compiler pinned in its `global.json` for native unions. Set `<LangVersion>preview</LangVersion>` in consuming projects. Resource properties accept their literal type or a `BaseFunction`; intrinsic functions and factory references remain assignable directly.
+
+For collections containing expressions, use `List<Union<T, BaseFunction>>` or `Union<T, BaseFunction>[]`. Ordinary lists and arrays of `T` also work, and a `BaseFunction` can supply the whole collection. Use `GetLiteral()` and `GetItems()` from `RonSijm.FluidHumidifier.Features.Helpers` when a decorator needs to inspect literal values locally; they reject deferred expressions. `Fn.JoinList(separator, values)` joins a wrapped string list without adding an extra array. The examples use `Fn.Literal(value)` where preserving their original JSON representation requires a value different from the schema's literal type, including integer formatting for schema `Double` properties.
+
 ## Complete application examples
 
 The [NimbusFactory examples](Examples/README.md) generate infrastructure for two fictional applications. Both include sample configuration and snapshot tests, and their CLIs write CloudFormation JSON, batch deployment scripts, and GitHub workflows.
@@ -460,13 +481,13 @@ policy.WithDocument()
 
 var role = stack.WithRole("ApplicationRole", role =>
 {
-    role.ManagedPolicyArns = new List<dynamic> { policy.FFnREF() };
+    role.ManagedPolicyArns = new List<Union<string, BaseFunction>> { policy.FFnREF() };
 });
 
 role.WithAssumeRolePolicy()
     .WithStatement(
         action: "sts:AssumeRole",
-        principle: new { Service = "lambda.amazonaws.com" });
+        principle: new PolicyPrincipal { Service = "lambda.amazonaws.com" });
 ```
 
 The policy factories assemble the final `PolicyDocument` and `Statement` objects during the normal build. You can still assign a policy document directly when that is clearer.

@@ -16,7 +16,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         {
             group.Family = "aurora-mysql8.0";
             group.Description = "Parameter group for fruitvendor.example";
-            group.Parameters = new Dictionary<string, dynamic>
+            group.Parameters = new Dictionary<string, object>
             {
                 { "lower_case_table_names", "1" },
                 { "character_set_server", "utf8mb4" },
@@ -52,7 +52,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         var document = policies.WithDocument();
         document.WithStatement(["logs:CreateLogGroup", "logs:PutRetentionPolicy"], resource: "arn:aws:logs:*:*:log-group:RDS*", sid: "EnableCreationAndManagementOfRDSCloudwatchLogGroups");
         document.WithStatement(["logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams", "logs:GetLogEvents"], resource: "arn:aws:logs:*:*:log-group:RDS*:log-stream:*", sid: "EnableCreationAndManagementOfRDSCloudwatchLogStreams");
-        roleFactory.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new { Service = "monitoring.rds.amazonaws.com" });
+        roleFactory.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "monitoring.rds.amazonaws.com" });
 
         stack.WithRDSDBInstance($"fruitvendor-{Environment.EnvironmentName}-mysql-instance", x =>
         {
@@ -85,26 +85,25 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             .WithBackupPlan_(x =>
             {
                 x.BackupPlanName = "MySQL-BackupPlan";
-                x.BackupPlanRule =
-                [
+                x.BackupPlanRule = new BackupRuleResourceType[] {
                     new BackupRuleResourceType()
                     {
                         RuleName = "DailyBackup",
                         TargetBackupVault = backupVault.FFnREF(),
                         ScheduleExpression = "cron(0 12 * * ? *)",
-                        StartWindowMinutes = 60,
-                        CompletionWindowMinutes = 10080,
+                        StartWindowMinutes = Fn.Literal(60),
+                        CompletionWindowMinutes = Fn.Literal(10080),
                         Lifecycle = new LifecycleResourceType()
                         {
-                            MoveToColdStorageAfterDays = 7,
-                            DeleteAfterDays = 100
+                            MoveToColdStorageAfterDays = Fn.Literal(7),
+                            DeleteAfterDays = Fn.Literal(100)
                         },
-                        RecoveryPointTags = new Dictionary<string, dynamic>
+                        RecoveryPointTags = new Dictionary<string, string>
                         {
                             { "App", "MySQL-DB" }
                         }
                     }
-                ];
+                };
             });
 
         var backupRole = CreateBackupRole(stack);
@@ -118,7 +117,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         {
             x.SelectionName = "MySQL-BackupSelection";
             x.IamRoleArn = backupRole.FFnGetARN();
-            x.Resources = new List<dynamic>
+            x.Resources = new List<Union<string, BaseFunction>>
             {
                 // TODO: This is a bit fucked up to do. Maybe invent a better function
                 mysqlCluster.FFnRawFunc(itemName=> $"{{\"Fn::Sub\": \"arn:aws:rds:${{AWS::Region}}:${{AWS::AccountId}}:cluster:${{{itemName}}}\"}}")
@@ -133,8 +132,8 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             record.HostedZoneName = $"fruitvendor.example.";
             record.Type = "CNAME";
             record.Name = $"database.fruitvendor.example";
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(mysqlCluster, "Endpoint.Address") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(mysqlCluster, "Endpoint.Address") };
         });
 
         var stackResult = environmentFactory.Build().First();
@@ -156,7 +155,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -171,7 +170,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -186,7 +185,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -201,7 +200,7 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
             alarm.Statistic = "Sum";
             alarm.Period = 30;
             alarm.EvaluationPeriods = 1;
-            alarm.Threshold = 1;
+            alarm.Threshold = Fn.Literal(1);
             alarm.ComparisonOperator = "GreaterThanOrEqualToThreshold";
             alarm.ActionsEnabled = true;
             alarm.AlarmActions = config.SlackLoggingTopic;
@@ -232,10 +231,10 @@ public class DatabaseStackComposer : BaseStackComposer<DatabaseStackConfig>
         var backupRole = stack.WithRole("MySQL-BackupRole", roleConfig =>
         {
             roleConfig.MaxSessionDuration = 3600;
-            roleConfig.ManagedPolicyArns = new List<dynamic> { backupPolicy.FFnREF() };
+            roleConfig.ManagedPolicyArns = new List<Union<string, BaseFunction>> { backupPolicy.FFnREF() };
         });
 
-        backupRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new { Service = "backup.amazonaws.com" });
+        backupRole.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "backup.amazonaws.com" });
        
         return backupRole;
     }

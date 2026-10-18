@@ -1,0 +1,194 @@
+[
+  {
+    "Path": ".github/workflows/auto-deploy-cf-dev.yml",
+    "Hash": "BAC52E373FD7C88DBDC0FB251787E15497842D43E6398254C4C3A9BA5C192798"
+  },
+  {
+    "Path": ".github/workflows/auto-deploy-cf-prod.yml",
+    "Hash": "1BE2D7590CA37BCE3B47BFA5EB930C9E7CDD09A9E52969C263C485A7CC7DC67E"
+  },
+  {
+    "Path": ".github/workflows/auto-deploy-cf-staging.yml",
+    "Hash": "879B6068BA9A3E095738DFABCA816DBC84C088F677530A11F5442A1F7BC522D2"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/4 - Create CloudFormation GithubUser Stack/dev/CF-2-dev-GithubUser-Stack.json",
+    "Hash": "FB84A610316386D178940D166106D9E637E393C177A7D130ABAC1CB940B89829"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/4 - Create CloudFormation GithubUser Stack/prod/CF-2-prod-GithubUser-Stack.json",
+    "Hash": "251CBBF7A41B5E97BA2E3FA2DD735DE1F14A63254301EE5D0BBE664B3B20A76C"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/4 - Create CloudFormation GithubUser Stack/staging/CF-2-staging-GithubUser-Stack.json",
+    "Hash": "A6392F1A11F92DAB67386D82FCBFCA5F213315D5332AE675C87A0BDDA8FB2669"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/5 - Cloudformation Resources Stack/dev/CF-3-dev-CloudformationResources-Stack.json",
+    "Hash": "A6048686B369E24F5296C4DE7963B27CFAF5CE4820F4B897969909DA518BDB53"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/5 - Cloudformation Resources Stack/prod/CF-3-prod-CloudformationResources-Stack.json",
+    "Hash": "CEB1F4F4A83420BC2702B161DE42F03583EF86435EDD6E71B5ED9AFF3780D99B"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/5 - Cloudformation Resources Stack/staging/CF-3-staging-CloudformationResources-Stack.json",
+    "Hash": "698517D98E2E6AE7241FFF2BE233620EB443EFBA89EC900ED913804D4212019F"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/6 - Create Lambda Logger Stack/dev/CF-4-dev-SlackLogger-Stack.json",
+    "Hash": "0B2A8AD87B7F62B0AFF22B99A61EC4E68DA9FC522A269F38811580612D01E96C"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/6 - Create Lambda Logger Stack/prod/CF-4-prod-SlackLogger-Stack.json",
+    "Hash": "E714EDDF94A11B7FE5F621B8ECAA4EE0EC971C9F3593D7254CD76E8FD87BC5D3"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/6 - Create Lambda Logger Stack/staging/CF-4-staging-SlackLogger-Stack.json",
+    "Hash": "2457C3875D6A824A9BB53950D1358B7759D3F026C73EBF9C22E213B358F06002"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/7 - Enable GuardDuty/dev/Script-7-dev-Enable GuardDuty-Script.bat",
+    "Hash": "DE0CFC7B09673BCD377F3E2EB87BC18D73B82E5A7DD9AB92DB8DC110A0F5904E"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/7 - Enable GuardDuty/prod/Script-7-prod-Enable GuardDuty-Script.bat",
+    "Hash": "C07067DD1AD9467F6AFEB4F588C067CF9A0C7E3D3903625092B62DDA72B68B46"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/7 - Enable GuardDuty/staging/Script-7-staging-Enable GuardDuty-Script.bat",
+    "Hash": "7340A997E5709C738E17CCC1E44EBEE7EA0D5A879804BCD5658A1E69090D3FED"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/9 - Create CircleCI User/dev/CF-14-dev-CircleCIUser-Stack.json",
+    "Hash": "E152E5176617837481E0C981305E9389FA5D5B95660B3D800484D8B28A9FF627"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/9 - Create CircleCI User/prod/CF-14-prod-CircleCIUser-Stack.json",
+    "Hash": "006FADA69A2A9C300938FD86BDF3162107F5BA2945A07FEF8BFDFD65A38FDC73"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/1 - All/9 - Create CircleCI User/staging/CF-14-staging-CircleCIUser-Stack.json",
+    "Hash": "50B35CC12DCAEC822BF72576410FC6506080F3105D5572046530F0E359FA4E91"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/2 - Paris/1 - Paris Database Backup/dev/CF-1-dev-PostgreSQL-paris-Backup-Stack.json",
+    "Hash": "E3195CDF9D84F8A619ADEC3A5E9EF4903C756A414EDFA5A06DCCE9A46F06AD18"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/2 - Paris/1 - Paris Database Backup/prod/CF-1-prod-PostgreSQL-paris-Backup-Stack.json",
+    "Hash": "165617A8B05DE8EB82AC7DEA6B2F2DEA42DB29F76CA23F3335E69087FFF2DF65"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/2 - Paris/1 - Paris Database Backup/staging/CF-1-staging-PostgreSQL-paris-Backup-Stack.json",
+    "Hash": "DB7557F1A09352DAF2C61718ADE5B9DCD261899D82DE97EFED3722131D429CC9"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-10-dev-Puma-LB-Stack.json",
+    "Hash": "F36B8DFBD496839275CC56B66B84B00BBB3EB1A47FAD7564C31270B00D101985"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-11-dev-ECSServices-Stack.json",
+    "Hash": "B5C77F1BDB39C705F6F2C23E1FF1F8B3D6D7135C63E76C2EEEC999124C8088D6"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-13-dev-PUMUsers-Stack.json",
+    "Hash": "F9F26F52FF50417AE5A844FD8E1D0FE600DCBDF69DE34ACAF9977AF6CB728D9A"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-5-dev-VCDMapplestoreLogging-Stack.json",
+    "Hash": "2BB289F23D7DA8363C6D145F21AADCDAB15CDD624B3939AFFE11F24CBDA29A6C"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-6-dev-ECRServiceAccess-Stack.json",
+    "Hash": "2097C7CA6A478A78D908C558173C93597E469B2E64B03AB1268EFC79D480BBC9"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-7-dev-VPCInfrastructure-Stack.json",
+    "Hash": "F9F733B0542C3DD0FD87423425B0F1C151B2DF67865811C3B2D251C359292857"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-8-dev-Redis-Stack.json",
+    "Hash": "22E3A2423E180EA33C884E50C266F3997643268274096865AB66F7BDDC60D5B1"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/dev/CF-9-dev-PostgreSQL-Stack.json",
+    "Hash": "B754F0C333D952636C0C4B40A8BCD332655303206072DB81BFE73EAC70C067D0"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-10-prod-Puma-LB-Stack.json",
+    "Hash": "C058AA1664AECA0CA7FF6BAD0453F2CAD035C54BE6E49F3BE6E5D7A4820539B4"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-11-prod-ECSServices-Stack.json",
+    "Hash": "6D9DB767C71CDED11494347A966E4C25A4FA0D5EAAAD1B52FA762249B0A0F783"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-13-prod-PUMUsers-Stack.json",
+    "Hash": "19302F6E4E50046DFE89DCFDAC5C7FDED76552FC5768F43F1A97C30F51560C63"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-5-prod-VCDMapplestoreLogging-Stack.json",
+    "Hash": "A78D446C9A271493B8D5B83696AB233E4A50EDD7D86B1DDAA4C3A5C944FB457A"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-6-prod-ECRServiceAccess-Stack.json",
+    "Hash": "3BA01C9E6D304DC429B90C6D6DF32D41A0EF441E9106FAE5A8EB4760A938F4AA"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-7-prod-VPCInfrastructure-Stack.json",
+    "Hash": "778D72E9343592F63476BCC67234685C8AAD4948D5B57F6CF0669E2A4DCBEF02"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-8-prod-Redis-Stack.json",
+    "Hash": "35CAF9B80340995D9F17BD6F5A9A329E17EB017EC201291C2797CF235465E235"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/prod/CF-9-prod-PostgreSQL-Stack.json",
+    "Hash": "7648D3D9F12B7F5756400C2C4E8092E54361E2676FB7FFD92E02B3BB9EDA44B5"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-10-staging-Puma-LB-Stack.json",
+    "Hash": "B0F9927BC0665D8DA5871BF0EA5B5C47E6BFA8CC2C84F0895DC0B013872E87E1"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-11-staging-ECSServices-Stack.json",
+    "Hash": "556C6D07FDBB078E8AF8236CB02434AD0287C7A78B9EF3A5AAB7DC9CA4D30262"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-13-staging-PUMUsers-Stack.json",
+    "Hash": "6BCED22D69B2CEDBD0F193C00C99CC767CEC079D5E56BC627805F38EC1998058"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-5-staging-VCDMapplestoreLogging-Stack.json",
+    "Hash": "DA02788413597692DB76DC9DE0F5A29EA54D7146EB49F7C43A3F54A8F9DEC073"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-6-staging-ECRServiceAccess-Stack.json",
+    "Hash": "BC1848A78C17FD3A18784F078C2521C95B3DA0D08CA94C230CBC9CEEEDECED76"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-7-staging-VPCInfrastructure-Stack.json",
+    "Hash": "C0EF8A7D0EB72F95741759C3CFE6ABBD5328A8D285A11FBBF12ED9BB09B20853"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-8-staging-Redis-Stack.json",
+    "Hash": "D149E8BE525CF5283DB7FEE4B6DB949FFD903FCF0B99D1CB5368FA42A1A095DD"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/3 - Environments/staging/CF-9-staging-PostgreSQL-Stack.json",
+    "Hash": "622B1275CF45B8E6E99F0F49C5B8EA2A52870EC2240E290CECE645A14DA9F80F"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/deploy-cf-dev.bat",
+    "Hash": "7BC5CDFB49CFAEFC88AD1DEBC402E41AAB9E740D08695CE4CCCD8CE708DCB64A"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/deploy-cf-prod.bat",
+    "Hash": "00C0213FF2243F560892EEBD77E26AADAD63064B167889FBE08CC613FFF0148A"
+  },
+  {
+    "Path": "Cloud Formation/Scripts/deploy-cf-staging.bat",
+    "Hash": "1B340A2EB49FFC906E90F56360D91709AA39FA83A7E28101D9B1EE8994AE5DBC"
+  }
+]

@@ -78,14 +78,14 @@ public class VPCInfrastructureStackComposer : BaseStackComposer<VPCInfrastructur
             s3Config.ServiceName = $"com.amazonaws.{Environment.Region}.ecr.api";
             s3Config.VpcId = vpc.FFnREF();
             s3Config.VpcEndpointType = "Interface";
-            s3Config.SubnetIds = new List<dynamic>
+            s3Config.SubnetIds = new List<Union<string, BaseFunction>>
             {
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZA"),
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZB"),
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZC"),
             };
 
-            s3Config.SecurityGroupIds = new List<dynamic>
+            s3Config.SecurityGroupIds = new List<Union<string, BaseFunction>>
             {
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SecurityGroup"),
             };
@@ -96,14 +96,14 @@ public class VPCInfrastructureStackComposer : BaseStackComposer<VPCInfrastructur
             s3Config.ServiceName = $"com.amazonaws.{Environment.Region}.ecr.dkr";
             s3Config.VpcId = vpc.FFnREF();
             s3Config.VpcEndpointType = "Interface";
-            s3Config.SubnetIds = new List<dynamic>
+            s3Config.SubnetIds = new List<Union<string, BaseFunction>>
             {
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZA"),
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZB"),
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SubnetAZC"),
             };
 
-            s3Config.SecurityGroupIds = new List<dynamic>
+            s3Config.SecurityGroupIds = new List<Union<string, BaseFunction>>
             {
                 Fn.Ref($"{ResourceConfigSettings.DockerName}SecurityGroup"),
             };

@@ -136,11 +136,11 @@ public class POCConsumerEnvironmentComposer(
         //    AssetsAccountId = config.AssetAccountId,
         //    CreateServices = true,
         //    Import = new ImportModel(serviceAccessStack.Export),
-        //    SecurityGroups = new WithFallback<dynamic>(new List<dynamic>
+        //    SecurityGroups = new WithFallback<StringListValue>(new List<Union<string, BaseFunction>>
         //    {
         //        "sg-011391e7245be5841"
         //    }),
-        //    DockerSubnets = new WithFallback<dynamic>(new List<dynamic>
+        //    DockerSubnets = new WithFallback<StringListValue>(new List<Union<string, BaseFunction>>
         //    {
         //        "subnet-043e29e342367021a",
         //        "subnet-00bfd24e3590a4179",

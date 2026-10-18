@@ -37,22 +37,21 @@ public class CircleCIUserStackComposer : BaseStackComposer<CircleCIUserStackConf
         var githubActionsRole = stack.WithRole("CircleCIDeploy", role =>
         {
             role.RoleName = "CircleCI-Deploy-Role";
-            role.ManagedPolicyArns = new List<dynamic>
+            role.ManagedPolicyArns = new List<Union<string, BaseFunction>>
             {
-                config.OIDCSafetyPolicyArn,
+                config.OIDCSafetyPolicyArn.Value.Value,
                 githubActionsDeployPolicy.FFnREF()
             };
         });
 
         var assumeRolePolicy = githubActionsRole.WithAssumeRolePolicy();
 
-        var condition = new Dictionary<string, Dictionary<string, dynamic>>
+        var condition = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringLike"] = new() { [$"oidc.circleci.com/org/{config.CircleCIOrgId}:aud"] = config.CircleCIOrgId },
         };
 
-        assumeRolePolicy.WithStatement(action: "sts:AssumeRoleWithWebIdentity", principle: new
-        {
+        assumeRolePolicy.WithStatement(action: "sts:AssumeRoleWithWebIdentity", principle: new PolicyPrincipal {
             Federated = $"arn:aws:iam::{Environment.AWSAccountId}:oidc-provider/oidc.circleci.com/org/{config.CircleCIOrgId}"
         }, condition: condition);
 

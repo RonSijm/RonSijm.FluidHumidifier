@@ -6,11 +6,11 @@ public class LoadbalancerStackConfig
 {
     public LoadbalancerStackConfig()
     {
-        LoadBalancerSecurityGroups = new WithFallback<dynamic>(() =>
+        LoadBalancerSecurityGroups = new WithFallback<StringListValue>(() =>
         {
-            var importedSecurityGroup = Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.Contains(ResourceConfigSettings.LoadBalancerName));
+            var importedSecurityGroup = Import.Single(x => x.Result.AWSTypeName == Humidifier.AWS.EC2.SecurityGroup && x.Result.GivenName.GetLiteral().Contains(ResourceConfigSettings.LoadBalancerName));
 
-            var securityGroups = new List<dynamic>
+            var securityGroups = new List<Union<string, BaseFunction>>
             {
                 importedSecurityGroup.ImportValue()
             };
@@ -19,13 +19,13 @@ public class LoadbalancerStackConfig
         });
     }
 
-    private dynamic _loadBalancerSubnets;
+    private StringListValue _loadBalancerSubnets;
 
     public ImportModel Import { private get; set; }
 
-    public WithFallback<dynamic> LoadBalancerSecurityGroups { get; set; }
+    public WithFallback<StringListValue> LoadBalancerSecurityGroups { get; set; }
 
-    public dynamic LoadBalancerSubnets
+    public StringListValue LoadBalancerSubnets
     {
         get
         {
@@ -36,7 +36,7 @@ public class LoadbalancerStackConfig
 
             var name = ResourceConfigSettings.LoadBalancerName.Replace("-", string.Empty);
 
-            var subnets = new List<dynamic>
+            var subnets = new List<Union<string, BaseFunction>>
             {
                 Fn.ImportValue($"{name}SubnetAZA"),
                 Fn.ImportValue($"{name}SubnetAZB"),
@@ -48,9 +48,9 @@ public class LoadbalancerStackConfig
         set => _loadBalancerSubnets = value;
     }
 
-    private dynamic _vpcId;
+    private StringValue _vpcId;
 
-    public dynamic VpcId
+    public StringValue VpcId
     {
         get
         {
@@ -68,7 +68,7 @@ public class LoadbalancerStackConfig
 
 public static class CertificateRetriever
 {
-    public static dynamic GetCertificateArnFromRegion(string environmentName)
+    public static string GetCertificateArnFromRegion(string environmentName)
     {
         if (environmentName == "dev")
         {
@@ -93,7 +93,7 @@ public static class CertificateRetriever
         throw new NotImplementedException();
     }
 
-    public static dynamic GetCertificateArnFromGlobal(string environmentName)
+    public static string GetCertificateArnFromGlobal(string environmentName)
     {
         // TODO
         if (environmentName == "dev")

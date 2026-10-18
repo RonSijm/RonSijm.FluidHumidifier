@@ -155,8 +155,8 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
             record.HostedZoneName = $"{Environment.EnvironmentName}-applestore.example.";
             record.Type = "CNAME";
             record.Name = $"{subDomainName}.{Environment.EnvironmentName}-applestore.example";
-            record.TTL = 300;
-            record.ResourceRecords = new List<dynamic>() { FFn.FFnGetAtt(distribution, "DomainName") };
+            record.TTL = Fn.Literal(300);
+            record.ResourceRecords = new List<Union<string, BaseFunction>>() { FFn.FFnGetAtt(distribution, "DomainName") };
         });
     }
 
@@ -177,10 +177,7 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
                 ObjectOwnership = "BucketOwnerEnforced"
             };
 
-            owner.Rules =
-            [
-                rule
-            ];
+            owner.Rules = new[] { rule };
         });
 
         return bucket.T1;
@@ -188,7 +185,7 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
 
     private void WithPublicCloudFrontPolicy(StackFactory stack, string name, BucketFactory environmentVarBucket)
     {
-        var condition = new Dictionary<string, Dictionary<string, dynamic>>
+        var condition = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringLike"] = new()
             {
@@ -207,7 +204,7 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
                     new
                     {
                         Effect = "Allow",
-                        Principal = new { Service = "cloudfront.amazonaws.com"},
+                        Principal = new PolicyPrincipal { Service = "cloudfront.amazonaws.com"},
                         Action = new[] { "s3:GetObject" },
                         Resource = new[] { $"arn:aws:s3:::{name}/*" },
                         Condition = condition
@@ -250,10 +247,10 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
         var role = stack.WithRole(name, role =>
         {
             role.MaxSessionDuration = 3600;
-            role.ManagedPolicyArns = new List<dynamic> { policy.FFnREF() };
+            role.ManagedPolicyArns = new List<Union<string, BaseFunction>> { policy.FFnREF() };
         });
 
-        role.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new { Service = "lambda.amazonaws.com" });
+        role.WithAssumeRolePolicy().WithStatement("sts:AssumeRole", principle: new PolicyPrincipal { Service = "lambda.amazonaws.com" });
         return role;
     }
 
@@ -284,19 +281,19 @@ public class CloudformationResourcesStackComposer : BaseStackComposer<Cloudforma
             "SNS:Receive"
         };
 
-        var condition = new Dictionary<string, Dictionary<string, dynamic>>
+        var condition = new Dictionary<string, Dictionary<string, object>>
         {
             ["StringEquals"] = new() { ["AWS:SourceOwner"] = Fn.Sub("${AWS::AccountId}") },
         };
 
-        document.WithStatement(statementActions, principle: new { AWS = "*" }, topic.FFnREF(), "Allow", condition, sid: "AllowSNS");
+        document.WithStatement(statementActions, principle: new PolicyPrincipal { AWS = "*" }, topic.FFnREF(), "Allow", condition, sid: "AllowSNS");
 
         var statementActions2 = new List<string>
         {
             "SNS:Publish"
         };
 
-        document.WithStatement(statementActions2, principle: new { Service = "cloudtrail.amazonaws.com" }, topic.FFnREF(), sid: "AllowCloudtrail");
+        document.WithStatement(statementActions2, principle: new PolicyPrincipal { Service = "cloudtrail.amazonaws.com" }, topic.FFnREF(), sid: "AllowCloudtrail");
 
         return topic;
     }

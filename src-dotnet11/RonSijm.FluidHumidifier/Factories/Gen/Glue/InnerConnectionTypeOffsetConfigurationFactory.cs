@@ -1,0 +1,80 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable RedundantNameQualifier
+
+namespace RonSijm.FluidHumidifier.Factories.Glue;
+
+public class InnerConnectionTypeOffsetConfigurationFactory(Action<Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration> factoryAction = null) : SubResourceFactory<Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration>
+{
+
+    internal InnerConnectionTypeExtractedParameterFactory LimitParameterFactory { get; set; }
+
+    internal InnerConnectionTypeExtractedParameterFactory OffsetParameterFactory { get; set; }
+
+    protected override Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration Create()
+    {
+        var offsetConfigurationResult = CreateOffsetConfiguration();
+        factoryAction?.Invoke(offsetConfigurationResult);
+
+        return offsetConfigurationResult;
+    }
+
+    private Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration CreateOffsetConfiguration()
+    {
+        var offsetConfigurationResult = new Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration();
+
+        return offsetConfigurationResult;
+    }
+    public override void CreateChildren(Humidifier.Glue.ConnectionTypeTypes.OffsetConfiguration result)
+    {
+        base.CreateChildren(result);
+
+        result.LimitParameter ??= LimitParameterFactory?.Build();
+        result.OffsetParameter ??= OffsetParameterFactory?.Build();
+    }
+
+} // End Of Class
+
+public static class InnerConnectionTypeOffsetConfigurationFactoryExtensions
+{
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter(this InnerConnectionTypeOffsetConfigurationFactory parentFactory, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null)
+    {
+        parentFactory.LimitParameterFactory = new InnerConnectionTypeExtractedParameterFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.LimitParameterFactory);
+    }
+
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter(this InnerConnectionTypeOffsetConfigurationFactory parentFactory, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null)
+    {
+        parentFactory.OffsetParameterFactory = new InnerConnectionTypeExtractedParameterFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.OffsetParameterFactory);
+    }
+
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, WithLimitParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, WithLimitParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3, T4>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3, T4>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, T4, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithLimitParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithLimitParameter(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, WithOffsetParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, WithOffsetParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3>(this CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3, T4>(this CombinedResult<InnerConnectionTypeOffsetConfigurationFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3, T4>(this CombinedResult<T1, InnerConnectionTypeOffsetConfigurationFactory, T2, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, T4, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, InnerConnectionTypeOffsetConfigurationFactory, T3, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, T4, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, InnerConnectionTypeOffsetConfigurationFactory, T4> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, InnerConnectionTypeOffsetConfigurationFactory, InnerConnectionTypeExtractedParameterFactory> WithOffsetParameter<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, InnerConnectionTypeOffsetConfigurationFactory> combinedResult, Action<Humidifier.Glue.ConnectionTypeTypes.ExtractedParameter> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithOffsetParameter(combinedResult.T5, subFactoryAction).T2);
+}
