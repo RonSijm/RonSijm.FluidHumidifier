@@ -6,7 +6,7 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators.PropertyGenerators
     {
         public void Generate(string resourceName, ResourceType resource)
         {
-            if (!CanHandle(resource))
+            if (!CanGenerate(resource))
             {
                 return;
             }
@@ -14,7 +14,7 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators.PropertyGenerators
             var code = GenerateCode(resourceName, resource);
 
             var outputPath = Path.Combine(CodeGenSettings.OutputPath, ParentGroup, "Extensions");
-            var outputFile = $"{Parent}.With{resourceName}{FileNameAppendage}Extension.cs";
+            var outputFile = GetOutputFileName(resourceName);
 
             if (!Directory.Exists(outputPath))
             {
@@ -25,6 +25,10 @@ namespace RonSijm.FluidHumidifier.CodeGen.CLI.Generators.PropertyGenerators
 
             File.WriteAllText(file, code);
         }
+
+        public bool CanGenerate(ResourceType resource) => CanHandle(resource);
+
+        public string GetOutputFileName(string resourceName) => $"{Parent}.With{resourceName}{FileNameAppendage}Extension.cs";
 
         protected abstract bool CanHandle(ResourceType resource);
 

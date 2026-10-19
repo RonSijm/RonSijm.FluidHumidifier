@@ -4,7 +4,7 @@
 
 namespace RonSijm.FluidHumidifier.Factories.EC2;
 
-public static class VPCWithVpcEndpointExtension
+public static class VPCWithOpenSearchServerlessVpcEndpointExtension
 {
     public static CombinedResult<VPCFactory, OpenSearchServerless.VpcEndpointFactory> WithVpcEndpoint(this EC2.VPCFactory factory, string resourceName, Action<Humidifier.OpenSearchServerless.VpcEndpoint> action = null)
     {

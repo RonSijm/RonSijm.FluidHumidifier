@@ -67,11 +67,23 @@ public class FluentGeneratorCore(SourceDirectoryLocator sourceDirectoryLocator, 
             new HasSubnetsExtensionsGenerator(),
         };
 
-        foreach (var generatedResource in namedGeneratedResources)
+        foreach (var generator in generators)
         {
-            foreach (var generator in generators)
+            var generatorResources = namedGeneratedResources.Where(x => generator.CanGenerate(x.Item2)).ToList();
+            var collidingResources = generatorResources
+                .GroupBy(x => generator.GetOutputFileName(x.Item1), StringComparer.OrdinalIgnoreCase)
+                .Where(x => x.Count() > 1)
+                .SelectMany(x => x)
+                .Select(x => x.Item2)
+                .ToHashSet();
+
+            foreach (var generatedResource in generatorResources)
             {
-                generator.Generate(generatedResource.Item1, generatedResource.Item2);
+                var resourceName = collidingResources.Contains(generatedResource.Item2)
+                    ? $"{generatedResource.Item2.Group}{generatedResource.Item1}"
+                    : generatedResource.Item1;
+
+                generator.Generate(resourceName, generatedResource.Item2);
             }
         }
     }
