@@ -693,6 +693,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<BedrockAgentCore.GatewayFactory> BedrockAgentCoreGatewayFactories { get; set; } = [];
 
+    private List<ECS.GatewayFactory> ECSGatewayFactories { get; set; } = [];
+
     private List<IoTSiteWise.GatewayFactory> IoTSiteWiseGatewayFactories { get; set; } = [];
 
     private List<MediaConnect.GatewayFactory> MediaConnectGatewayFactories { get; set; } = [];
@@ -720,6 +722,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<Batch.SchedulingPolicyFactory> SchedulingPolicyFactories { get; set; } = [];
 
     private List<Batch.ServiceEnvironmentFactory> ServiceEnvironmentFactories { get; set; } = [];
+
+    private List<BcmPricingCalculator.BillEstimateFactory> BillEstimateFactories { get; set; } = [];
 
     private List<BcmPricingCalculator.BillScenarioFactory> BillScenarioFactories { get; set; } = [];
 
@@ -788,6 +792,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<Connect.PromptFactory> ConnectPromptFactories { get; set; } = [];
 
     private List<Bedrock.PromptVersionFactory> PromptVersionFactories { get; set; } = [];
+
+    private List<Bedrock.RetrievalInstructionFactory> RetrievalInstructionFactories { get; set; } = [];
 
     private List<BedrockAgentCore.ApiKeyCredentialProviderFactory> ApiKeyCredentialProviderFactories { get; set; } = [];
 
@@ -1857,6 +1863,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<EC2.DHCPOptionsFactory> DHCPOptionsFactories { get; set; } = [];
 
+    private List<EC2.DeclarativePoliciesReportFactory> DeclarativePoliciesReportFactories { get; set; } = [];
+
     private List<EC2.EC2FleetFactory> EC2FleetFactories { get; set; } = [];
 
     private List<EC2.EIPFactory> EIPFactories { get; set; } = [];
@@ -1866,6 +1874,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<EC2.EgressOnlyInternetGatewayFactory> EgressOnlyInternetGatewayFactories { get; set; } = [];
 
     private List<EC2.EnclaveCertificateIamRoleAssociationFactory> EnclaveCertificateIamRoleAssociationFactories { get; set; } = [];
+
+    private List<EC2.ExportImageTaskFactory> ExportImageTaskFactories { get; set; } = [];
 
     private List<EC2.ExportInstanceTaskFactory> ExportInstanceTaskFactories { get; set; } = [];
 
@@ -2021,6 +2031,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<EC2.TransitGatewayAttachmentFactory> TransitGatewayAttachmentFactories { get; set; } = [];
 
+    private List<EC2.TransitGatewayAttachmentNatConfigurationFactory> TransitGatewayAttachmentNatConfigurationFactories { get; set; } = [];
+
     private List<EC2.TransitGatewayConnectFactory> TransitGatewayConnectFactories { get; set; } = [];
 
     private List<EC2.TransitGatewayConnectPeerFactory> TransitGatewayConnectPeerFactories { get; set; } = [];
@@ -2136,6 +2148,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<ECS.DaemonTaskDefinitionFactory> DaemonTaskDefinitionFactories { get; set; } = [];
 
     private List<ECS.ExpressGatewayServiceFactory> ExpressGatewayServiceFactories { get; set; } = [];
+
+    private List<ECS.GatewayClusterAssociationsFactory> GatewayClusterAssociationsFactories { get; set; } = [];
 
     private List<ECS.PrimaryTaskSetFactory> PrimaryTaskSetFactories { get; set; } = [];
 
@@ -2713,12 +2727,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<IoTDeviceAdvisor.SuiteRunFactory> SuiteRunFactories { get; set; } = [];
 
-    private List<IoTEvents.DetectorModelFactory> DetectorModelFactories { get; set; } = [];
-
-    private List<IoTEvents.InputFactory> IoTEventsInputFactories { get; set; } = [];
-
-    private List<MediaLive.InputFactory> MediaLiveInputFactories { get; set; } = [];
-
     private List<IoTFleetWise.DecoderManifestFactory> DecoderManifestFactories { get; set; } = [];
 
     private List<IoTFleetWise.ModelManifestFactory> ModelManifestFactories { get; set; } = [];
@@ -3028,6 +3036,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<MediaLive.EventBridgeRuleTemplateFactory> EventBridgeRuleTemplateFactories { get; set; } = [];
 
     private List<MediaLive.EventBridgeRuleTemplateGroupFactory> EventBridgeRuleTemplateGroupFactories { get; set; } = [];
+
+    private List<MediaLive.InputFactory> InputFactories { get; set; } = [];
 
     private List<MediaLive.InputSecurityGroupFactory> InputSecurityGroupFactories { get; set; } = [];
 
@@ -3759,6 +3769,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
 
     private List<SageMaker.CodeRepositoryFactory> CodeRepositoryFactories { get; set; } = [];
 
+    private List<SageMaker.ComputeQuotaFactory> ComputeQuotaFactories { get; set; } = [];
+
     private List<SageMaker.ContextFactory> ContextFactories { get; set; } = [];
 
     private List<SageMaker.DataQualityJobDefinitionFactory> DataQualityJobDefinitionFactories { get; set; } = [];
@@ -3854,6 +3866,8 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     private List<SecurityAgent.SecurityRequirementPackFactory> SecurityRequirementPackFactories { get; set; } = [];
 
     private List<SecurityAgent.TargetDomainFactory> TargetDomainFactories { get; set; } = [];
+
+    private List<SecurityHub.ActionTargetFactory> ActionTargetFactories { get; set; } = [];
 
     private List<SecurityHub.AggregatorV2Factory> AggregatorV2Factories { get; set; } = [];
 
@@ -6545,6 +6559,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ECS.GatewayFactory WithECSGateway(string resourceName = null, Action<Humidifier.ECS.Gateway> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ECS.GatewayFactory(resourceName, resourceFactoryAction));
+        ECSGatewayFactories.Add(factory);
+        return factory;
+    }
+
     public IoTSiteWise.GatewayFactory WithIoTSiteWiseGateway(string resourceName = null, Action<Humidifier.IoTSiteWise.Gateway> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new IoTSiteWise.GatewayFactory(resourceName, resourceFactoryAction));
@@ -6640,6 +6661,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Batch.ServiceEnvironmentFactory(resourceName, resourceFactoryAction));
         ServiceEnvironmentFactories.Add(factory);
+        return factory;
+    }
+
+    public BcmPricingCalculator.BillEstimateFactory WithBillEstimate(string resourceName = null, Action<Humidifier.BcmPricingCalculator.BillEstimate> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new BcmPricingCalculator.BillEstimateFactory(resourceName, resourceFactoryAction));
+        BillEstimateFactories.Add(factory);
         return factory;
     }
 
@@ -6878,6 +6906,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Bedrock.PromptVersionFactory(resourceName, resourceFactoryAction));
         PromptVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Bedrock.RetrievalInstructionFactory WithRetrievalInstruction(string resourceName = null, Action<Humidifier.Bedrock.RetrievalInstruction> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new Bedrock.RetrievalInstructionFactory(resourceName, resourceFactoryAction));
+        RetrievalInstructionFactories.Add(factory);
         return factory;
     }
 
@@ -10619,6 +10654,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.DeclarativePoliciesReportFactory WithDeclarativePoliciesReport(string resourceName = null, Action<Humidifier.EC2.DeclarativePoliciesReport> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.DeclarativePoliciesReportFactory(resourceName, resourceFactoryAction));
+        DeclarativePoliciesReportFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.EC2FleetFactory WithEC2Fleet(string resourceName = null, Action<Humidifier.EC2.EC2Fleet> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.EC2FleetFactory(resourceName, resourceFactoryAction));
@@ -10651,6 +10693,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new EC2.EnclaveCertificateIamRoleAssociationFactory(resourceName, resourceFactoryAction));
         EnclaveCertificateIamRoleAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.ExportImageTaskFactory WithExportImageTask(string resourceName = null, Action<Humidifier.EC2.ExportImageTask> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.ExportImageTaskFactory(resourceName, resourceFactoryAction));
+        ExportImageTaskFactories.Add(factory);
         return factory;
     }
 
@@ -11193,6 +11242,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.TransitGatewayAttachmentNatConfigurationFactory WithTransitGatewayAttachmentNatConfiguration(string resourceName = null, Action<Humidifier.EC2.TransitGatewayAttachmentNatConfiguration> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.TransitGatewayAttachmentNatConfigurationFactory(resourceName, resourceFactoryAction));
+        TransitGatewayAttachmentNatConfigurationFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.TransitGatewayConnectFactory WithTransitGatewayConnect(string resourceName = null, Action<Humidifier.EC2.TransitGatewayConnect> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.TransitGatewayConnectFactory(resourceName, resourceFactoryAction));
@@ -11596,6 +11652,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new ECS.ExpressGatewayServiceFactory(resourceName, resourceFactoryAction));
         ExpressGatewayServiceFactories.Add(factory);
+        return factory;
+    }
+
+    public ECS.GatewayClusterAssociationsFactory WithGatewayClusterAssociations(string resourceName = null, Action<Humidifier.ECS.GatewayClusterAssociations> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new ECS.GatewayClusterAssociationsFactory(resourceName, resourceFactoryAction));
+        GatewayClusterAssociationsFactories.Add(factory);
         return factory;
     }
 
@@ -13615,27 +13678,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public IoTEvents.DetectorModelFactory WithDetectorModel(string resourceName = null, Action<Humidifier.IoTEvents.DetectorModel> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTEvents.DetectorModelFactory(resourceName, resourceFactoryAction));
-        DetectorModelFactories.Add(factory);
-        return factory;
-    }
-
-    public IoTEvents.InputFactory WithIoTEventsInput(string resourceName = null, Action<Humidifier.IoTEvents.Input> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTEvents.InputFactory(resourceName, resourceFactoryAction));
-        IoTEventsInputFactories.Add(factory);
-        return factory;
-    }
-
-    public MediaLive.InputFactory WithMediaLiveInput(string resourceName = null, Action<Humidifier.MediaLive.Input> resourceFactoryAction = null)
-    {
-        var factory = this.CreateSubFactory(() => new MediaLive.InputFactory(resourceName, resourceFactoryAction));
-        MediaLiveInputFactories.Add(factory);
-        return factory;
-    }
-
     public IoTFleetWise.DecoderManifestFactory WithDecoderManifest(string resourceName = null, Action<Humidifier.IoTFleetWise.DecoderManifest> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.DecoderManifestFactory(resourceName, resourceFactoryAction));
@@ -14718,6 +14760,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new MediaLive.EventBridgeRuleTemplateGroupFactory(resourceName, resourceFactoryAction));
         EventBridgeRuleTemplateGroupFactories.Add(factory);
+        return factory;
+    }
+
+    public MediaLive.InputFactory WithInput(string resourceName = null, Action<Humidifier.MediaLive.Input> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new MediaLive.InputFactory(resourceName, resourceFactoryAction));
+        InputFactories.Add(factory);
         return factory;
     }
 
@@ -17276,6 +17325,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public SageMaker.ComputeQuotaFactory WithComputeQuota(string resourceName = null, Action<Humidifier.SageMaker.ComputeQuota> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.ComputeQuotaFactory(resourceName, resourceFactoryAction));
+        ComputeQuotaFactories.Add(factory);
+        return factory;
+    }
+
     public SageMaker.ContextFactory WithContext(string resourceName = null, Action<Humidifier.SageMaker.Context> resourceFactoryAction = null)
     {
         var factory = this.CreateSubFactory(() => new SageMaker.ContextFactory(resourceName, resourceFactoryAction));
@@ -17609,6 +17665,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new SecurityAgent.TargetDomainFactory(resourceName, resourceFactoryAction));
         TargetDomainFactories.Add(factory);
+        return factory;
+    }
+
+    public SecurityHub.ActionTargetFactory WithActionTarget(string resourceName = null, Action<Humidifier.SecurityHub.ActionTarget> resourceFactoryAction = null)
+    {
+        var factory = this.CreateSubFactory(() => new SecurityHub.ActionTargetFactory(resourceName, resourceFactoryAction));
+        ActionTargetFactories.Add(factory);
         return factory;
     }
 
@@ -21056,6 +21119,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public ECS.GatewayFactory WithECSGateway(Action<Humidifier.ECS.Gateway> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ECS.GatewayFactory(resourceName, resourceFactoryAction));
+        ECSGatewayFactories.Add(factory);
+        return factory;
+    }
+
     public IoTSiteWise.GatewayFactory WithIoTSiteWiseGateway(Action<Humidifier.IoTSiteWise.Gateway> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new IoTSiteWise.GatewayFactory(resourceName, resourceFactoryAction));
@@ -21151,6 +21221,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Batch.ServiceEnvironmentFactory(resourceName, resourceFactoryAction));
         ServiceEnvironmentFactories.Add(factory);
+        return factory;
+    }
+
+    public BcmPricingCalculator.BillEstimateFactory WithBillEstimate(Action<Humidifier.BcmPricingCalculator.BillEstimate> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new BcmPricingCalculator.BillEstimateFactory(resourceName, resourceFactoryAction));
+        BillEstimateFactories.Add(factory);
         return factory;
     }
 
@@ -21389,6 +21466,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new Bedrock.PromptVersionFactory(resourceName, resourceFactoryAction));
         PromptVersionFactories.Add(factory);
+        return factory;
+    }
+
+    public Bedrock.RetrievalInstructionFactory WithRetrievalInstruction(Action<Humidifier.Bedrock.RetrievalInstruction> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new Bedrock.RetrievalInstructionFactory(resourceName, resourceFactoryAction));
+        RetrievalInstructionFactories.Add(factory);
         return factory;
     }
 
@@ -25130,6 +25214,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.DeclarativePoliciesReportFactory WithDeclarativePoliciesReport(Action<Humidifier.EC2.DeclarativePoliciesReport> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.DeclarativePoliciesReportFactory(resourceName, resourceFactoryAction));
+        DeclarativePoliciesReportFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.EC2FleetFactory WithEC2Fleet(Action<Humidifier.EC2.EC2Fleet> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.EC2FleetFactory(resourceName, resourceFactoryAction));
@@ -25162,6 +25253,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new EC2.EnclaveCertificateIamRoleAssociationFactory(resourceName, resourceFactoryAction));
         EnclaveCertificateIamRoleAssociationFactories.Add(factory);
+        return factory;
+    }
+
+    public EC2.ExportImageTaskFactory WithExportImageTask(Action<Humidifier.EC2.ExportImageTask> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.ExportImageTaskFactory(resourceName, resourceFactoryAction));
+        ExportImageTaskFactories.Add(factory);
         return factory;
     }
 
@@ -25704,6 +25802,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public EC2.TransitGatewayAttachmentNatConfigurationFactory WithTransitGatewayAttachmentNatConfiguration(Action<Humidifier.EC2.TransitGatewayAttachmentNatConfiguration> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new EC2.TransitGatewayAttachmentNatConfigurationFactory(resourceName, resourceFactoryAction));
+        TransitGatewayAttachmentNatConfigurationFactories.Add(factory);
+        return factory;
+    }
+
     public EC2.TransitGatewayConnectFactory WithTransitGatewayConnect(Action<Humidifier.EC2.TransitGatewayConnect> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new EC2.TransitGatewayConnectFactory(resourceName, resourceFactoryAction));
@@ -26107,6 +26212,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new ECS.ExpressGatewayServiceFactory(resourceName, resourceFactoryAction));
         ExpressGatewayServiceFactories.Add(factory);
+        return factory;
+    }
+
+    public ECS.GatewayClusterAssociationsFactory WithGatewayClusterAssociations(Action<Humidifier.ECS.GatewayClusterAssociations> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new ECS.GatewayClusterAssociationsFactory(resourceName, resourceFactoryAction));
+        GatewayClusterAssociationsFactories.Add(factory);
         return factory;
     }
 
@@ -28126,27 +28238,6 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
-    public IoTEvents.DetectorModelFactory WithDetectorModel(Action<Humidifier.IoTEvents.DetectorModel> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTEvents.DetectorModelFactory(resourceName, resourceFactoryAction));
-        DetectorModelFactories.Add(factory);
-        return factory;
-    }
-
-    public IoTEvents.InputFactory WithIoTEventsInput(Action<Humidifier.IoTEvents.Input> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new IoTEvents.InputFactory(resourceName, resourceFactoryAction));
-        IoTEventsInputFactories.Add(factory);
-        return factory;
-    }
-
-    public MediaLive.InputFactory WithMediaLiveInput(Action<Humidifier.MediaLive.Input> resourceFactoryAction = null, string resourceName = null)
-    {
-        var factory = this.CreateSubFactory(() => new MediaLive.InputFactory(resourceName, resourceFactoryAction));
-        MediaLiveInputFactories.Add(factory);
-        return factory;
-    }
-
     public IoTFleetWise.DecoderManifestFactory WithDecoderManifest(Action<Humidifier.IoTFleetWise.DecoderManifest> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new IoTFleetWise.DecoderManifestFactory(resourceName, resourceFactoryAction));
@@ -29229,6 +29320,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new MediaLive.EventBridgeRuleTemplateGroupFactory(resourceName, resourceFactoryAction));
         EventBridgeRuleTemplateGroupFactories.Add(factory);
+        return factory;
+    }
+
+    public MediaLive.InputFactory WithInput(Action<Humidifier.MediaLive.Input> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new MediaLive.InputFactory(resourceName, resourceFactoryAction));
+        InputFactories.Add(factory);
         return factory;
     }
 
@@ -31787,6 +31885,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
         return factory;
     }
 
+    public SageMaker.ComputeQuotaFactory WithComputeQuota(Action<Humidifier.SageMaker.ComputeQuota> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new SageMaker.ComputeQuotaFactory(resourceName, resourceFactoryAction));
+        ComputeQuotaFactories.Add(factory);
+        return factory;
+    }
+
     public SageMaker.ContextFactory WithContext(Action<Humidifier.SageMaker.Context> resourceFactoryAction = null, string resourceName = null)
     {
         var factory = this.CreateSubFactory(() => new SageMaker.ContextFactory(resourceName, resourceFactoryAction));
@@ -32120,6 +32225,13 @@ public class StackFactory : Features.Factories.Base.BaseFactory<Stack>, IHaveSta
     {
         var factory = this.CreateSubFactory(() => new SecurityAgent.TargetDomainFactory(resourceName, resourceFactoryAction));
         TargetDomainFactories.Add(factory);
+        return factory;
+    }
+
+    public SecurityHub.ActionTargetFactory WithActionTarget(Action<Humidifier.SecurityHub.ActionTarget> resourceFactoryAction = null, string resourceName = null)
+    {
+        var factory = this.CreateSubFactory(() => new SecurityHub.ActionTargetFactory(resourceName, resourceFactoryAction));
+        ActionTargetFactories.Add(factory);
         return factory;
     }
 

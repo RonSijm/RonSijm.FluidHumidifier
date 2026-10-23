@@ -11,6 +11,8 @@ public class LogAlarmFactory(string resourceName = null, Action<Humidifier.Cloud
 
     internal InnerLogAlarmWarmUpConfigurationFactory WarmUpConfigurationFactory { get; set; }
 
+    internal InnerLogAlarmActionConfigurationFactory ActionConfigurationFactory { get; set; }
+
     protected override Humidifier.CloudWatch.LogAlarm Create()
     {
         var logAlarmResult = CreateLogAlarm();
@@ -34,6 +36,7 @@ public class LogAlarmFactory(string resourceName = null, Action<Humidifier.Cloud
 
         result.ScheduledQueryConfiguration ??= ScheduledQueryConfigurationFactory?.Build();
         result.WarmUpConfiguration ??= WarmUpConfigurationFactory?.Build();
+        result.ActionConfiguration ??= ActionConfigurationFactory?.Build();
     }
 
 } // End Of Class
@@ -50,6 +53,12 @@ public static class LogAlarmFactoryExtensions
     {
         parentFactory.WarmUpConfigurationFactory = new InnerLogAlarmWarmUpConfigurationFactory(subFactoryAction);
         return CombinedResultFactory.Create(parentFactory, parentFactory.WarmUpConfigurationFactory);
+    }
+
+    public static CombinedResult<LogAlarmFactory, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration(this LogAlarmFactory parentFactory, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null)
+    {
+        parentFactory.ActionConfigurationFactory = new InnerLogAlarmActionConfigurationFactory(subFactoryAction);
+        return CombinedResultFactory.Create(parentFactory, parentFactory.ActionConfigurationFactory);
     }
 
     public static CombinedResult<LogAlarmFactory, T1, InnerLogAlarmScheduledQueryConfigurationFactory> WithScheduledQueryConfiguration<T1>(this CombinedResult<LogAlarmFactory, T1> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ScheduledQueryConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithScheduledQueryConfiguration(combinedResult.T1, subFactoryAction).T2);
@@ -80,4 +89,18 @@ public static class LogAlarmFactoryExtensions
     public static CombinedResult<T1, T2, LogAlarmFactory, T3, T4, InnerLogAlarmWarmUpConfigurationFactory> WithWarmUpConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, LogAlarmFactory, T3, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.WarmUpConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmUpConfiguration(combinedResult.T3, subFactoryAction).T2);
     public static CombinedResult<T1, T2, T3, LogAlarmFactory, T4, InnerLogAlarmWarmUpConfigurationFactory> WithWarmUpConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, LogAlarmFactory, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.WarmUpConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmUpConfiguration(combinedResult.T4, subFactoryAction).T2);
     public static CombinedResult<T1, T2, T3, T4, LogAlarmFactory, InnerLogAlarmWarmUpConfigurationFactory> WithWarmUpConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, LogAlarmFactory> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.WarmUpConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithWarmUpConfiguration(combinedResult.T5, subFactoryAction).T2);
+    public static CombinedResult<LogAlarmFactory, T1, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1>(this CombinedResult<LogAlarmFactory, T1> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithActionConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, LogAlarmFactory, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1>(this CombinedResult<T1, LogAlarmFactory> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, WithActionConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<LogAlarmFactory, T1, T2, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2>(this CombinedResult<LogAlarmFactory, T1, T2> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, LogAlarmFactory, T2, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2>(this CombinedResult<T1, LogAlarmFactory, T2> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, LogAlarmFactory, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2>(this CombinedResult<T1, T2, LogAlarmFactory> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<LogAlarmFactory, T1, T2, T3, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3>(this CombinedResult<LogAlarmFactory, T1, T2, T3> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, LogAlarmFactory, T2, T3, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3>(this CombinedResult<T1, LogAlarmFactory, T2, T3> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, LogAlarmFactory, T3, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, LogAlarmFactory, T3> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, LogAlarmFactory, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3>(this CombinedResult<T1, T2, T3, LogAlarmFactory> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<LogAlarmFactory, T1, T2, T3, T4, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3, T4>(this CombinedResult<LogAlarmFactory, T1, T2, T3, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T1, subFactoryAction).T2);
+    public static CombinedResult<T1, LogAlarmFactory, T2, T3, T4, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, LogAlarmFactory, T2, T3, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T2, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, LogAlarmFactory, T3, T4, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, LogAlarmFactory, T3, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T3, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, LogAlarmFactory, T4, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, LogAlarmFactory, T4> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T4, subFactoryAction).T2);
+    public static CombinedResult<T1, T2, T3, T4, LogAlarmFactory, InnerLogAlarmActionConfigurationFactory> WithActionConfiguration<T1, T2, T3, T4>(this CombinedResult<T1, T2, T3, T4, LogAlarmFactory> combinedResult, Action<Humidifier.CloudWatch.LogAlarmTypes.ActionConfiguration> subFactoryAction = null) => new (combinedResult, combinedResult, combinedResult, combinedResult, combinedResult, WithActionConfiguration(combinedResult.T5, subFactoryAction).T2);
 }
